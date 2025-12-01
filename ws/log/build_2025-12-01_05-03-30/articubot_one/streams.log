@@ -1,0 +1,14 @@
+[0.009s] Invoking command in '/home/calafaker/Control-Formation/ws/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws/build/articubot_one -- -j16 -l16
+[0.036s] Invoked command in '/home/calafaker/Control-Formation/ws/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws/build/articubot_one -- -j16 -l16
+[0.043s] Invoking command in '/home/calafaker/Control-Formation/ws/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/calafaker/Control-Formation/ws/build/articubot_one
+[0.048s] -- Install configuration: ""
+[0.048s] -- Execute custom install script
+[0.048s] [31mCMake Error at ament_cmake_symlink_install/ament_cmake_symlink_install.cmake:100 (message):
+[0.048s]   ament_cmake_symlink_install_directory() can't find
+[0.048s]   '/home/calafaker/Control-Formation/ws/src/articubot_one/config'
+[0.048s] Call Stack (most recent call first):
+[0.048s]   ament_cmake_symlink_install/ament_cmake_symlink_install.cmake:314 (ament_cmake_symlink_install_directory)
+[0.048s]   cmake_install.cmake:46 (include)
+[0.048s] 
+[0.048s] [0m
+[0.049s] Invoked command in '/home/calafaker/Control-Formation/ws/build/articubot_one' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/calafaker/Control-Formation/ws/build/articubot_one

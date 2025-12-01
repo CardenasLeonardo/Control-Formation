@@ -1,0 +1,1 @@
+/home/calafaker/Control-Formation/ws/src/articubot_one/launch/launch_sim.launch.py

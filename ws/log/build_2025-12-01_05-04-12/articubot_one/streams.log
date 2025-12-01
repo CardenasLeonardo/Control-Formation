@@ -1,0 +1,19 @@
+[0.009s] Invoking command in '/home/calafaker/Control-Formation/ws/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws/build/articubot_one -- -j16 -l16
+[0.024s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.106s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.112s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.156s] [31mCMake Error at /opt/ros/humble/share/ament_cmake_core/cmake/symlink_install/install.cmake:43 (_install):
+[0.156s]   _install does not recognize sub-command DESTINATION
+[0.156s] Call Stack (most recent call first):
+[0.156s]   CMakeLists.txt:35 (install)
+[0.156s] 
+[0.156s] [0m
+[0.158s] -- Added test 'copyright' to check source files copyright and LICENSE
+[0.161s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.162s] -- Added test 'lint_cmake' to check CMake code style
+[0.162s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.164s] -- Added test 'xmllint' to check XML markup files
+[0.165s] -- Configuring incomplete, errors occurred!
+[0.165s] See also "/home/calafaker/Control-Formation/ws/build/articubot_one/CMakeFiles/CMakeOutput.log".
+[0.167s] gmake: *** [Makefile:226: cmake_check_build_system] Error 1
+[0.169s] Invoked command in '/home/calafaker/Control-Formation/ws/build/articubot_one' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws/build/articubot_one -- -j16 -l16

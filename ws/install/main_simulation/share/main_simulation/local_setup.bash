@@ -1,0 +1,1 @@
+/home/calafaker/Control-Formation/ws/build/main_simulation/ament_cmake_environment_hooks/local_setup.bash
