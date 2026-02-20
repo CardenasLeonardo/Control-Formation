@@ -310,6 +310,12 @@ message(STATUS "Execute custom install script")
 
 # begin of custom install code
 
+# install(DIRECTORY "launch/" "DESTINATION" "share/articubot_one/launch")
+ament_cmake_symlink_install_directory("/home/calafaker/Control-Formation/ws/src/articubot_one" DIRECTORY "launch/" "DESTINATION" "share/articubot_one/launch")
+
+# install(DIRECTORY "description/" "DESTINATION" "share/articubot_one/description")
+ament_cmake_symlink_install_directory("/home/calafaker/Control-Formation/ws/src/articubot_one" DIRECTORY "description/" "DESTINATION" "share/articubot_one/description")
+
 # install(FILES "/home/calafaker/Control-Formation/ws/src/build/articubot_one/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/articubot_one" "DESTINATION" "share/ament_index/resource_index/package_run_dependencies")
 ament_cmake_symlink_install_files("/home/calafaker/Control-Formation/ws/src/articubot_one" FILES "/home/calafaker/Control-Formation/ws/src/build/articubot_one/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/articubot_one" "DESTINATION" "share/ament_index/resource_index/package_run_dependencies")
 

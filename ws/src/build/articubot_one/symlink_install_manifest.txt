@@ -1,3 +1,11 @@
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/launch/launch_sim.launch.py
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/launch/multi_robot.launch.py
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/launch/rsp.launch.py
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/description/gazebo_control.xacro
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/description/inertial_macros.xacro
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/description/lidar.xacro
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/description/robot.urdf.xacro
+/home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/description/robot_core.xacro
 /home/calafaker/Control-Formation/ws/src/install/articubot_one/share/ament_index/resource_index/package_run_dependencies/articubot_one
 /home/calafaker/Control-Formation/ws/src/install/articubot_one/share/ament_index/resource_index/parent_prefix_path/articubot_one
 /home/calafaker/Control-Formation/ws/src/install/articubot_one/share/articubot_one/environment/ament_prefix_path.sh

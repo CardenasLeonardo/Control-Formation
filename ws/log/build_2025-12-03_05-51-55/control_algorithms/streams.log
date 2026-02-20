@@ -1,0 +1,17 @@
+[0.622s] Invoking command in '/home/calafaker/Control-Formation/ws/build/control_algorithms': PYTHONPATH=/home/calafaker/Control-Formation/ws/build/control_algorithms/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws/install/control_algorithms/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws/build/control_algorithms/build --no-deps symlink_data
+[0.797s] running develop
+[0.900s] running egg_info
+[0.900s] writing control_algorithms.egg-info/PKG-INFO
+[0.900s] writing dependency_links to control_algorithms.egg-info/dependency_links.txt
+[0.900s] writing entry points to control_algorithms.egg-info/entry_points.txt
+[0.901s] writing requirements to control_algorithms.egg-info/requires.txt
+[0.901s] writing top-level names to control_algorithms.egg-info/top_level.txt
+[0.902s] reading manifest file 'control_algorithms.egg-info/SOURCES.txt'
+[0.903s] writing manifest file 'control_algorithms.egg-info/SOURCES.txt'
+[0.904s] running build_ext
+[0.904s] Creating /home/calafaker/Control-Formation/ws/install/control_algorithms/lib/python3.10/site-packages/control-algorithms.egg-link (link to .)
+[0.904s] Installing multi_controller script to /home/calafaker/Control-Formation/ws/install/control_algorithms/lib/control_algorithms
+[0.905s] 
+[0.905s] Installed /home/calafaker/Control-Formation/ws/build/control_algorithms
+[0.905s] running symlink_data
+[0.924s] Invoked command in '/home/calafaker/Control-Formation/ws/build/control_algorithms' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws/build/control_algorithms/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws/install/control_algorithms/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws/build/control_algorithms/build --no-deps symlink_data

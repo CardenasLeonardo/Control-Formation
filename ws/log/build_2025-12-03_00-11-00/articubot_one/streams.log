@@ -1,0 +1,55 @@
+[0.017s] Invoking command in '/home/calafaker/Control-Formation/ws/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws/install/simulation_pkg:/opt/ros/humble /usr/bin/cmake /home/calafaker/Control-Formation/ws/src/articubot_one -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/calafaker/Control-Formation/ws/install/articubot_one
+[0.228s] -- The C compiler identification is GNU 11.4.0
+[0.681s] -- The CXX compiler identification is GNU 11.4.0
+[0.981s] -- Detecting C compiler ABI info
+[1.110s] -- Detecting C compiler ABI info - done
+[1.115s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.116s] -- Detecting C compile features
+[1.116s] -- Detecting C compile features - done
+[1.119s] -- Detecting CXX compiler ABI info
+[1.244s] -- Detecting CXX compiler ABI info - done
+[1.249s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.249s] -- Detecting CXX compile features
+[1.249s] -- Detecting CXX compile features - done
+[1.256s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.362s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.416s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[1.445s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.508s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.511s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.511s] -- Added test 'lint_cmake' to check CMake code style
+[1.512s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.513s] -- Added test 'xmllint' to check XML markup files
+[1.515s] -- Configuring done
+[1.518s] -- Generating done
+[1.519s] -- Build files have been written to: /home/calafaker/Control-Formation/ws/build/articubot_one
+[1.522s] Invoked command in '/home/calafaker/Control-Formation/ws/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws/install/simulation_pkg:/opt/ros/humble /usr/bin/cmake /home/calafaker/Control-Formation/ws/src/articubot_one -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/calafaker/Control-Formation/ws/install/articubot_one
+[1.524s] Invoking command in '/home/calafaker/Control-Formation/ws/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws/install/simulation_pkg:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws/build/articubot_one -- -j16 -l16
+[1.551s] Invoked command in '/home/calafaker/Control-Formation/ws/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws/install/simulation_pkg:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws/build/articubot_one -- -j16 -l16
+[1.559s] Invoking command in '/home/calafaker/Control-Formation/ws/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws/install/simulation_pkg:/opt/ros/humble /usr/bin/cmake --install /home/calafaker/Control-Formation/ws/build/articubot_one
+[1.563s] -- Install configuration: ""
+[1.563s] -- Execute custom install script
+[1.564s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/launch/launch_sim.launch.py
+[1.570s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/launch/multi_robot.launch.py
+[1.576s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/launch/rsp.launch.py
+[1.583s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/description/gazebo_control.xacro
+[1.590s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/description/inertial_macros.xacro
+[1.596s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/description/lidar.xacro
+[1.602s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/description/robot.urdf.xacro
+[1.608s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/description/robot_core.xacro
+[1.615s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/ament_index/resource_index/package_run_dependencies/articubot_one
+[1.621s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/ament_index/resource_index/parent_prefix_path/articubot_one
+[1.627s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/environment/ament_prefix_path.sh
+[1.633s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/environment/ament_prefix_path.dsv
+[1.639s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/environment/path.sh
+[1.646s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/environment/path.dsv
+[1.652s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/local_setup.bash
+[1.658s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/local_setup.sh
+[1.664s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/local_setup.zsh
+[1.671s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/local_setup.dsv
+[1.677s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/package.dsv
+[1.682s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/ament_index/resource_index/packages/articubot_one
+[1.688s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/cmake/articubot_oneConfig.cmake
+[1.694s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/cmake/articubot_oneConfig-version.cmake
+[1.700s] -- Symlinking: /home/calafaker/Control-Formation/ws/install/articubot_one/share/articubot_one/package.xml
+[1.708s] Invoked command in '/home/calafaker/Control-Formation/ws/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws/install/simulation_pkg:/opt/ros/humble /usr/bin/cmake --install /home/calafaker/Control-Formation/ws/build/articubot_one

@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws/build/main_simulation/ament_cmake_core/main_simulationConfig-version.cmake

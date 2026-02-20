@@ -1,0 +1,17 @@
+running develop
+running egg_info
+writing control_algorithms.egg-info/PKG-INFO
+writing dependency_links to control_algorithms.egg-info/dependency_links.txt
+writing entry points to control_algorithms.egg-info/entry_points.txt
+writing requirements to control_algorithms.egg-info/requires.txt
+writing top-level names to control_algorithms.egg-info/top_level.txt
+reading manifest file 'control_algorithms.egg-info/SOURCES.txt'
+writing manifest file 'control_algorithms.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/calafaker/Control-Formation/ws/install/control_algorithms/lib/python3.10/site-packages/control-algorithms.egg-link (link to .)
+Installing multi_controller script to /home/calafaker/Control-Formation/ws/install/control_algorithms/lib/control_algorithms
+
+Installed /home/calafaker/Control-Formation/ws/build/control_algorithms
+running symlink_data
+creating /home/calafaker/Control-Formation/ws/install/control_algorithms/share/control_algorithms/launch
+symbolically linking /home/calafaker/Control-Formation/ws/build/control_algorithms/launch/multi_control.launch.py -> /home/calafaker/Control-Formation/ws/install/control_algorithms/share/control_algorithms/launch

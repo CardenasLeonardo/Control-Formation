@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws/src/main_simulation/launch/spawn_one.launch.py

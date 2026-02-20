@@ -1,0 +1,26 @@
+[0.611s] Invoking command in '/home/calafaker/Control-Formation/ws/src/build/control_algorithms': PYTHONPATH=/home/calafaker/Control-Formation/ws/src/build/control_algorithms/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws/src/install/control_algorithms/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws/src/build/control_algorithms/build --no-deps symlink_data
+[0.781s] running develop
+[0.877s] running egg_info
+[0.877s] creating control_algorithms.egg-info
+[0.877s] writing control_algorithms.egg-info/PKG-INFO
+[0.877s] writing dependency_links to control_algorithms.egg-info/dependency_links.txt
+[0.878s] writing entry points to control_algorithms.egg-info/entry_points.txt
+[0.878s] writing requirements to control_algorithms.egg-info/requires.txt
+[0.878s] writing top-level names to control_algorithms.egg-info/top_level.txt
+[0.878s] writing manifest file 'control_algorithms.egg-info/SOURCES.txt'
+[0.880s] reading manifest file 'control_algorithms.egg-info/SOURCES.txt'
+[0.880s] writing manifest file 'control_algorithms.egg-info/SOURCES.txt'
+[0.881s] running build_ext
+[0.881s] Creating /home/calafaker/Control-Formation/ws/src/install/control_algorithms/lib/python3.10/site-packages/control-algorithms.egg-link (link to .)
+[0.882s] Installing multi_controller script to /home/calafaker/Control-Formation/ws/src/install/control_algorithms/lib/control_algorithms
+[0.882s] 
+[0.883s] Installed /home/calafaker/Control-Formation/ws/src/build/control_algorithms
+[0.883s] running symlink_data
+[0.883s] creating /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/ament_index
+[0.883s] creating /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/ament_index/resource_index
+[0.883s] creating /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/ament_index/resource_index/packages
+[0.883s] symbolically linking /home/calafaker/Control-Formation/ws/src/build/control_algorithms/resource/control_algorithms -> /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/ament_index/resource_index/packages
+[0.884s] symbolically linking /home/calafaker/Control-Formation/ws/src/build/control_algorithms/package.xml -> /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/control_algorithms
+[0.884s] creating /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/control_algorithms/launch
+[0.884s] symbolically linking /home/calafaker/Control-Formation/ws/src/build/control_algorithms/launch/multi_control.launch.py -> /home/calafaker/Control-Formation/ws/src/install/control_algorithms/share/control_algorithms/launch
+[0.909s] Invoked command in '/home/calafaker/Control-Formation/ws/src/build/control_algorithms' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws/src/build/control_algorithms/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws/src/install/control_algorithms/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws/src/build/control_algorithms/build --no-deps symlink_data
