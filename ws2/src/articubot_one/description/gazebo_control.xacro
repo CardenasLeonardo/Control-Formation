@@ -5,6 +5,7 @@
     <plugin name="diff_drive_${namespace}" filename="libgazebo_ros_diff_drive.so">
 
       <ros>
+        <namespace>${namespace}</namespace>
         <remapping>cmd_vel:=cmd_vel</remapping>
         <remapping>odom:=odom</remapping>
       </ros>
