@@ -9,6 +9,7 @@ setup.py
 ../../build/control_nodes/control_nodes.egg-info/top_level.txt
 ../../build/control_nodes/control_nodes.egg-info/zip-safe
 control_nodes/__init__.py
+control_nodes/consenso_prom_err_R.py
 control_nodes/consenso_prom_err_notR.py
 control_nodes/distributed_controller.py
 control_nodes/navigate_individual.py

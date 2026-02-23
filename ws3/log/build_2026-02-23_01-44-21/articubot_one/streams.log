@@ -1,0 +1,55 @@
+[0.018s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/control_nodes:/home/calafaker/Control-Formation/ws3/src/install/control_nodes:/opt/ros/humble:/home/calafaker/Control-Formation/ws3/src/install/simulador:/home/calafaker/Control-Formation/ws3/src/install/control_algorithms:/home/calafaker/Control-Formation/ws3/install/simulation_pkg:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_algorithms /usr/bin/cmake /home/calafaker/Control-Formation/ws3/src/articubot_one -DCMAKE_INSTALL_PREFIX=/home/calafaker/Control-Formation/ws3/install/articubot_one
+[0.109s] -- The C compiler identification is GNU 11.4.0
+[0.481s] -- The CXX compiler identification is GNU 11.4.0
+[0.750s] -- Detecting C compiler ABI info
+[0.853s] -- Detecting C compiler ABI info - done
+[0.858s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.858s] -- Detecting C compile features
+[0.858s] -- Detecting C compile features - done
+[0.860s] -- Detecting CXX compiler ABI info
+[0.970s] -- Detecting CXX compiler ABI info - done
+[0.975s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.975s] -- Detecting CXX compile features
+[0.976s] -- Detecting CXX compile features - done
+[0.977s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.084s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.145s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.198s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.200s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.200s] -- Added test 'lint_cmake' to check CMake code style
+[1.201s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.202s] -- Added test 'xmllint' to check XML markup files
+[1.203s] -- Configuring done
+[1.206s] -- Generating done
+[1.207s] -- Build files have been written to: /home/calafaker/Control-Formation/ws3/build/articubot_one
+[1.211s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/control_nodes:/home/calafaker/Control-Formation/ws3/src/install/control_nodes:/opt/ros/humble:/home/calafaker/Control-Formation/ws3/src/install/simulador:/home/calafaker/Control-Formation/ws3/src/install/control_algorithms:/home/calafaker/Control-Formation/ws3/install/simulation_pkg:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_algorithms /usr/bin/cmake /home/calafaker/Control-Formation/ws3/src/articubot_one -DCMAKE_INSTALL_PREFIX=/home/calafaker/Control-Formation/ws3/install/articubot_one
+[1.213s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/control_nodes:/home/calafaker/Control-Formation/ws3/src/install/control_nodes:/opt/ros/humble:/home/calafaker/Control-Formation/ws3/src/install/simulador:/home/calafaker/Control-Formation/ws3/src/install/control_algorithms:/home/calafaker/Control-Formation/ws3/install/simulation_pkg:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_algorithms /usr/bin/cmake --build /home/calafaker/Control-Formation/ws3/build/articubot_one -- -j16 -l16
+[1.239s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/control_nodes:/home/calafaker/Control-Formation/ws3/src/install/control_nodes:/opt/ros/humble:/home/calafaker/Control-Formation/ws3/src/install/simulador:/home/calafaker/Control-Formation/ws3/src/install/control_algorithms:/home/calafaker/Control-Formation/ws3/install/simulation_pkg:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_algorithms /usr/bin/cmake --build /home/calafaker/Control-Formation/ws3/build/articubot_one -- -j16 -l16
+[1.247s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/articubot_one': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/control_nodes:/home/calafaker/Control-Formation/ws3/src/install/control_nodes:/opt/ros/humble:/home/calafaker/Control-Formation/ws3/src/install/simulador:/home/calafaker/Control-Formation/ws3/src/install/control_algorithms:/home/calafaker/Control-Formation/ws3/install/simulation_pkg:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_algorithms /usr/bin/cmake --install /home/calafaker/Control-Formation/ws3/build/articubot_one
+[1.251s] -- Install configuration: ""
+[1.252s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/launch
+[1.252s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/launch/launch_sim.launch.py
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/launch/rsp.launch.py
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/launch/multi_robot.launch.py
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/description
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/description/lidar.xacro
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/description/inertial_macros.xacro
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/description/gazebo_control.xacro
+[1.253s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/description/robot_core.xacro
+[1.254s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/description/robot.urdf.xacro
+[1.254s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/ament_index/resource_index/package_run_dependencies/articubot_one
+[1.255s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/ament_index/resource_index/parent_prefix_path/articubot_one
+[1.255s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/environment/ament_prefix_path.sh
+[1.255s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/environment/ament_prefix_path.dsv
+[1.255s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/environment/path.sh
+[1.256s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/environment/path.dsv
+[1.256s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/local_setup.bash
+[1.256s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/local_setup.sh
+[1.256s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/local_setup.zsh
+[1.256s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/local_setup.dsv
+[1.256s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/package.dsv
+[1.257s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/ament_index/resource_index/packages/articubot_one
+[1.257s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/cmake/articubot_oneConfig.cmake
+[1.257s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/cmake/articubot_oneConfig-version.cmake
+[1.257s] -- Installing: /home/calafaker/Control-Formation/ws3/install/articubot_one/share/articubot_one/package.xml
+[1.260s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/articubot_one' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/control_nodes:/home/calafaker/Control-Formation/ws3/src/install/control_nodes:/opt/ros/humble:/home/calafaker/Control-Formation/ws3/src/install/simulador:/home/calafaker/Control-Formation/ws3/src/install/control_algorithms:/home/calafaker/Control-Formation/ws3/install/simulation_pkg:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_algorithms /usr/bin/cmake --install /home/calafaker/Control-Formation/ws3/build/articubot_one

@@ -27,6 +27,7 @@ setup(
         'distributed_controller = control_nodes.distributed_controller:main',
         'navigate_individual = control_nodes.navigate_individual:main',
         'consenso_prom_err_notR = control_nodes.consenso_prom_err_notR:main',
+        'consenso_prom_err_R = control_nodes.consenso_prom_err_R:main',
     ],
 },
 )
