@@ -2,21 +2,26 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="namespace" default="robot0"/>
-  <xacro:property name="namespace" value="$(arg namespace)"/>
+  <xacro:property name="prefix" value="${namespace}/"/>
 
-  <joint name="laser_joint" type="fixed">
-    <parent link="chassis"/>
-    <child link="laser_frame"/>
+  <!-- ================= LASER JOINT ================= -->
+
+  <joint name="${prefix}laser_joint" type="fixed">
+    <parent link="${prefix}chassis"/>
+    <child link="${prefix}laser_frame"/>
     <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
   </joint>
 
-  <link name="laser_frame">
+  <!-- ================= LASER LINK ================= -->
+
+  <link name="${prefix}laser_frame">
     <visual>
       <geometry>
         <cylinder radius="0.05" length="0.04"/>
       </geometry>
       <material name="red"/>
     </visual>
+
     <collision>
       <geometry>
         <cylinder radius="0.05" length="0.04"/>
@@ -24,10 +29,12 @@
     </collision>
   </link>
 
-  <gazebo reference="laser_frame">
-  <material>Gazebo/Red</material>
-    <sensor name="laser_sensor" type="ray">
+  <!-- ================= GAZEBO SENSOR ================= -->
 
+  <gazebo reference="${prefix}laser_frame">
+    <material>Gazebo/Red</material>
+
+    <sensor name="laser_sensor_${namespace}" type="ray">
       <always_on>true</always_on>
       <visualize>true</visualize>
       <update_rate>10.0</update_rate>
@@ -47,13 +54,13 @@
       </ray>
 
       <plugin name="laser_plugin_${namespace}" filename="libgazebo_ros_ray_sensor.so">
-  <ros>
-    <namespace>${namespace}</namespace>
-    <remapping>~/out:=scan</remapping>
-  </ros>
-  <output_type>sensor_msgs/LaserScan</output_type>
-  <frame_name>laser_frame</frame_name>
-</plugin>
+        <ros>
+          <namespace>${namespace}</namespace>
+          <remapping>~/out:=scan</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>${prefix}laser_frame</frame_name>
+      </plugin>
 
     </sensor>
   </gazebo>

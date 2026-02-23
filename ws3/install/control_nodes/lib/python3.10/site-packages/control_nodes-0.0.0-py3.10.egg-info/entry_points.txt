@@ -1,0 +1,3 @@
+[console_scripts]
+distributed_controller = control_nodes.distributed_controller:main
+

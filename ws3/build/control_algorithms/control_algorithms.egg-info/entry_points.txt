@@ -1,0 +1,3 @@
+[console_scripts]
+multi_controller = control_algorithms.multi_controller:main
+
