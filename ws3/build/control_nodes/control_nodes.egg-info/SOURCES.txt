@@ -9,7 +9,13 @@ setup.py
 ../../build/control_nodes/control_nodes.egg-info/top_level.txt
 ../../build/control_nodes/control_nodes.egg-info/zip-safe
 control_nodes/__init__.py
+control_nodes/consenso_prom_err_notR.py
 control_nodes/distributed_controller.py
+control_nodes/navigate_individual.py
+control_nodes/algorithms/__init__.py
+control_nodes/algorithms/consensus_prom_err.py
+control_nodes/algorithms/control_law.py
+control_nodes/algorithms/pva.py
 resource/control_nodes
 test/test_copyright.py
 test/test_flake8.py
