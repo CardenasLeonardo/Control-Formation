@@ -1,3 +1,4 @@
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/navigate_individual_pva.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/consenso_prom_err_R.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__init__.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/distributed_controller.py
@@ -7,6 +8,7 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__init__.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_prom_err.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/pva.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/navigate_individual_pva.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/consenso_prom_err_R.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/__init__.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/distributed_controller.cpython-310.pyc
@@ -29,3 +31,4 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/consenso_prom_err_notR
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/distributed_controller
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/navigate_individual
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/navigate_individual_pva

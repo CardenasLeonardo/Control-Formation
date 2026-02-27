@@ -17,50 +17,24 @@ class ConsensoPromErrR(Node):
 
         self.robot_id = self.get_namespace().strip('/')
 
-        # 🔥 Radio configurable
         self.declare_parameter('neighbor_radius', 3.0)
         self.R = self.get_parameter('neighbor_radius').value
 
-        # Estado propio
         self.x = 0.0
         self.y = 0.0
         self.theta = 0.0
 
-        # Estados recibidos
         self.states = {}
-
-        # Algoritmo
         self.algorithm = ConsensusPromErr()
 
         # Subscripciones
-        self.odom_sub = self.create_subscription(
-            Odometry,
-            'odom',
-            self.odom_callback,
-            10
-        )
-
-        self.state_sub = self.create_subscription(
-            RobotState,
-            '/robot_states',
-            self.state_callback,
-            10
-        )
+        self.create_subscription(Odometry, 'odom', self.odom_callback, 10)
+        self.create_subscription(RobotState, '/robot_states', self.state_callback, 10)
 
         # Publicadores
-        self.state_pub = self.create_publisher(
-            RobotState,
-            '/robot_states',
-            10
-        )
+        self.state_pub = self.create_publisher(RobotState, '/robot_states', 10)
+        self.cmd_pub = self.create_publisher(Twist, 'cmd_vel', 10)
 
-        self.cmd_pub = self.create_publisher(
-            Twist,
-            'cmd_vel',
-            10
-        )
-
-        # Timer
         self.timer = self.create_timer(0.1, self.control_loop)
 
         self.get_logger().info(
@@ -78,7 +52,6 @@ class ConsensoPromErrR(Node):
         cosy_cosp = 1 - 2*(q.y*q.y + q.z*q.z)
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
-        # Publicar estado propio
         state = RobotState()
         state.robot_id = self.robot_id
         state.x = self.x
@@ -117,7 +90,6 @@ class ConsensoPromErrR(Node):
         twist = Twist()
         twist.linear.x = v
         twist.angular.z = w
-
         self.cmd_pub.publish(twist)
 
 

@@ -13,6 +13,7 @@ control_nodes/consenso_prom_err_R.py
 control_nodes/consenso_prom_err_notR.py
 control_nodes/distributed_controller.py
 control_nodes/navigate_individual.py
+control_nodes/navigate_individual_pva.py
 control_nodes/algorithms/__init__.py
 control_nodes/algorithms/consensus_prom_err.py
 control_nodes/algorithms/control_law.py
