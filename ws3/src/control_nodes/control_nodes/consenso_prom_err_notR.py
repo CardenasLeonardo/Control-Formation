@@ -38,15 +38,14 @@ class ConsensoPromErr(Node):
 
         self.state_sub = self.create_subscription(
             RobotState,
-            '/robot_states',
+            '/robot_states_rx',
             self.state_callback,
             10
         )
 
-        # Publishers
         self.state_pub = self.create_publisher(
             RobotState,
-            '/robot_states',
+            '/robot_states_tx',
             10
         )
 
@@ -56,7 +55,7 @@ class ConsensoPromErr(Node):
             10
         )
 
-        # 🔥 GUARDAMOS EL TIMER COMO ATRIBUTO (CLAVE)
+        # GUARDAMOS EL TIMER COMO ATRIBUTO (CLAVE)
         self.timer = self.create_timer(0.1, self.control_loop)
 
         self.get_logger().info(f"{self.robot_id} consenso iniciado")
@@ -72,7 +71,7 @@ class ConsensoPromErr(Node):
         cosy_cosp = 1 - 2*(q.y*q.y + q.z*q.z)
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
-        # 🔥 PUBLICAMOS ESTADO SIEMPRE
+        # PUBLICAMOS ESTADO SIEMPRE
         state = RobotState()
         state.robot_id = self.robot_id
         state.x = self.x
@@ -91,7 +90,7 @@ class ConsensoPromErr(Node):
     def control_loop(self):
 
         neighbors = []
-
+        "Valorar el tamaño de la lista y si crece demasiado"
         for rid, (xj, yj, _) in self.states.items():
             if rid != self.robot_id:
                 neighbors.append((xj, yj))

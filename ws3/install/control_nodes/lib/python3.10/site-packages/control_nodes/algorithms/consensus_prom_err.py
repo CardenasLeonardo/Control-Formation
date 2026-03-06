@@ -30,7 +30,7 @@ class ConsensusPromErr:
         a = sqrt(ex**2 + ey**2)
         alpha = atan2(ey, ex) - theta
 
-        # normalización
+        # normalización , aprovechar el modulo que ya emple
         if alpha > math.pi:
             alpha -= 2 * math.pi
         if alpha < -math.pi:

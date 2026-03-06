@@ -1,3 +1,3 @@
 [console_scripts]
-
+aire = simulador.AIRE:main
 

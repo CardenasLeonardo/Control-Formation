@@ -23,13 +23,14 @@ class ControlLaw:
         # Ángulo al objetivo
         self.alpha = atan2(self.yr - self.y, self.xr - self.x) - self.theta
         
-        # Normalización de ángulo
+        # Normalización de ángulo 
+        "Cambiar a while para lidiar con aliasing grandes"
         if self.alpha > math.pi:
             self.alpha -= 2 * math.pi
         if self.alpha < -math.pi:
             self.alpha += 2 * math.pi
         
-        # Ley de control
+        # Ley de control verificar unidades
         self.v = k1 * self.a * cos(self.alpha)
         self.v = max(min(self.v, 1.0), -1.0)
 
