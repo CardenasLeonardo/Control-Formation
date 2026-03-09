@@ -1,9 +1,19 @@
 import numpy as np
+from scipy.optimize import minimize
 
 
 class PVA:
 
-    def __init__(self,d_safe=0.3,d_influence=1.0,xi=1.0,v_max=0.5,w_max=1.5):
+    def __init__(self,
+                 d_safe=0.3,
+                 d_influence=1.0,
+                 xi=1.0,
+                 rp=0.25,
+                 v_max=0.5,
+                 w_max=0.5,
+                 angle_min=-np.pi,
+                 angle_increment=np.pi/180,
+                 n_rays=360):
 
         self.d_safe = d_safe
         self.d_influence = d_influence
@@ -12,95 +22,74 @@ class PVA:
         self.v_max = v_max
         self.w_max = w_max
 
-    # ---------------------------------------------------------
+        # Precalcular A y B
+        angles = angle_min + np.arange(n_rays)*angle_increment
 
-    def build_constraints(self, robot_pose, obstacles):
-        """
-        Construye restricciones lineales Av <= c
-        """
-
-        x, y, theta = robot_pose
-
-        A = []
-        c = []
-
-        for obs in obstacles:
-
-            ox, oy = obs
-
-            dx = ox - x
-            dy = oy - y
-
-            d = np.sqrt(dx**2 + dy**2)
-
-            # Solo si está en zona de influencia
-            if d > self.d_influence:
-                continue
-
-            # Vector normal hacia obstáculo
-            n = np.array([dx, dy]) / d
-
-            # Dirección longitudinal del robot
-            m = np.array([np.cos(theta), np.sin(theta)])
-
-            # Aproximamos punto P como centro del robot
-            # (Después lo refinamos)
-            RP = np.array([0.0, 0.0])
-
-            # Coeficientes lineales
-            a = np.dot(m, n)
-
-            # Para robot diferencial:
-            # k x RP = (-RP_y, RP_x)
-            k_cross_RP = np.array([-RP[1], RP[0]])
-            b = np.dot(k_cross_RP, n)
-
-            # Límite derecho
-            c_i = self.xi * (d - self.d_safe) / (self.d_influence - self.d_safe)
-
-            A.append([a, b])
-            c.append(c_i)
-
-        return np.array(A), np.array(c)
+        self.A = np.cos(angles)
+        self.B = rp*np.sin(angles)
 
     # ---------------------------------------------------------
 
-    def project_velocity(self, u_goal, A, c):
-        """
-        Proyecta u_goal en el conjunto Av <= c
-        """
+    def build_constraints(self, ranges):
 
-        u = np.array(u_goal)
+        d = np.asarray(ranges)
 
-        for i in range(len(A)):
-            if np.dot(A[i], u) > c[i]:
+        mask = (d > 0) & (d <= self.d_influence)
 
-                # Proyección ortogonal sobre la recta Ai u = ci
-                Ai = A[i]
-                u = u - (np.dot(Ai, u) - c[i]) / np.dot(Ai, Ai) * Ai
+        if not np.any(mask):
+            return []
 
-        return u
+        d = d[mask]
 
-    # ---------------------------------------------------------
+        ratio = (d - self.d_safe)/(self.d_influence - self.d_safe)
 
-    def apply_limits(self, u):
+        C = -self.xi*ratio
 
-        v = np.clip(u[0], -self.v_max, self.v_max)
-        w = np.clip(u[1], -self.w_max, self.w_max)
+        A = self.A[mask]
+        B = self.B[mask]
 
-        return np.array([v, w])
+        constraints = list(zip(A,B,C))
+
+        return constraints
 
     # ---------------------------------------------------------
 
-    def filter(self, u_goal, robot_pose, obstacles):
+    def solve_qp(self, v_goal, w_goal, constraints):
 
-        A, c = self.build_constraints(robot_pose, obstacles)
+        # función objetivo
+        def objective(x):
 
-        if len(A) > 0:
-            u = self.project_velocity(u_goal, A, c)
-        else:
-            u = np.array(u_goal)
+            v, w = x
 
-        u = self.apply_limits(u)
+            return 0.5*((v - v_goal)**2 + (w - w_goal)**2)
 
-        return u[0], u[1]
+        # constraints PVA
+        cons = []
+
+        for A,B,C in constraints:
+
+            cons.append({
+                'type': 'ineq',
+                'fun': lambda x, A=A, B=B, C=C:
+                    A*x[0] + B*x[1] - C
+            })
+
+        # límites de velocidad
+        bounds = [
+            (-self.v_max, self.v_max),
+            (-self.w_max, self.w_max)
+        ]
+
+        result = minimize(
+            objective,
+            x0=[v_goal, w_goal],
+            constraints=cons,
+            bounds=bounds,
+            method='SLSQP'
+        )
+
+        if result.success:
+            return result.x
+
+        # fallback
+        return np.array([0.0,0.0])

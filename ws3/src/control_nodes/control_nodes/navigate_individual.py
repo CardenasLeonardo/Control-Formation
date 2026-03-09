@@ -50,9 +50,10 @@ class NavigateIndividual(Node):
             10
         )
 
+        # 🔹 Publicación del estado al nodo AIRE
         self.state_pub = self.create_publisher(
             RobotState,
-            '/robot_states',
+            '/robot_states_tx',
             10
         )
 
@@ -74,7 +75,7 @@ class NavigateIndividual(Node):
         cosy_cosp = 1 - 2*(q.y*q.y + q.z*q.z)
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
-        # Publicar estado SIEMPRE
+        # Publicar estado al AIRE
         state = RobotState()
         state.robot_id = self.robot_id
         state.x = self.x
