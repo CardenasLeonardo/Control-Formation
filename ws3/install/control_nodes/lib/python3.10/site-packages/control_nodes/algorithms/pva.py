@@ -25,8 +25,8 @@ class PVA:
         # Precalcular A y B
         angles = angle_min + np.arange(n_rays)*angle_increment
 
-        self.A = np.cos(angles)
-        self.B = rp*np.sin(angles)
+        self.A = -np.cos(angles)
+        self.B = -rp*np.sin(angles)
 
     # ---------------------------------------------------------
 

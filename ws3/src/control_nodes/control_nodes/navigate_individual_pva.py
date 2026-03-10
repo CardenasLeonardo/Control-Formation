@@ -33,7 +33,7 @@ class NavigateIndividual(Node):
         self.tolerance = 0.05
 
         # --------------------------------------------------
-        # CONTROL NOMINAL
+        # CONTROLADOR
         # --------------------------------------------------
 
         self.controller = NavControlador()
@@ -43,16 +43,16 @@ class NavigateIndividual(Node):
         # --------------------------------------------------
 
         self.pva = PVA(
-            d_safe=0.5,
-            d_influence=2.0,
-            xi=1.5,
+            d_safe=0.85,
+            d_influence=3.0,
+            xi=1.0,
             rp=0.25,
             v_max=1.0,
             w_max=1.0
         )
 
         # --------------------------------------------------
-        # ESTADO DEL ROBOT
+        # ESTADO ROBOT
         # --------------------------------------------------
 
         self.x = 0.0
@@ -62,10 +62,9 @@ class NavigateIndividual(Node):
         self.v = 0.0
         self.w = 0.0
 
-        # lidar
         self.ranges = []
 
-        # constraints actuales (solo para graficar)
+        # constraints actuales
         self.constraints = []
 
         # --------------------------------------------------
@@ -135,7 +134,6 @@ class NavigateIndividual(Node):
 
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
-        # publicar estado
         state = RobotState()
         state.robot_id = self.robot_id
         state.x = self.x
@@ -144,7 +142,6 @@ class NavigateIndividual(Node):
 
         self.state_pub.publish(state)
 
-        # actualizar controlador
         self.controller.x = self.x
         self.controller.y = self.y
         self.controller.theta = self.theta
@@ -155,25 +152,6 @@ class NavigateIndividual(Node):
 
     def scan_callback(self, msg):
 
-        ranges = msg.ranges
-        n = len(ranges)
-
-        # índices principales
-        front_i = n // 2
-        back_i = 0
-        left_i = int(3 * n / 4)
-        right_i = int(n / 4)
-
-        front = ranges[front_i]
-        back = ranges[back_i]
-        left = ranges[left_i]
-        right = ranges[right_i]
-
-        self.get_logger().info(
-            f"F:{front:.2f}  B:{back:.2f}  L:{left:.2f}  R:{right:.2f}"
-        )
-
-        # guardar ranges
         self.ranges = list(msg.ranges)
 
     # --------------------------------------------------
@@ -204,15 +182,35 @@ class NavigateIndividual(Node):
         )
 
         # --------------------------------------------------
-        # PVA
+        # DEBUG: usar solo 10 rayos
         # --------------------------------------------------
 
         if self.ranges:
 
-            # construir constraints
-            self.constraints = self.pva.build_constraints(self.ranges)
+            # construir todas las constraints
+            all_constraints = self.pva.build_constraints(self.ranges)
 
-            # resolver optimización
+            # índices cada 36°
+            debug_indices = [i*36 for i in range(10)]
+
+            # seleccionar solo esas constraints
+            self.constraints = [
+                all_constraints[i]
+                for i in debug_indices
+                if i < len(all_constraints)
+            ]
+
+            print("\n--- DEBUG CONSTRAINTS ---")
+
+            for i,(A,B,C) in enumerate(self.constraints):
+
+                angle = math.degrees(math.atan2(B/0.25, A))
+
+                print(
+                    f"{i}: angle≈{angle:.1f}°  "
+                    f"A={A:.3f}  B={B:.3f}  C={C:.3f}"
+                )
+
             v_safe, w_safe = self.pva.solve_qp(
                 v_goal,
                 w_goal,
