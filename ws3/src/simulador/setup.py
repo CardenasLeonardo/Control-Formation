@@ -27,6 +27,9 @@ setup(
     entry_points={
         'console_scripts': [
             'aire = simulador.AIRE:main',
+            'states_plotter = simulador.plotter_states:main',
+            'states_plotter_v2 = simulador.states_plotter_v2:main',
+            'pva_plotter = simulador.pva_plotter:main',
         ],
     },
 )

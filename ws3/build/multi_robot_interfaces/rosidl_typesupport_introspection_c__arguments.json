@@ -3,7 +3,8 @@
   "output_dir": "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_typesupport_introspection_c/multi_robot_interfaces",
   "template_dir": "/opt/ros/humble/share/rosidl_typesupport_introspection_c/resource",
   "idl_tuples": [
-    "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_adapter/multi_robot_interfaces:msg/RobotState.idl"
+    "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_adapter/multi_robot_interfaces:msg/RobotState.idl",
+    "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_adapter/multi_robot_interfaces:msg/PVAConstraints.idl"
   ],
   "target_dependencies": [
     "/opt/ros/humble/lib/rosidl_typesupport_introspection_c/rosidl_typesupport_introspection_c",
@@ -14,6 +15,7 @@
     "/opt/ros/humble/share/rosidl_typesupport_introspection_c/resource/msg__type_support.c.em",
     "/opt/ros/humble/share/rosidl_typesupport_introspection_c/resource/srv__rosidl_typesupport_introspection_c.h.em",
     "/opt/ros/humble/share/rosidl_typesupport_introspection_c/resource/srv__type_support.c.em",
-    "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_adapter/multi_robot_interfaces/msg/RobotState.idl"
+    "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_adapter/multi_robot_interfaces/msg/RobotState.idl",
+    "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/rosidl_adapter/multi_robot_interfaces/msg/PVAConstraints.idl"
   ]
 }

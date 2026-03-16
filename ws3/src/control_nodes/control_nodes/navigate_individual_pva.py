@@ -4,11 +4,12 @@ from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
+
 from multi_robot_interfaces.msg import RobotState
+from multi_robot_interfaces.msg import PVAConstraints
 
 from control_nodes.algorithms.control_law import NavControlador
 from control_nodes.algorithms.pva import PVA
-from control_nodes.algorithms.pva_plotter import PVAPlotter
 
 import math
 
@@ -16,6 +17,7 @@ import math
 class NavigateIndividual(Node):
 
     def __init__(self):
+
         super().__init__('navigate_individual')
 
         self.robot_id = self.get_namespace().strip('/')
@@ -64,15 +66,7 @@ class NavigateIndividual(Node):
 
         self.ranges = []
 
-        # constraints actuales
         self.constraints = []
-
-        # --------------------------------------------------
-        # GRAFICADOR
-        # --------------------------------------------------
-
-        self.plotter = PVAPlotter(vmax=1.0, wmax=1.0)
-        self.plot_counter = 0
 
         # --------------------------------------------------
         # SUBSCRIBERS
@@ -108,6 +102,12 @@ class NavigateIndividual(Node):
             10
         )
 
+        self.pva_pub = self.create_publisher(
+            PVAConstraints,
+            '/pva_constraints',
+            10
+        )
+
         # --------------------------------------------------
         # TIMER
         # --------------------------------------------------
@@ -129,8 +129,8 @@ class NavigateIndividual(Node):
 
         q = msg.pose.pose.orientation
 
-        siny_cosp = 2*(q.w*q.z + q.x*q.y)
-        cosy_cosp = 1 - 2*(q.y*q.y + q.z*q.z)
+        siny_cosp = 2 * (q.w * q.z + q.x * q.y)
+        cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
 
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
@@ -161,55 +161,30 @@ class NavigateIndividual(Node):
     def control_loop(self):
 
         distance_to_goal = math.sqrt(
-            (self.goal_x - self.x)**2 +
-            (self.goal_y - self.y)**2
+            (self.goal_x - self.x) ** 2 +
+            (self.goal_y - self.y) ** 2
         )
-
-        if distance_to_goal < self.tolerance:
-
-            stop = Twist()
-            self.cmd_pub.publish(stop)
-
-            return
 
         # --------------------------------------------------
         # CONTROL NOMINAL
         # --------------------------------------------------
 
-        v_goal, w_goal = self.controller.ley_control(
-            self.goal_x,
-            self.goal_y
-        )
+        if distance_to_goal < self.tolerance:
+            v_goal = 0.0
+            w_goal = 0.0
+        else:
+            v_goal, w_goal = self.controller.ley_control(
+                self.goal_x,
+                self.goal_y
+            )
 
         # --------------------------------------------------
-        # DEBUG: usar solo 10 rayos
+        # PVA
         # --------------------------------------------------
 
         if self.ranges:
 
-            # construir todas las constraints
-            all_constraints = self.pva.build_constraints(self.ranges)
-
-            # índices cada 36°
-            debug_indices = [i*36 for i in range(10)]
-
-            # seleccionar solo esas constraints
-            self.constraints = [
-                all_constraints[i]
-                for i in debug_indices
-                if i < len(all_constraints)
-            ]
-
-            print("\n--- DEBUG CONSTRAINTS ---")
-
-            for i,(A,B,C) in enumerate(self.constraints):
-
-                angle = math.degrees(math.atan2(B/0.25, A))
-
-                print(
-                    f"{i}: angle≈{angle:.1f}°  "
-                    f"A={A:.3f}  B={B:.3f}  C={C:.3f}"
-                )
+            self.constraints = self.pva.build_constraints(self.ranges)
 
             v_safe, w_safe = self.pva.solve_qp(
                 v_goal,
@@ -226,21 +201,27 @@ class NavigateIndividual(Node):
         self.w = w_safe
 
         # --------------------------------------------------
-        # GRAFICAR
+        # PUBLICAR PVA
         # --------------------------------------------------
 
-        self.plot_counter += 1
+        msg = PVAConstraints()
 
-        if self.plot_counter % 5 == 0:
+        msg.robot_id = self.robot_id
 
-            self.plotter.plot_constraints(
-                self.constraints,
-                goal=(v_goal, w_goal),
-                safe=(v_safe, w_safe)
-            )
+        msg.a = [c[0] for c in self.constraints]
+        msg.b = [c[1] for c in self.constraints]
+        msg.c = [c[2] for c in self.constraints]
+
+        msg.v_goal = float(v_goal)
+        msg.w_goal = float(w_goal)
+
+        msg.v_star = float(v_safe)
+        msg.w_star = float(w_safe)
+
+        self.pva_pub.publish(msg)
 
         # --------------------------------------------------
-        # PUBLICAR
+        # PUBLICAR VELOCIDADES
         # --------------------------------------------------
 
         twist = Twist()
@@ -261,3 +242,7 @@ def main(args=None):
     node.destroy_node()
 
     rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()

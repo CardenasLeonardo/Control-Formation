@@ -1,0 +1,25 @@
+[0.711s] Invoking command in '/home/calafaker/Control-Formation/ws3/src/control_nodes': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/control_nodes/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/control_nodes build --build-base /home/calafaker/Control-Formation/ws3/build/control_nodes/build install --record /home/calafaker/Control-Formation/ws3/build/control_nodes/install.log --single-version-externally-managed install_data
+[0.898s] running egg_info
+[0.899s] writing ../../build/control_nodes/control_nodes.egg-info/PKG-INFO
+[0.899s] writing dependency_links to ../../build/control_nodes/control_nodes.egg-info/dependency_links.txt
+[0.899s] writing entry points to ../../build/control_nodes/control_nodes.egg-info/entry_points.txt
+[0.899s] writing requirements to ../../build/control_nodes/control_nodes.egg-info/requires.txt
+[0.900s] writing top-level names to ../../build/control_nodes/control_nodes.egg-info/top_level.txt
+[0.901s] reading manifest file '../../build/control_nodes/control_nodes.egg-info/SOURCES.txt'
+[0.901s] writing manifest file '../../build/control_nodes/control_nodes.egg-info/SOURCES.txt'
+[0.902s] running build
+[0.902s] running build_py
+[0.902s] running install
+[0.902s] running install_lib
+[0.903s] running install_data
+[0.903s] running install_egg_info
+[0.905s] removing '/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info' (and everything under it)
+[0.906s] Copying ../../build/control_nodes/control_nodes.egg-info to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info
+[0.906s] running install_scripts
+[0.921s] Installing consenso_prom_err_R script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[0.921s] Installing consenso_prom_err_notR script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[0.922s] Installing distributed_controller script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[0.922s] Installing navigate_individual script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[0.922s] Installing navigate_individual_pva script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[0.922s] writing list of installed files to '/home/calafaker/Control-Formation/ws3/build/control_nodes/install.log'
+[0.946s] Invoked command in '/home/calafaker/Control-Formation/ws3/src/control_nodes' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/control_nodes/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/control_nodes build --build-base /home/calafaker/Control-Formation/ws3/build/control_nodes/build install --record /home/calafaker/Control-Formation/ws3/build/control_nodes/install.log --single-version-externally-managed install_data

@@ -12,6 +12,9 @@ launch/simulacion.launch.py
 resource/simulador
 simulador/AIRE.py
 simulador/__init__.py
+simulador/plotter_states.py
+simulador/pva_plotter.py
+simulador/states_plotter_v2.py
 test/test_copyright.py
 test/test_flake8.py
 test/test_pep257.py

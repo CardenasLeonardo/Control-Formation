@@ -67,6 +67,7 @@ include CMakeFiles/multi_robot_interfaces.dir/compiler_depend.make
 include CMakeFiles/multi_robot_interfaces.dir/progress.make
 
 CMakeFiles/multi_robot_interfaces: /home/calafaker/Control-Formation/ws3/src/multi_robot_interfaces/msg/RobotState.msg
+CMakeFiles/multi_robot_interfaces: /home/calafaker/Control-Formation/ws3/src/multi_robot_interfaces/msg/PVAConstraints.msg
 
 multi_robot_interfaces: CMakeFiles/multi_robot_interfaces
 multi_robot_interfaces: CMakeFiles/multi_robot_interfaces.dir/build.make
