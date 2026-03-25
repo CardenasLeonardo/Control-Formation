@@ -1,9 +1,11 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/navigate_individual_pva.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/consenso_prom_err_R.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/consenso_lider_node.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__init__.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/distributed_controller.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/navigate_individual.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/consenso_prom_err_notR.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_lider.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/control_law.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/pva_plotter.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__init__.py
@@ -11,10 +13,12 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/pva.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/navigate_individual_pva.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/consenso_prom_err_R.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/consenso_lider_node.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/__init__.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/distributed_controller.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/navigate_individual.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/consenso_prom_err_notR.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/consensus_lider.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/control_law.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/pva_plotter.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/__init__.cpython-310.pyc
@@ -29,6 +33,8 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info/entry_points.txt
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info/dependency_links.txt
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info/PKG-INFO
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/aire
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/consenso_lider_node
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/consenso_prom_err_R
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/consenso_prom_err_notR
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes/distributed_controller

@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws2/src/build/articubot_one/ament_cmake_core/articubot_oneConfig.cmake

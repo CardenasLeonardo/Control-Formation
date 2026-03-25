@@ -1,9 +1,0 @@
-source;share/control_algorithms/hook/pythonpath.ps1
-source;share/control_algorithms/hook/pythonpath.dsv
-source;share/control_algorithms/hook/pythonpath.sh
-source;share/control_algorithms/hook/ament_prefix_path.ps1
-source;share/control_algorithms/hook/ament_prefix_path.dsv
-source;share/control_algorithms/hook/ament_prefix_path.sh
-source;../../build/control_algorithms/share/control_algorithms/hook/pythonpath_develop.ps1
-source;../../build/control_algorithms/share/control_algorithms/hook/pythonpath_develop.dsv
-source;../../build/control_algorithms/share/control_algorithms/hook/pythonpath_develop.sh

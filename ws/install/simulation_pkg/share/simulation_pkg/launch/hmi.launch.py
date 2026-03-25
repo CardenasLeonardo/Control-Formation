@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws/build/simulation_pkg/launch/hmi.launch.py

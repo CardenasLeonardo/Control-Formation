@@ -29,6 +29,8 @@ setup(
         'consenso_prom_err_notR = control_nodes.consenso_prom_err_notR:main',
         'consenso_prom_err_R = control_nodes.consenso_prom_err_R:main',
         'navigate_individual_pva = control_nodes.navigate_individual_pva:main',
+        'consenso_lider_node = control_nodes.consenso_lider_node:main',
+        'aire = control_nodes.aire:main',
     ],
 },
 )

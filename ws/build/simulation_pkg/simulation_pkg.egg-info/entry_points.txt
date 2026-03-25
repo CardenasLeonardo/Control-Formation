@@ -1,5 +1,0 @@
-[console_scripts]
-hmi_gui = simulation_pkg.hmi_gui:main
-hmi_node = simulation_pkg.hmi_visual:main
-hmi_visual = simulation_pkg.hmi_visual:main
-
