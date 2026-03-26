@@ -1,0 +1,164 @@
+[0.013s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_nodes:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces -- -j16 -l16
+[0.056s] [  2%] Built target multi_robot_interfaces__cpp
+[0.057s] [ 12%] Built target multi_robot_interfaces__rosidl_generator_c
+[0.067s] [ 12%] Built target ament_cmake_python_copy_multi_robot_interfaces
+[0.082s] [ 28%] Built target multi_robot_interfaces__rosidl_typesupport_fastrtps_c
+[0.082s] [ 38%] Built target multi_robot_interfaces__rosidl_typesupport_introspection_cpp
+[0.083s] [ 48%] Built target multi_robot_interfaces__rosidl_typesupport_cpp
+[0.084s] [ 53%] Built target multi_robot_interfaces__rosidl_typesupport_fastrtps_cpp
+[0.084s] [ 71%] Built target multi_robot_interfaces__rosidl_typesupport_c
+[0.084s] [ 74%] Built target multi_robot_interfaces__rosidl_typesupport_introspection_c
+[0.101s] [ 74%] Built target multi_robot_interfaces
+[0.121s] [ 76%] Built target multi_robot_interfaces__py
+[0.141s] [ 84%] Built target multi_robot_interfaces__rosidl_generator_py
+[0.161s] [100%] Built target multi_robot_interfaces__rosidl_typesupport_fastrtps_c__pyext
+[0.162s] [100%] Built target multi_robot_interfaces__rosidl_typesupport_introspection_c__pyext
+[0.162s] [100%] Built target multi_robot_interfaces__rosidl_typesupport_c__pyext
+[0.255s] running egg_info
+[0.255s] writing multi_robot_interfaces.egg-info/PKG-INFO
+[0.256s] writing dependency_links to multi_robot_interfaces.egg-info/dependency_links.txt
+[0.256s] writing top-level names to multi_robot_interfaces.egg-info/top_level.txt
+[0.258s] reading manifest file 'multi_robot_interfaces.egg-info/SOURCES.txt'
+[0.258s] writing manifest file 'multi_robot_interfaces.egg-info/SOURCES.txt'
+[0.279s] [100%] Built target ament_cmake_python_build_multi_robot_interfaces_egg
+[0.289s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_nodes:/opt/ros/humble /usr/bin/cmake --build /home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces -- -j16 -l16
+[0.291s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_nodes:/opt/ros/humble /usr/bin/cmake --install /home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces
+[0.297s] -- Install configuration: ""
+[0.297s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/ament_index/resource_index/rosidl_interfaces/multi_robot_interfaces
+[0.298s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces
+[0.298s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg
+[0.298s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/rosidl_generator_c__visibility_control.h
+[0.299s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/robot_state.h
+[0.299s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/pva_constraints.h
+[0.299s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail
+[0.299s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__type_support.h
+[0.299s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__struct.h
+[0.299s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__functions.c
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__functions.c
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__functions.h
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__type_support.h
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__functions.h
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__struct.h
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/library_path.sh
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/library_path.dsv
+[0.300s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_generator_c.so
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__rosidl_typesupport_fastrtps_c.h
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__rosidl_typesupport_fastrtps_c.h
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_typesupport_fastrtps_c.so
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces
+[0.301s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__type_support.c
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__type_support.c
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__rosidl_typesupport_introspection_c.h
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__rosidl_typesupport_introspection_c.h
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_typesupport_introspection_c.so
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_typesupport_c.so
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/pva_constraints.hpp
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/robot_state.hpp
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__type_support.hpp
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__builder.hpp
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__struct.hpp
+[0.302s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__traits.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__builder.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__struct.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__traits.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__type_support.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__rosidl_typesupport_fastrtps_cpp.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__rosidl_typesupport_fastrtps_cpp.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/dds_fastrtps
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__rosidl_typesupport_introspection_cpp.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__rosidl_typesupport_introspection_cpp.hpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/robot_state__type_support.cpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/include/multi_robot_interfaces/multi_robot_interfaces/msg/detail/pva_constraints__type_support.cpp
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_typesupport_introspection_cpp.so
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_typesupport_cpp.so
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/pythonpath.sh
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/pythonpath.dsv
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces-0.0.0-py3.10.egg-info
+[0.303s] -- Installing: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces-0.0.0-py3.10.egg-info/top_level.txt
+[0.303s] -- Installing: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces-0.0.0-py3.10.egg-info/SOURCES.txt
+[0.303s] -- Installing: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces-0.0.0-py3.10.egg-info/dependency_links.txt
+[0.303s] -- Installing: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces-0.0.0-py3.10.egg-info/PKG-INFO
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces
+[0.303s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg/_pva_constraints_s.c
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg/_robot_state.py
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg/__init__.py
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg/_pva_constraints.py
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg/_robot_state_s.c
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/_multi_robot_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/_multi_robot_interfaces_s.ep.rosidl_typesupport_c.c
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/multi_robot_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/libmulti_robot_interfaces__rosidl_generator_py.so
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/multi_robot_interfaces_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/__init__.py
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/multi_robot_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.304s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/_multi_robot_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+[0.329s] Listing '/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces'...
+[0.329s] Listing '/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/msg'...
+[0.332s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/multi_robot_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.332s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/multi_robot_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.332s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages/multi_robot_interfaces/multi_robot_interfaces_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib/libmulti_robot_interfaces__rosidl_generator_py.so
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/msg/RobotState.idl
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/msg/PVAConstraints.idl
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/msg/RobotState.msg
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/msg/PVAConstraints.msg
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/ament_index/resource_index/package_run_dependencies/multi_robot_interfaces
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/ament_index/resource_index/parent_prefix_path/multi_robot_interfaces
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/ament_prefix_path.sh
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/ament_prefix_path.dsv
+[0.333s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/path.sh
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/environment/path.dsv
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/local_setup.bash
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/local_setup.sh
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/local_setup.zsh
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/local_setup.dsv
+[0.334s] -- Installing: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/package.dsv
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/ament_index/resource_index/packages/multi_robot_interfaces
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_generator_cExport.cmake
+[0.334s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_generator_cExport-noconfig.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_introspection_cExport.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_cExport.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_generator_cppExport.cmake
+[0.335s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_cppExport.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_generator_pyExport.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/export_multi_robot_interfaces__rosidl_generator_pyExport-noconfig.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/rosidl_cmake-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfacesConfig.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/cmake/multi_robot_interfacesConfig-version.cmake
+[0.336s] -- Up-to-date: /home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/share/multi_robot_interfaces/package.xml
+[0.338s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/calafaker/Control-Formation/ws3/install/simulador:/home/calafaker/Control-Formation/ws3/install/control_nodes:/opt/ros/humble /usr/bin/cmake --install /home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces

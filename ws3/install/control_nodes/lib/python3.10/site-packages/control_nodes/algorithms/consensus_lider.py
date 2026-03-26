@@ -1,52 +1,54 @@
 import math
+from math import atan2, sqrt, cos, sin
+
+k1 = 0.8
+k2 = 1.0
 
 
 class ConsensusLeader:
 
-    def __init__(self, k_leader=0.6):
+    def __init__(self, k_leader=1.5, vmax=1.0, wmax=1.0):
 
         self.k_leader = k_leader
-
+        self.vmax = vmax
+        self.wmax = wmax
 
     def compute(self, state, neighbors, leader_state=None):
+        """
+        state        = (x, y, theta)
+        neighbors    = [(xj, yj), ...]
+        leader_state = (xL, yL)
+        """
 
         xi, yi, theta = state
 
-        # -----------------------------
-        # CONSENSO ENTRE VECINOS
-        # -----------------------------
+        # Sin líder no hay acción
+        if leader_state is None:
+            return 0.0, 0.0
 
-        ex = 0.0
-        ey = 0.0
-
-        for xj, yj in neighbors:
-
-            ex += (xj - xi)
-            ey += (yj - yi)
+        xL, yL = leader_state
 
         # -----------------------------
-        # INFLUENCIA DEL LÍDER
+        # Error directo al líder
         # -----------------------------
 
-        if leader_state is not None:
-
-            xL, yL = leader_state
-
-            ex += self.k_leader * (xL - xi)
-            ey += self.k_leader * (yL - yi)
+        ex = xL - xi
+        ey = yL - yi
 
         # -----------------------------
-        # CONTROL CINEMÁTICO
+        # Ley de control polar
         # -----------------------------
 
-        dist = math.sqrt(ex**2 + ey**2)
+        a     = sqrt(ex**2 + ey**2)
+        alpha = atan2(ey, ex) - theta
 
-        desired_theta = math.atan2(ey, ex)
+        if alpha >  math.pi: alpha -= 2 * math.pi
+        if alpha < -math.pi: alpha += 2 * math.pi
 
-        theta_error = desired_theta - theta
-        theta_error = math.atan2(math.sin(theta_error), math.cos(theta_error))
+        v = k1 * a * cos(alpha)
+        w = k2 * alpha + k1 * sin(alpha) * cos(alpha)
 
-        v = dist
-        w = theta_error
+        v = max(-self.vmax, min(self.vmax, v))
+        w = max(-self.wmax, min(self.wmax, w))
 
         return v, w

@@ -1,0 +1,34 @@
+[0.897s] Invoking command in '/home/calafaker/Control-Formation/ws3/src/control_nodes': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/control_nodes/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/control_nodes build --build-base /home/calafaker/Control-Formation/ws3/build/control_nodes/build install --record /home/calafaker/Control-Formation/ws3/build/control_nodes/install.log --single-version-externally-managed install_data
+[1.090s] running egg_info
+[1.091s] writing ../../build/control_nodes/control_nodes.egg-info/PKG-INFO
+[1.091s] writing dependency_links to ../../build/control_nodes/control_nodes.egg-info/dependency_links.txt
+[1.091s] writing entry points to ../../build/control_nodes/control_nodes.egg-info/entry_points.txt
+[1.091s] writing requirements to ../../build/control_nodes/control_nodes.egg-info/requires.txt
+[1.091s] writing top-level names to ../../build/control_nodes/control_nodes.egg-info/top_level.txt
+[1.093s] reading manifest file '../../build/control_nodes/control_nodes.egg-info/SOURCES.txt'
+[1.093s] writing manifest file '../../build/control_nodes/control_nodes.egg-info/SOURCES.txt'
+[1.094s] running build
+[1.094s] running build_py
+[1.094s] copying control_nodes/consenso_lider_node.py -> /home/calafaker/Control-Formation/ws3/build/control_nodes/build/lib/control_nodes
+[1.094s] copying control_nodes/algorithms/consensus_lider.py -> /home/calafaker/Control-Formation/ws3/build/control_nodes/build/lib/control_nodes/algorithms
+[1.095s] running install
+[1.095s] running install_lib
+[1.096s] copying /home/calafaker/Control-Formation/ws3/build/control_nodes/build/lib/control_nodes/consenso_lider_node.py -> /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes
+[1.097s] copying /home/calafaker/Control-Formation/ws3/build/control_nodes/build/lib/control_nodes/algorithms/consensus_lider.py -> /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms
+[1.097s] byte-compiling /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/consenso_lider_node.py to consenso_lider_node.cpython-310.pyc
+[1.099s] byte-compiling /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_lider.py to consensus_lider.cpython-310.pyc
+[1.099s] running install_data
+[1.099s] running install_egg_info
+[1.101s] removing '/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info' (and everything under it)
+[1.102s] Copying ../../build/control_nodes/control_nodes.egg-info to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes-0.0.0-py3.10.egg-info
+[1.103s] running install_scripts
+[1.119s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.120s] Installing consenso_lider_node script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.120s] Installing consenso_prom_err_R script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.120s] Installing consenso_prom_err_notR script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.120s] Installing distributed_controller script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.120s] Installing navigate_individual script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.120s] Installing navigate_individual_pva script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.121s] Installing navigate_waypoints_pva script to /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/control_nodes
+[1.121s] writing list of installed files to '/home/calafaker/Control-Formation/ws3/build/control_nodes/install.log'
+[1.142s] Invoked command in '/home/calafaker/Control-Formation/ws3/src/control_nodes' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/control_nodes/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/control_nodes build --build-base /home/calafaker/Control-Formation/ws3/build/control_nodes/build install --record /home/calafaker/Control-Formation/ws3/build/control_nodes/install.log --single-version-externally-managed install_data

@@ -38,10 +38,10 @@ class ConsensoLider(Node):
         self.theta = 0.0
 
         # -----------------------------
-        # Estados vecinos
+        # Estados vecinos — ya filtrados por AIRE
         # -----------------------------
 
-        self.states = {}
+        self.neighbors = {}      # { neighbor_id: (x, y, theta) }
 
         # -----------------------------
         # LiDAR
@@ -51,7 +51,7 @@ class ConsensoLider(Node):
         self.constraints = []
 
         # -----------------------------
-        # Algoritmo consenso líder
+        # Algoritmo consenso con líder
         # -----------------------------
 
         self.algorithm = ConsensusLeader()
@@ -87,10 +87,11 @@ class ConsensoLider(Node):
             10
         )
 
-        self.state_sub = self.create_subscription(
+        # Vecinos filtrados — tópico propio dentro del namespace
+        self.neighbor_sub = self.create_subscription(
             RobotState,
-            '/robot_states_rx',
-            self.state_callback,
+            'neighbors_rx',
+            self.neighbor_callback,
             10
         )
 
@@ -116,6 +117,12 @@ class ConsensoLider(Node):
             10
         )
 
+        self.plot_pub = self.create_publisher(
+            RobotState,
+            '/robot_states_plot',
+            10
+        )
+
         # -----------------------------
         # Timer
         # -----------------------------
@@ -134,13 +141,11 @@ class ConsensoLider(Node):
         self.y = msg.pose.pose.position.y
 
         q = msg.pose.pose.orientation
-
         siny_cosp = 2 * (q.w * q.z + q.x * q.y)
         cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
-
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
-        # Publicar estado
+        # Publicar estado al AIRE
         state = RobotState()
         state.robot_id = self.robot_id
         state.x = self.x
@@ -148,6 +153,9 @@ class ConsensoLider(Node):
         state.theta = self.theta
 
         self.state_pub.publish(state)
+
+        # Publicar estado para el plotter
+        self.plot_pub.publish(state)
 
     # -----------------------------------------------------
 
@@ -157,9 +165,9 @@ class ConsensoLider(Node):
 
     # -----------------------------------------------------
 
-    def state_callback(self, msg):
+    def neighbor_callback(self, msg):
 
-        self.states[msg.robot_id] = (msg.x, msg.y, msg.theta)
+        self.neighbors[msg.robot_id] = (msg.x, msg.y, msg.theta)
 
     # -----------------------------------------------------
 
@@ -174,43 +182,36 @@ class ConsensoLider(Node):
 
     def control_loop(self):
 
-        # -------------------------------------------------
-        # Si este nodo corre en el líder, no actúa
-        # -------------------------------------------------
-
+        # El líder no actúa
         if self.robot_id == self.leader_id:
             self.publish_zero()
             return
 
-        # -------------------------------------------------
-        # Asegurar que al menos conozco al líder
-        # -------------------------------------------------
-
-        if self.leader_id not in self.states:
+        # Esperar hasta conocer al líder
+        if self.leader_id not in self.neighbors:
             self.publish_zero()
             return
 
-        # -------------------------------------------------
-        # Obtener vecinos (excluyéndome a mí)
-        # -------------------------------------------------
+        # -----------------------------
+        # Vecinos (sin el líder)
+        # -----------------------------
 
-        neighbors = []
+        neighbors = [
+            (x, y)
+            for rid, (x, y, _) in self.neighbors.items()
+            if rid != self.leader_id
+        ]
 
-        for rid, (xj, yj, _) in self.states.items():
-
-            if rid != self.robot_id:
-                neighbors.append((xj, yj))
-
-        # -------------------------------------------------
+        # -----------------------------
         # Estado del líder
-        # -------------------------------------------------
+        # -----------------------------
 
-        xL, yL, _ = self.states[self.leader_id]
+        xL, yL, _ = self.neighbors[self.leader_id]
         leader_state = (xL, yL)
 
-        # -------------------------------------------------
-        # CONSENSO LÍDER
-        # -------------------------------------------------
+        # -----------------------------
+        # CONSENSO CON LÍDER
+        # -----------------------------
 
         v_goal, w_goal = self.algorithm.compute(
             (self.x, self.y, self.theta),
@@ -218,9 +219,9 @@ class ConsensoLider(Node):
             leader_state
         )
 
-        # -------------------------------------------------
+        # -----------------------------
         # PVA
-        # -------------------------------------------------
+        # -----------------------------
 
         if self.ranges:
 
@@ -237,32 +238,31 @@ class ConsensoLider(Node):
             v_safe, w_safe = v_goal, w_goal
             self.constraints = []
 
-        # -------------------------------------------------
+        # -----------------------------
         # PUBLICAR PVA
-        # -------------------------------------------------
+        # -----------------------------
 
-        msg = PVAConstraints()
+        pva_msg = PVAConstraints()
 
-        msg.robot_id = self.robot_id
+        pva_msg.robot_id = self.robot_id
 
-        msg.a = [float(c[0]) for c in self.constraints]
-        msg.b = [float(c[1]) for c in self.constraints]
-        msg.c = [float(c[2]) for c in self.constraints]
+        pva_msg.a = [float(c[0]) for c in self.constraints]
+        pva_msg.b = [float(c[1]) for c in self.constraints]
+        pva_msg.c = [float(c[2]) for c in self.constraints]
 
-        msg.v_goal = float(v_goal)
-        msg.w_goal = float(w_goal)
+        pva_msg.v_goal = float(v_goal)
+        pva_msg.w_goal = float(w_goal)
 
-        msg.v_star = float(v_safe)
-        msg.w_star = float(w_safe)
+        pva_msg.v_star = float(v_safe)
+        pva_msg.w_star = float(w_safe)
 
-        self.pva_pub.publish(msg)
+        self.pva_pub.publish(pva_msg)
 
-        # -------------------------------------------------
+        # -----------------------------
         # PUBLICAR VELOCIDAD
-        # -------------------------------------------------
+        # -----------------------------
 
         twist = Twist()
-
         twist.linear.x = float(v_safe)
         twist.angular.z = float(w_safe)
 
@@ -278,9 +278,4 @@ def main(args=None):
     rclpy.spin(node)
 
     node.destroy_node()
-
     rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()

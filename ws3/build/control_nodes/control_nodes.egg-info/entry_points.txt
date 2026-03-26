@@ -6,4 +6,5 @@ consenso_prom_err_notR = control_nodes.consenso_prom_err_notR:main
 distributed_controller = control_nodes.distributed_controller:main
 navigate_individual = control_nodes.navigate_individual:main
 navigate_individual_pva = control_nodes.navigate_individual_pva:main
+navigate_waypoints_pva = control_nodes.navigate_waypoints_pva:main
 

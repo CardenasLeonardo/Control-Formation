@@ -8,6 +8,8 @@ setup.py
 ../../build/simulador/simulador.egg-info/requires.txt
 ../../build/simulador/simulador.egg-info/top_level.txt
 ../../build/simulador/simulador.egg-info/zip-safe
+launch/consenso_lider.launch.py
+launch/consenso_prom.launch.py
 launch/simulacion.launch.py
 resource/simulador
 simulador/AIRE.py
