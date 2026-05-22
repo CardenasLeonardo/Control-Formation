@@ -44,13 +44,19 @@ class NavigateIndividual(Node):
         # PVA
         # --------------------------------------------------
 
+        self.declare_parameter('d_safe',      0.85)
+        self.declare_parameter('d_influence', 3.0)
+        self.declare_parameter('xi',          1.0)
+        self.declare_parameter('v_max',       1.0)
+        self.declare_parameter('w_max',       1.0)
+
         self.pva = PVA(
-            d_safe=0.85,
-            d_influence=3.0,
-            xi=1.0,
+            d_safe=self.get_parameter('d_safe').value,
+            d_influence=self.get_parameter('d_influence').value,
+            xi=self.get_parameter('xi').value,
             rp=0.25,
-            v_max=1.0,
-            w_max=1.0
+            v_max=self.get_parameter('v_max').value,
+            w_max=self.get_parameter('w_max').value,
         )
 
         # --------------------------------------------------
@@ -65,7 +71,6 @@ class NavigateIndividual(Node):
         self.w = 0.0
 
         self.ranges = []
-
         self.constraints = []
 
         # --------------------------------------------------
@@ -99,6 +104,12 @@ class NavigateIndividual(Node):
         self.state_pub = self.create_publisher(
             RobotState,
             '/robot_states_tx',
+            10
+        )
+
+        self.plot_pub = self.create_publisher(
+            RobotState,
+            '/robot_states_plot',
             10
         )
 
@@ -141,6 +152,7 @@ class NavigateIndividual(Node):
         state.theta = self.theta
 
         self.state_pub.publish(state)
+        self.plot_pub.publish(state)
 
         self.controller.x = self.x
         self.controller.y = self.y

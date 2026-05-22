@@ -27,7 +27,18 @@ class ConsensoLider(Node):
         # -----------------------------
 
         self.declare_parameter('leader_id', 'robot0')
+        self.declare_parameter('vmax', 1.0)
+        self.declare_parameter('wmax', 1.0)
+        self.declare_parameter('k1', 0.8)
+        self.declare_parameter('k2', 1.0)
+        self.declare_parameter('k_leader', 1.0)
+
         self.leader_id = str(self.get_parameter('leader_id').value)
+        vmax    = float(self.get_parameter('vmax').value)
+        wmax    = float(self.get_parameter('wmax').value)
+        k1      = float(self.get_parameter('k1').value)
+        k2      = float(self.get_parameter('k2').value)
+        k_leader = float(self.get_parameter('k_leader').value)
 
         # -----------------------------
         # Estado propio
@@ -54,7 +65,7 @@ class ConsensoLider(Node):
         # Algoritmo consenso con líder
         # -----------------------------
 
-        self.algorithm = ConsensusLeader()
+        self.algorithm = ConsensusLeader(k1=k1, k2=k2, k_leader=k_leader, vmax=vmax, wmax=wmax)
 
         # -----------------------------
         # PVA
@@ -65,8 +76,8 @@ class ConsensoLider(Node):
             d_influence=3.0,
             xi=1.0,
             rp=0.25,
-            v_max=1.0,
-            w_max=1.0
+            v_max=vmax,
+            w_max=wmax
         )
 
         # -----------------------------
@@ -87,7 +98,6 @@ class ConsensoLider(Node):
             10
         )
 
-        # Vecinos filtrados — tópico propio dentro del namespace
         self.neighbor_sub = self.create_subscription(
             RobotState,
             'neighbors_rx',
@@ -130,7 +140,7 @@ class ConsensoLider(Node):
         self.timer = self.create_timer(0.1, self.control_loop)
 
         self.get_logger().info(
-            f"{self.robot_id} consenso líder iniciado. Líder esperado: {self.leader_id}"
+            f"{self.robot_id} consenso líder iniciado. Líder: {self.leader_id}"
         )
 
     # -----------------------------------------------------
@@ -145,7 +155,6 @@ class ConsensoLider(Node):
         cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
         self.theta = math.atan2(siny_cosp, cosy_cosp)
 
-        # Publicar estado al AIRE
         state = RobotState()
         state.robot_id = self.robot_id
         state.x = self.x
@@ -153,8 +162,6 @@ class ConsensoLider(Node):
         state.theta = self.theta
 
         self.state_pub.publish(state)
-
-        # Publicar estado para el plotter
         self.plot_pub.publish(state)
 
     # -----------------------------------------------------
@@ -187,27 +194,23 @@ class ConsensoLider(Node):
             self.publish_zero()
             return
 
-        # Esperar hasta conocer al líder
-        if self.leader_id not in self.neighbors:
-            self.publish_zero()
-            return
-
-        # -----------------------------
-        # Vecinos (sin el líder)
-        # -----------------------------
-
+        # Vecinos sin el líder
         neighbors = [
             (x, y)
             for rid, (x, y, _) in self.neighbors.items()
             if rid != self.leader_id
         ]
 
-        # -----------------------------
-        # Estado del líder
-        # -----------------------------
+        # Estado del líder si está disponible
+        leader_state = None
+        if self.leader_id in self.neighbors:
+            xL, yL, _ = self.neighbors[self.leader_id]
+            leader_state = (xL, yL)
 
-        xL, yL, _ = self.neighbors[self.leader_id]
-        leader_state = (xL, yL)
+        # Sin vecinos ni líder — no actuar
+        if not neighbors and leader_state is None:
+            self.publish_zero()
+            return
 
         # -----------------------------
         # CONSENSO CON LÍDER

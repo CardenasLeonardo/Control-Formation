@@ -1,0 +1,29 @@
+[0.617s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/simulador': AMENT_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces LD_LIBRARY_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data --force
+[0.795s] running develop
+[0.892s] running egg_info
+[0.892s] writing simulador.egg-info/PKG-INFO
+[0.892s] writing dependency_links to simulador.egg-info/dependency_links.txt
+[0.893s] writing entry points to simulador.egg-info/entry_points.txt
+[0.893s] writing requirements to simulador.egg-info/requires.txt
+[0.893s] writing top-level names to simulador.egg-info/top_level.txt
+[0.894s] reading manifest file 'simulador.egg-info/SOURCES.txt'
+[0.894s] writing manifest file 'simulador.egg-info/SOURCES.txt'
+[0.895s] running build_ext
+[0.895s] Creating /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador.egg-link (link to .)
+[0.896s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.897s] Installing pva_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.897s] Installing states_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.897s] Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.897s] 
+[0.897s] Installed /home/calafaker/Control-Formation/ws3/build/simulador
+[0.897s] running symlink_data
+[0.897s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/resource/simulador -> /home/calafaker/Control-Formation/ws3/install/simulador/share/ament_index/resource_index/packages
+[0.898s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/package.xml -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador
+[0.899s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/corredor_pva.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.899s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/simulacion.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.899s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/navegacion_individual.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.900s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/consenso_prom_3x3.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.900s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/consenso_lider.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.900s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/consenso_prom.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.901s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/consenso_formacion.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.919s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/simulador' returned '0': AMENT_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces LD_LIBRARY_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data --force

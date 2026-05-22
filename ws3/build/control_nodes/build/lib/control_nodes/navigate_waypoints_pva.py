@@ -27,10 +27,14 @@ class NavigateWaypoints(Node):
         # --------------------------------------------------
 
         self.declare_parameter('waypoints', [0.0, 0.0, 5.0, 0.0])
+        self.declare_parameter('vmax', 1.0)
+        self.declare_parameter('wmax', 1.0)
+
+        vmax = float(self.get_parameter('vmax').value)
+        wmax = float(self.get_parameter('wmax').value)
 
         raw = list(self.get_parameter('waypoints').value)
 
-        # Convertir lista plana [x0, y0, x1, y1, ...] a lista de tuplas
         self.waypoints = [
             (raw[i], raw[i + 1])
             for i in range(0, len(raw) - 1, 2)
@@ -51,7 +55,7 @@ class NavigateWaypoints(Node):
         self.controller = NavControlador()
 
         # --------------------------------------------------
-        # PVA
+        # PVA con boundary following
         # --------------------------------------------------
 
         self.pva = PVA(
@@ -59,9 +63,13 @@ class NavigateWaypoints(Node):
             d_influence=3.0,
             xi=1.0,
             rp=0.25,
-            v_max=1.0,
-            w_max=1.0
+            v_max=vmax,
+            w_max=wmax,
+            deadlock_tol=0.05
         )
+
+        self.vmax = vmax
+        self.wmax = wmax
 
         # --------------------------------------------------
         # ESTADO ROBOT
@@ -173,6 +181,12 @@ class NavigateWaypoints(Node):
 
     def next_waypoint(self):
 
+        # Resetear boundary following al cambiar de objetivo
+        self.pva.mode = 'reaching_goal'
+        self.pva.V_block = None
+        self.pva.constraint_to_follow = None
+        self.pva.search_direction = None
+
         self.wp_index = (self.wp_index + 1) % len(self.waypoints)
         self.goal_x, self.goal_y = self.waypoints[self.wp_index]
 
@@ -192,12 +206,11 @@ class NavigateWaypoints(Node):
             (self.goal_y - self.y) ** 2
         )
 
-        # Avanzar waypoint si llegamos
         if distance_to_goal < self.tolerance:
             self.next_waypoint()
 
         # --------------------------------------------------
-        # CONTROL NOMINAL
+        # CONTROL NOMINAL — también calcula a y alpha
         # --------------------------------------------------
 
         v_goal, w_goal = self.controller.ley_control(
@@ -205,19 +218,35 @@ class NavigateWaypoints(Node):
             self.goal_y
         )
 
+        # Saturar según vmax/wmax configurado
+        v_goal = max(-self.vmax, min(self.vmax, v_goal))
+        w_goal = max(-self.wmax, min(self.wmax, w_goal))
+
+        # a y alpha para V(z) = ½a² + ½α²
+        a     = self.controller.a
+        alpha = self.controller.alpha
+
         # --------------------------------------------------
-        # PVA
+        # PVA + BOUNDARY FOLLOWING
         # --------------------------------------------------
 
         if self.ranges:
 
             self.constraints = self.pva.build_constraints(self.ranges)
 
-            v_safe, w_safe = self.pva.solve_qp(
+            v_safe, w_safe, mode = self.pva.compute(
                 v_goal,
                 w_goal,
-                self.constraints
+                self.constraints,
+                a,
+                alpha
             )
+
+            if mode == 'boundary_following':
+                self.get_logger().info(
+                    f"{self.robot_id} [BOUNDARY FOLLOWING]",
+                    throttle_duration_sec=1.0
+                )
 
         else:
 

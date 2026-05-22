@@ -26,12 +26,13 @@ setup(
         'console_scripts': [
             'distributed_controller = control_nodes.distributed_controller:main',
             'navigate_individual = control_nodes.navigate_individual:main',
-            'consenso_prom_err_notR = control_nodes.consenso_prom_err_notR:main',
+            'consenso_prom_err = control_nodes.consenso_prom_err:main',
             'consenso_prom_err_R = control_nodes.consenso_prom_err_R:main',
             'navigate_individual_pva = control_nodes.navigate_individual_pva:main',
             'consenso_lider_node = control_nodes.consenso_lider_node:main',
             'aire = control_nodes.aire:main',
             'navigate_waypoints_pva = control_nodes.navigate_waypoints_pva:main',
+            'consenso_formacion_node = control_nodes.consenso_formacion_node:main',
         ],
     },
 )
