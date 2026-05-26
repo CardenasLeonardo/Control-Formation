@@ -11,6 +11,7 @@ setup.py
 control_nodes/__init__.py
 control_nodes/consenso_formacion_node.py
 control_nodes/consenso_lider_node.py
+control_nodes/consenso_node.py
 control_nodes/consenso_prom_err.py
 control_nodes/navigate_individual.py
 control_nodes/navigate_individual_pva.py

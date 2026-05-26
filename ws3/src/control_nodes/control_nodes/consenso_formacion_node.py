@@ -7,6 +7,8 @@ from geometry_msgs.msg import Twist
 from multi_robot_interfaces.msg import RobotState
 
 from control_nodes.algorithms.consensus_formation import ConsensusFormation, compute_offsets
+from control_nodes.algorithms.control_law import PolarControlLaw
+from control_nodes.algorithms.pva import PVA
 
 import math
 
@@ -29,15 +31,15 @@ class ConsensoFormacion(Node):
         self.declare_parameter('vmax',      0.8)
         self.declare_parameter('wmax',      0.8)
 
-        self.leader_id   = str(self.get_parameter('leader_id').value)
-        self.n_robots    = int(self.get_parameter('n_robots').value)
-        self.angle_v     = float(self.get_parameter('angle_v').value)
-        self.d           = float(self.get_parameter('d').value)
-        beta             = float(self.get_parameter('beta').value)
-        k1               = float(self.get_parameter('k1').value)
-        k2               = float(self.get_parameter('k2').value)
-        self.vmax        = float(self.get_parameter('vmax').value)
-        self.wmax        = float(self.get_parameter('wmax').value)
+        self.leader_id   = self.get_parameter('leader_id').value
+        self.n_robots    = self.get_parameter('n_robots').value
+        self.angle_v     = self.get_parameter('angle_v').value
+        self.d           = self.get_parameter('d').value
+        beta             = self.get_parameter('beta').value
+        k1               = self.get_parameter('k1').value
+        k2               = self.get_parameter('k2').value
+        self.vmax        = self.get_parameter('vmax').value
+        self.wmax        = self.get_parameter('wmax').value
 
         self.n_followers = self.n_robots - 1
 
@@ -50,18 +52,17 @@ class ConsensoFormacion(Node):
         self.y     = 0.0
         self.theta = 0.0
 
-        self.neighbors       = {}   # { robot_id: (x, y, theta) }
-        self.theta_L_smooth  = None  # low-pass del heading del líder
+        self.neighbors      = {}    # { robot_id: (x, y, theta) }
+        self.theta_L_smooth = None  # low-pass del heading del líder
 
-        self.algorithm = ConsensusFormation(
-            beta=beta, k1=k1, k2=k2,
-            vmax=self.vmax, wmax=self.wmax
-        )
+        # Pipeline: consenso → ley de control → PVA (saturación)
+        self.consensus    = ConsensusFormation(beta=beta)
+        self.control_law  = PolarControlLaw(k1=k1, k2=k2)
+        self.pva          = PVA(v_max=self.vmax, w_max=self.wmax)
 
         self.odom_sub = self.create_subscription(
             Odometry, 'odom', self.odom_callback, 10
         )
-
         self.neighbor_sub = self.create_subscription(
             RobotState, 'neighbors_rx', self.neighbor_callback, 10
         )
@@ -119,7 +120,6 @@ class ConsensoFormacion(Node):
 
             theta_L = self.theta_L_smooth
 
-        # Sin información aún — esperar
         if leader_state is None and not self.neighbors:
             self.publish_zero()
             return
@@ -143,13 +143,20 @@ class ConsensoFormacion(Node):
             neighbors.append((xj, yj))
             neighbor_offsets.append(offsets_all.get(j, (0.0, 0.0)))
 
-        v, w = self.algorithm.compute(
+        # 1. Consenso → error polar (a, alpha)
+        a, alpha = self.consensus.compute(
             (self.x, self.y, self.theta),
             neighbors,
             leader_state,
             my_offset,
             neighbor_offsets
         )
+
+        # 2. Ley de control → velocidades de referencia (sin saturar)
+        v_ref, w_ref = self.control_law.compute(a, alpha)
+
+        # 3. PVA → velocidades finales capadas (sin obstáculos: constraints=[])
+        v, w, _ = self.pva.compute(v_ref, w_ref, [], a, alpha)
 
         twist = Twist()
         twist.linear.x  = float(v)

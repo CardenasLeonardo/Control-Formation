@@ -55,42 +55,25 @@ def compute_offsets(n_followers, theta_leader, angle_v, d):
 
 
 class ConsensusFormation:
+    """
+    Protocolo de consenso con anclaje al líder.
 
-    def __init__(self, beta=1.5, k1=1.5, k2=1.5, vmax=1.0, wmax=1.0):
-        """
-        Implementa:
-          ẋ_i = -Σ_{j∈N_i} a_ij (x_i - x_j) - β b_i^0 (x_i - x_0 - r_i)
-        con a_ij=1 y ley de control polar para convertir el error a (v, w).
+    Retorna el error polar (a, alpha) — magnitud y ángulo del error de consenso
+    respecto a la orientación del robot. La ley de control y la saturación
+    se aplican en capas separadas.
+    """
 
-        Parámetros:
-          beta : ganancia β del término de atracción al ancla (líder + offset)
-          k1   : ganancia proporcional de la ley polar (velocidad lineal)
-          k2   : ganancia angular de la ley polar
-          vmax : saturación velocidad lineal
-          wmax : saturación velocidad angular
-        """
-
-        self.beta  = beta
-        self.k1    = k1
-        self.k2    = k2
-        self.vmax  = vmax
-        self.wmax  = wmax
+    def __init__(self, beta=1.5):
+        self.beta = beta
 
     def compute(self, state, neighbors, leader_state, offset, neighbor_offsets=None):
         """
-        Implementa la ley de formación con consenso relativo:
+        Ley de consenso relativo:
+          e_i = -Σ_j a_ij [(x_i - r_i) - (x_j - r_j)] - β b_i^0 (x_i - x_0 - r_i)
 
-          ẋ_i = -Σ_j a_ij [(x_i - r_i) - (x_j - r_j)]
-                - β b_i^0 (x_i - x_0 - r_i)
-
-        El consenso es sobre la posición desplazada (x_j - r_j), de modo que
-        la formación deseada es punto de equilibrio exacto.
-
-        state            : (x, y, theta)
-        neighbors        : [(xj, yj), ...]  — vecinos (sin líder)
-        leader_state     : (xL, yL) o None
-        offset           : (rix, riy)        — offset de formación de este robot
-        neighbor_offsets : [(rjx, rjy), ...] — offsets de cada vecino (mismo orden)
+        Retorna (a, alpha):
+          a     : magnitud del vector de error
+          alpha : ángulo del error respecto al heading del robot (rad)
         """
 
         xi, yi, theta = state
@@ -102,32 +85,22 @@ class ConsensusFormation:
         ex = 0.0
         ey = 0.0
 
-        # Consenso relativo: (x_j - r_j) - (x_i - r_i)
         for (xj, yj), (rjx, rjy) in zip(neighbors, neighbor_offsets):
             ex += (xj - rjx) - (xi - rix)
             ey += (yj - rjy) - (yi - riy)
 
-        # Término del líder: β (x_0 + r_i - x_i)
         if leader_state is not None:
             xL, yL = leader_state
             ex += self.beta * ((xL + rix) - xi)
             ey += self.beta * ((yL + riy) - yi)
 
-        # Ley de control polar
         a = math.sqrt(ex**2 + ey**2)
 
         if a < 1e-6:
             return 0.0, 0.0
 
-        alpha_angle = math.atan2(ey, ex) - theta
+        alpha = math.atan2(ey, ex) - theta
+        while alpha >  math.pi: alpha -= 2 * math.pi
+        while alpha < -math.pi: alpha += 2 * math.pi
 
-        while alpha_angle >  math.pi: alpha_angle -= 2 * math.pi
-        while alpha_angle < -math.pi: alpha_angle += 2 * math.pi
-
-        v = self.k1 * a * math.cos(alpha_angle)
-        w = self.k2 * alpha_angle + self.k1 * math.sin(alpha_angle) * math.cos(alpha_angle)
-
-        v = max(-self.vmax, min(self.vmax, v))
-        w = max(-self.wmax, min(self.wmax, w))
-
-        return v, w
+        return a, alpha

@@ -64,47 +64,11 @@ def launch_setup(context, *args, **kwargs):
     )
     rsp_launch = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
 
-    # SDF del cilindro obstáculo — estático, rojo, radio 0.5 m
-    obstacle_sdf = (
-        '<?xml version="1.0"?>'
-        '<sdf version="1.6">'
-        '<model name="obstacle">'
-        '<static>true</static>'
-        '<link name="link">'
-        '<collision name="col">'
-        '<geometry><cylinder><radius>0.5</radius><length>1.5</length></cylinder></geometry>'
-        '</collision>'
-        '<visual name="vis">'
-        '<geometry><cylinder><radius>0.5</radius><length>1.5</length></cylinder></geometry>'
-        '<material><ambient>0.8 0.1 0.1 1</ambient><diffuse>0.8 0.1 0.1 1</diffuse></material>'
-        '</visual>'
-        '</link>'
-        '</model>'
-        '</sdf>'
-    )
-    sdf_path = '/tmp/obstacle_formacion.sdf'
-    with open(sdf_path, 'w') as f:
-        f.write(obstacle_sdf)
-
     actions = []
 
     actions.append(
         IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
     )
-
-    # Obstáculo en el primer tramo del líder (0,0)→(5,0), en x=2.5 y=0
-    actions.append(TimerAction(period=2.0, actions=[
-        Node(
-            package='gazebo_ros',
-            executable='spawn_entity.py',
-            arguments=[
-                '-entity', 'obstacle',
-                '-file',   sdf_path,
-                '-x', '2.5', '-y', '0.0', '-z', '0.75',
-            ],
-            output='screen'
-        )
-    ]))
 
     # Staggered: robot i arranca en t = 3 + i*1.5 s
     for i in range(n):
@@ -145,19 +109,20 @@ def launch_setup(context, *args, **kwargs):
         else:
             control_node = Node(
                 package='control_nodes',
-                executable='consenso_formacion_node',
-                name='consenso_formacion',
+                executable='consenso_node',
+                name='consenso',
                 namespace=ns,
                 parameters=[{
-                    'leader_id': leader_id,
-                    'n_robots':  n,
-                    'angle_v':   angle_v,
-                    'd':         d,
-                    'beta':      2.0,
-                    'k1':        1.0,
-                    'k2':        1.5,
-                    'vmax':      0.8,
-                    'wmax':      0.8,
+                    'consensus_type': 'formacion',
+                    'leader_id':      leader_id,
+                    'n_robots':       n,
+                    'angle_v':        angle_v,
+                    'd':              d,
+                    'beta':           2.0,
+                    'k1':             1.0,
+                    'k2':             1.5,
+                    'vmax':           0.8,
+                    'wmax':           0.8,
                 }],
                 output='screen'
             )

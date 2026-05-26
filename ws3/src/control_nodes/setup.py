@@ -33,6 +33,7 @@ setup(
             'aire = control_nodes.aire:main',
             'navigate_waypoints_pva = control_nodes.navigate_waypoints_pva:main',
             'consenso_formacion_node = control_nodes.consenso_formacion_node:main',
+            'consenso_node = control_nodes.consenso_node:main',
         ],
     },
 )

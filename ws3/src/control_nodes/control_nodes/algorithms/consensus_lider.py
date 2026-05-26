@@ -1,23 +1,19 @@
 import math
-from math import atan2, sqrt, cos, sin
-import numpy as np
+from math import atan2, sqrt
+
 
 class ConsensusLeader:
+    """
+    Protocolo de consenso con seguimiento de líder.
 
-    def __init__(self, k1=0.8, k2=1.0, k_leader=10.0, vmax=1.0, wmax=1.0):
+    Retorna el error polar (a, alpha) — magnitud y ángulo del error de consenso
+    respecto a la orientación del robot.
+    """
 
-        self.k1       = k1
-        self.k2       = k2
+    def __init__(self, k_leader=10.0):
         self.k_leader = k_leader
-        self.vmax     = vmax
-        self.wmax     = wmax
 
     def compute(self, state, neighbors, leader_state=None):
-        """
-        state        = (x, y, theta)
-        neighbors    = [(xj, yj), ...]
-        leader_state = (xL, yL) o None
-        """
 
         xi, yi, theta = state
 
@@ -25,7 +21,6 @@ class ConsensusLeader:
         ey = 0.0
         n  = 0.0
 
-        # Promedio de errores con vecinos
         for xj, yj in neighbors:
             ex += (xj - xi)
             ey += (yj - yi)
@@ -35,7 +30,6 @@ class ConsensusLeader:
             ex /= n
             ey /= n
 
-        # Término del líder: aditivo al promedio de vecinos, NO incluido en n
         has_leader = leader_state is not None
         if has_leader:
             xL, yL = leader_state
@@ -44,21 +38,14 @@ class ConsensusLeader:
 
         if n == 0.0 and not has_leader:
             return 0.0, 0.0
-          
-        # -----------------------------
-        # Ley de control polar
-        # -----------------------------
 
-        a     = sqrt(ex**2 + ey**2)
+        a = sqrt(ex**2 + ey**2)
+
+        if a < 1e-6:
+            return 0.0, 0.0
+
         alpha = atan2(ey, ex) - theta
+        while alpha >  math.pi: alpha -= 2 * math.pi
+        while alpha < -math.pi: alpha += 2 * math.pi
 
-        if alpha >  math.pi: alpha -= 2 * math.pi
-        if alpha < -math.pi: alpha += 2 * math.pi
-
-        v = self.k1 * a * cos(alpha)
-        w = self.k2 * alpha + self.k1 * sin(alpha) * cos(alpha)
-
-        v = max(-self.vmax, min(self.vmax, v))
-        w = max(-self.wmax, min(self.wmax, w))
-
-        return v, w
+        return a, alpha

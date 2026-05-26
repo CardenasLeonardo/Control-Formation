@@ -253,16 +253,16 @@ class PVA:
     # COMPUTE — interfaz principal con máquina de estados
     # ---------------------------------------------------------
 
-    def compute(self, v_goal, w_goal, constraints, a, alpha):
+    def compute(self, v_ref, w_ref, constraints, a, alpha):
         """
         Interfaz principal que maneja automáticamente la transición
         entre reaching_goal y boundary_following.
 
         Parámetros:
-          v_goal, w_goal : velocidad de referencia del consenso/control
-          constraints    : lista de (A, B, C) del LIDAR
-          a              : distancia al goal (para V(z))
-          alpha          : error de orientación al goal (para V(z))
+          v_ref, w_ref : velocidades de referencia de la ley de control
+          constraints  : lista de (A, B, C) del LIDAR
+          a            : magnitud del error polar (para V(z))
+          alpha        : ángulo del error polar (para V(z))
 
         Retorna:
           v_safe, w_safe : velocidades a aplicar
@@ -277,7 +277,7 @@ class PVA:
 
         if self.mode == 'reaching_goal':
 
-            u = self.solve_qp(v_goal, w_goal, constraints)
+            u = self.solve_qp(v_ref, w_ref, constraints)
             v_safe, w_safe = float(u[0]), float(u[1])
 
             if self.is_deadlock(v_safe, w_safe) and a > 0.1:
@@ -310,7 +310,7 @@ class PVA:
                 self.constraint_to_follow = None
                 self.search_direction = None
 
-                u = self.solve_qp(v_goal, w_goal, constraints)
+                u = self.solve_qp(v_ref, w_ref, constraints)
                 return float(u[0]), float(u[1]), self.mode
 
             # Seguir rodeando el obstáculo

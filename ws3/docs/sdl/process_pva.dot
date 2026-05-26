@@ -1,0 +1,184 @@
+digraph PVAProcessSDL {
+    rankdir=TB;
+    bgcolor="white";
+    fontname="Times New Roman";
+    fontsize=12;
+    label="Process SDL Diagram - PVA Algorithm (State Machine)";
+    labelloc=t;
+    pad=0.5;
+    nodesep=0.4;
+    ranksep=0.5;
+
+    edge [fontname="Times New Roman", fontsize=9, color="#333333"];
+
+    node [shape=box, style="filled", fillcolor="#FAFAFA",
+          penwidth=1.5, color="#333333", fontname="Times New Roman", fontsize=10];
+
+    "START" [label="PVA.compute(\n  v_goal, w_goal,\n  constraints[],\n  a, alpha)", shape=parallelogram, style=filled, fillcolor="#E8F5E9",
+             penwidth=1.5, color="#2E7D32"];
+
+    subgraph cluster_build_constraints {
+        label="Procedure: build_constraints(ranges)";
+        style=rounded;
+        fontname="Times New Roman";
+        fontsize=10;
+        color="#6A1B9A";
+        pencolor="#6A1B9A";
+
+        node [fontname="Times New Roman", fontsize=10];
+
+        "BC_START" [label="build_constraints(ranges[])", shape=box, style=rounded, fillcolor="#E8F0FE",
+                    penwidth=2, color="#1A237E", width=1.5];
+        "BC_FILTER" [label="Filter LIDAR rays:\nd = ranges[i]\nmask = (0 < d <= d_influence)"];
+        "BC_HAS_ANY" [label="Any obstacles\nwithin influence?", shape=diamond, style=filled, fillcolor="#FFF9C4",
+                      penwidth=1.5, color="#F57F17", width=1.6, height=1.0];
+        "BC_RETURN_EMPTY" [label="Return:\n[] (no constraints)"];
+        "BC_COMPUTE" [label="For each filtered ray:\nratio = (d - d_safe) / (d_inf - d_safe)\nC = xi * ratio\nA = cos(theta_ray)\nB = rp * sin(theta_ray)\n\nReturn: [(Ai, Bi, Ci), ...]"];
+        "BC_END" [label="END", shape=box, style=rounded, fillcolor="#E8F0FE",
+                  penwidth=2, color="#1A237E", width=1.0];
+
+        "BC_START" -> "BC_FILTER" -> "BC_HAS_ANY";
+        "BC_HAS_ANY" -> "BC_RETURN_EMPTY" [label="No", color="#C62828"];
+        "BC_HAS_ANY" -> "BC_COMPUTE" [label="Yes", color="#2E7D32"];
+        "BC_RETURN_EMPTY" -> "BC_END";
+        "BC_COMPUTE" -> "BC_END";
+    }
+
+    subgraph cluster_solve_qp {
+        label="Procedure: solve_qp(v_goal, w_goal, constraints)";
+        style=rounded;
+        fontname="Times New Roman";
+        fontsize=10;
+        color="#6A1B9A";
+        pencolor="#6A1B9A";
+
+        node [fontname="Times New Roman", fontsize=10];
+
+        "QP_START" [label="solve_qp(v_goal, w_goal,\n  constraints)", shape=box, style=rounded, fillcolor="#E8F0FE",
+                    penwidth=2, color="#1A237E", width=1.5];
+        "QP_OBJECTIVE" [label="Minimize:\nJ(v,w) = 0.5(v - v_goal)^2\n       + 0.5(w - w_goal)^2"];
+        "QP_CONSTRAINTS" [label="Subject to:\nCi - Ai*v - Bi*w >= 0, for all i\n\nBounds:\n-v_max <= v <= v_max\n-w_max <= w <= w_max\n\nMethod: SLSQP"];
+        "QP_SOLVE" [label="Solve with\nscipy.optimize.minimize()", shape=box, style=filled, fillcolor="#F3E5F5",
+                    penwidth=1.5, color="#6A1B9A"];
+        "QP_SUCCESS" [label="Optimization\nsuccessful?", shape=diamond, style=filled, fillcolor="#FFF9C4",
+                      penwidth=1.5, color="#F57F17", width=1.6, height=1.0];
+        "QP_RETURN" [label="Return:\n(v_safe, w_safe)"];
+        "QP_ZERO" [label="Return:\n(0.0, 0.0) (fallback)"];
+        "QP_END" [label="END", shape=box, style=rounded, fillcolor="#E8F0FE",
+                  penwidth=2, color="#1A237E", width=1.0];
+
+        "QP_START" -> "QP_OBJECTIVE" -> "QP_CONSTRAINTS" -> "QP_SOLVE" -> "QP_SUCCESS";
+        "QP_SUCCESS" -> "QP_RETURN" [label="Yes", color="#2E7D32"];
+        "QP_SUCCESS" -> "QP_ZERO" [label="No", color="#C62828"];
+        "QP_RETURN" -> "QP_END";
+        "QP_ZERO" -> "QP_END";
+    }
+
+    subgraph cluster_state_machine {
+        label="Process: compute - Main State Machine";
+        style=rounded;
+        fontname="Times New Roman";
+        fontsize=11;
+        color="#333333";
+        pencolor="#333333";
+
+        node [fontname="Times New Roman", fontsize=10];
+
+        "CHECK_MODE" [label="Check current mode:"];
+        "WHICH_MODE" [label="Current Mode?", shape=diamond, style=filled, fillcolor="#FFF9C4",
+                      penwidth=1.5, color="#F57F17", width=1.6, height=1.0];
+
+        subgraph cluster_reaching_goal {
+            label="Mode: REACHING_GOAL";
+            style=filled;
+            fillcolor="#E8F5E9";
+            color="#2E7D32";
+            fontname="Times New Roman";
+            fontsize=10;
+
+            node [fontname="Times New Roman", fontsize=10];
+
+            "REACHING" [label="State: REACHING_GOAL", shape=box, style="filled,rounded", fillcolor="#E8F5E9",
+                        penwidth=2, color="#2E7D32", fontsize=11];
+            "QP_CALL" [label="(v_safe, w_safe) =\nsolve_qp(v_goal, w_goal,\n  constraints)", shape=box, style=filled, fillcolor="#F3E5F5",
+                       penwidth=1.5, color="#6A1B9A"];
+            "CHECK_DEADLOCK" [label="Is deadlock?\n(|v| < tol AND |w| < tol)\nAND a > 0.1?", shape=diamond, style=filled, fillcolor="#FFF9C4",
+                              penwidth=1.5, color="#F57F17", width=1.6, height=1.0];
+            "REGISTER_BLOCK" [label="Record blocking constraint:\nconstraint_to_follow = max(C)\nsearch_direction:\n  B>0 -> ccw | B<0 -> cw\n\nV_block = 0.5*a^2 + 0.5*alpha^2\nSwitch: mode = BOUNDARY_FOLLOWING\nCompute boundary velocity"];
+            "RETURN_RG" [label="Return:\n(v, w, REACHING_GOAL)"];
+            "RETURN_BF_IMM" [label="Return:\n(v, w, BOUNDARY_FOLLOWING)"];
+
+            "REACHING" -> "QP_CALL" -> "CHECK_DEADLOCK";
+            "CHECK_DEADLOCK" -> "REGISTER_BLOCK" [label="Yes (deadlock)", color="#2E7D32"];
+            "CHECK_DEADLOCK" -> "RETURN_RG" [label="No", color="#C62828"];
+            "REGISTER_BLOCK" -> "RETURN_BF_IMM";
+        }
+
+        subgraph cluster_boundary_following {
+            label="Mode: BOUNDARY_FOLLOWING";
+            style=filled;
+            fillcolor="#FFEBEE";
+            color="#C62828";
+            fontname="Times New Roman";
+            fontsize=10;
+
+            node [fontname="Times New Roman", fontsize=10];
+
+            "FOLLOWING" [label="State: BOUNDARY_FOLLOWING", shape=box, style="filled,rounded", fillcolor="#FFEBEE",
+                         penwidth=2, color="#C62828", fontsize=11];
+            "CHECK_LYAPUNOV" [label="V = 0.5*a^2 + 0.5*alpha^2\n\nV_current < V_block?\n(obstacle bypassed?)", shape=diamond, style=filled, fillcolor="#FFF9C4",
+                              penwidth=1.5, color="#F57F17", width=1.6, height=1.0];
+            "SWITCH_TO_RG" [label="Obstacle bypassed.\nSwitch: mode = REACHING_GOAL\n\nCompute QP:\n(v, w) = solve_qp(...)"];
+            "FOLLOW_OBSTACLE" [label="Continue following.\n\nGet boundary velocity:\n(v, w) = get_boundary_velocity(constraints)"];
+            "RETURN_BF" [label="Return:\n(v, w, BOUNDARY_FOLLOWING)"];
+            "RETURN_SWITCH" [label="Return:\n(v, w, REACHING_GOAL)"];
+
+            "FOLLOWING" -> "CHECK_LYAPUNOV";
+            "CHECK_LYAPUNOV" -> "SWITCH_TO_RG" [label="Yes (V < V_block)", color="#2E7D32"];
+            "CHECK_LYAPUNOV" -> "FOLLOW_OBSTACLE" [label="No", color="#C62828"];
+            "SWITCH_TO_RG" -> "RETURN_SWITCH";
+            "FOLLOW_OBSTACLE" -> "RETURN_BF";
+        }
+
+        "CHECK_MODE" -> "WHICH_MODE";
+        "WHICH_MODE" -> "REACHING" [label="reaching_goal"];
+        "WHICH_MODE" -> "FOLLOWING" [label="boundary_following"];
+
+        "FT_END" [label="RETURN\n(v, w, mode)", shape=box, style=rounded, fillcolor="#E8F0FE",
+                  penwidth=2, color="#1A237E", width=1.5];
+        "RETURN_RG" -> "FT_END";
+        "RETURN_BF_IMM" -> "FT_END";
+        "RETURN_BF" -> "FT_END";
+        "RETURN_SWITCH" -> "FT_END";
+    }
+
+    subgraph cluster_boundary_vel {
+        label="Procedure: get_boundary_velocity(constraints)";
+        style=rounded;
+        fontname="Times New Roman";
+        fontsize=9;
+        color="#6A1B9A";
+        pencolor="#6A1B9A";
+
+        node [fontname="Times New Roman", fontsize=9];
+
+        "BV_START" [label="get_boundary_velocity()", shape=box, style=rounded, fillcolor="#E8F0FE",
+                    penwidth=2, color="#1A237E", width=1.2];
+        "BV_CANDIDATES" [label="Find 4 candidates from\nblocking constraint (A,B,C)\nintersected with v_max, w_max\nbounds:\n  (v_max, w_C), (-v_max, w_C)\n  (v_C, w_max), (v_C, -w_max)"];
+        "BV_FILTER" [label="Filter feasible candidates:\nsatisfying ALL constraints\nA*v + B*w <= C"];
+        "BV_FEASIBLE" [label="Any feasible\ncandidates?", shape=diamond, style=filled, fillcolor="#FFF9C4",
+                       penwidth=1.5, color="#F57F17", width=1.3, height=0.8];
+        "BV_NEAREST" [label="Use nearest candidate\n(min norm)"];
+        "BV_SELECT" [label="Select by direction:\nccw -> max(w)\ncw -> min(w)"];
+        "BV_RETURN" [label="Return:\n(v_bf, w_bf)"];
+        "BV_END" [label="END", shape=box, style=rounded, fillcolor="#E8F0FE",
+                  penwidth=2, color="#1A237E", width=1.0];
+
+        "BV_START" -> "BV_CANDIDATES" -> "BV_FILTER" -> "BV_FEASIBLE";
+        "BV_FEASIBLE" -> "BV_SELECT" [label="Yes", color="#2E7D32"];
+        "BV_FEASIBLE" -> "BV_NEAREST" [label="No", color="#C62828"];
+        "BV_SELECT" -> "BV_RETURN";
+        "BV_NEAREST" -> "BV_RETURN";
+        "BV_RETURN" -> "BV_END";
+    }
+}
