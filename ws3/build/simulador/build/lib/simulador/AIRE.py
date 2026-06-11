@@ -12,23 +12,10 @@ class Aire(Node):
 
         super().__init__('aire')
 
-        # --------------------------------------------------
-        # Parámetros
-        # --------------------------------------------------
-
         self.declare_parameter('neighbor_radius', 3.0)
         self.R = float(self.get_parameter('neighbor_radius').value)
-
-        # --------------------------------------------------
-        # Estado global de todos los robots
-        # --------------------------------------------------
-
         self.states = {}              # { robot_id: (x, y, theta) }
         self._neighbor_pubs = {}      # { robot_id: Publisher }
-
-        # --------------------------------------------------
-        # Subscriber — todos los robots transmiten aquí
-        # --------------------------------------------------
 
         self.sub = self.create_subscription(
             RobotState,
@@ -45,9 +32,8 @@ class Aire(Node):
         """Crea el publisher para un robot si no existe todavía."""
 
         if robot_id not in self._neighbor_pubs:
-
             topic = f'/{robot_id}/neighbors_rx'
-
+            
             self._neighbor_pubs[robot_id] = self.create_publisher(
                 RobotState,
                 topic,

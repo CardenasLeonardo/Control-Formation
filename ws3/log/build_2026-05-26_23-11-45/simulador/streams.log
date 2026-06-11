@@ -1,0 +1,19 @@
+[0.689s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/simulador': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data
+[0.848s] running develop
+[0.942s] running egg_info
+[0.942s] writing simulador.egg-info/PKG-INFO
+[0.942s] writing dependency_links to simulador.egg-info/dependency_links.txt
+[0.942s] writing entry points to simulador.egg-info/entry_points.txt
+[0.942s] writing requirements to simulador.egg-info/requires.txt
+[0.942s] writing top-level names to simulador.egg-info/top_level.txt
+[0.943s] reading manifest file 'simulador.egg-info/SOURCES.txt'
+[0.944s] writing manifest file 'simulador.egg-info/SOURCES.txt'
+[0.945s] running build_ext
+[0.946s] Creating /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador.egg-link (link to .)
+[0.946s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.946s] Installing pva_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.946s] Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.946s] 
+[0.946s] Installed /home/calafaker/Control-Formation/ws3/build/simulador
+[0.947s] running symlink_data
+[0.962s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/simulador' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data

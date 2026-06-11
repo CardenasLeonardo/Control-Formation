@@ -158,6 +158,19 @@ def launch_setup(context, *args, **kwargs):
         )
     ]))
 
+    # actions.append(TimerAction(period=late_delay, actions=[
+    #     Node(
+    #         package='simulador',
+    #         executable='pva_plotter',
+    #         name='pva_plotter',
+    #         parameters=[{
+    #             'save_dir': save_dir,
+    #             't_final':  t_final,
+    #         }],
+    #         output='screen'
+    #     )
+    # ]))
+
     return actions
 
 
@@ -186,7 +199,7 @@ def generate_launch_description():
             default_value='70.0',
             description='Duración de la simulación (s)'),
         DeclareLaunchArgument('save_dir',
-            default_value='figures_formacion',
+            default_value='figuras/formacion',
             description='Directorio donde se guardan las figuras'),
         OpaqueFunction(function=launch_setup)
     ])

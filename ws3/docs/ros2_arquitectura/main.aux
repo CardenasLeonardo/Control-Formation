@@ -1,0 +1,82 @@
+\relax 
+\citation{macenski2022robot}
+\citation{ramirez2001collision}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introducción}{1}{}\protected@file@percent }
+\newlabel{lst:cmd_ejemplo}{{1}{1}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Comando de ejemplo utilizado a lo largo del documento.}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}El Entorno de Ejecución}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Distribuciones de ROS\nobreakspace  {}2}{1}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Distribuciones de ROS\nobreakspace  {}2 y su soporte.}}{1}{}\protected@file@percent }
+\newlabel{tab:distros}{{I}{1}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Verificación de la distribución activa.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Dónde vive ROS\nobreakspace  {}2}{2}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}Estructura de instalación de ROS\nobreakspace  {}2 Humble.}{2}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}Estructura del workspace tras compilar con \texttt  {colcon build}.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Variables de entorno}{2}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}Inspección de variables de entorno relevantes.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Qué es \texttt  {source} y por qué es necesario}{2}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}Diferencia entre ejecutar y sourcear un script.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Qué hace \texttt  {setup.bash} internamente}{2}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}Mecanismo central de \texttt  {local\_setup.bash} (simplificado).}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-F}}El shebang y el PATH}{3}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}Primera línea del ejecutable \texttt  {ros2}.}{3}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {9}Equivalencia entre el comando y su expansión real.}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}El Ejecutable \texttt  {ros2}}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Cómo el OS entrega los argumentos}{3}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10}\texttt  {sys.argv} recibido por el ejecutable \texttt  {ros2}.}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Estructura modular de \texttt  {ros2}}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Parsing de los argumentos \texttt  {:=}}{3}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {11}Parsing de overrides de argumentos (simplificación del mecanismo interno).}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Localización del launch file con \texttt  {ament\_index}}{3}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {12}Localización del launch file (simplificado).}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}El Launch File}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}\texttt  {generate\_launch\_description()}}{4}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {13}Estructura típica de \texttt  {generate\_launch\_description()}.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}\texttt  {DeclareLaunchArgument}}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}El objeto \texttt  {context}}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}\texttt  {OpaqueFunction}: lógica Python arbitraria}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}\texttt  {LaunchConfiguration} y Substitutions}{4}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {14}Resolución de argumentos dentro de \texttt  {launch\_setup}.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-F}}Creación del descriptor de nodo}{4}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {15}Creación del descriptor de nodo con parámetros.}{4}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {16}Comando real que el OS ejecuta al procesar el descriptor \texttt  {Node}.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Arranque del Nodo}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}El mecanismo \texttt  {entry\_points}}{4}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {17}Declaración del ejecutable en \texttt  {setup.py}.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}La función \texttt  {main()}}{5}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {18}Función \texttt  {main()} típica de un nodo ROS\nobreakspace  {}2.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}El constructor \texttt  {\_\_init\_\_} del nodo}{5}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {19}Constructor de un nodo ROS\nobreakspace  {}2.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Declaración y lectura de parámetros}{5}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {20}Declaración y lectura de parámetros en el nodo.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Las tres fronteras de serialización}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Fronteras de serialización del argumento \texttt  {n\_rays\_used:=5}.}}{5}{}\protected@file@percent }
+\newlabel{tab:fronteras}{{II}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Del Nodo al Módulo}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Instanciación de módulos Python puros}{5}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {21}Instanciación del módulo PVA desde el nodo.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}La clase PVA como Python puro}{6}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {22}Constructor de la clase \texttt  {PVA}.}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Por qué esta separación es importante}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Ejecución en Tiempo Real}{6}{}\protected@file@percent }
+\newlabel{sec:runtime}{{VII}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}El loop de eventos: \texttt  {rclpy.spin()}}{6}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {23}Comportamiento conceptual de \texttt  {rclpy.spin()}.}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Suscripciones}{6}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {24}Registro de una suscripción a odometría.}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Timers}{6}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {25}Registro de un timer de control a 20\nobreakspace  {}Hz.}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}Modelo de concurrencia}{6}{}\protected@file@percent }
+\bibstyle{IEEEtran}
+\bibdata{References}
+\bibcite{macenski2022robot}{1}
+\bibcite{ramirez2001collision}{2}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-E}}El rol del DDS}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Resumen del Flujo Completo}{7}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Flujo completo del argumento \texttt  {n\_rays\_used:=5} desde la terminal hasta el módulo.}}{7}{}\protected@file@percent }
+\newlabel{tab:resumen_flujo}{{III}{7}}
+\newlabel{lst:diagrama}{{26}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {26}Diagrama de flujo Terminal $\to $ Módulo.}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Observaciones finales}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{7}{}\protected@file@percent }
+\gdef \@abspage@last{8}

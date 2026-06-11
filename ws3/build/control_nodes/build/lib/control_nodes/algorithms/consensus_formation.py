@@ -1,142 +1,107 @@
 import math
 
 
-def rotation_matrix(theta):
-    """Matriz de rotación 2D."""
-    c = math.cos(theta)
-    s = math.sin(theta)
-    return [[c, -s], [s, c]]
-
-
-def rotate(R, v):
-    """Aplica matriz de rotación R a vector v = [vx, vy]."""
-    return [
-        R[0][0] * v[0] + R[0][1] * v[1],
-        R[1][0] * v[0] + R[1][1] * v[1]
-    ]
-
-
-def compute_offsets(n_followers, theta_leader, angle_v, d):
-    """
-    Calcula los offsets r[i] de la formación en V para cada seguidor.
-
-    Parámetros:
-      n_followers  : número de seguidores (N - 1)
-      theta_leader : orientación actual del líder (radianes)
-      angle_v      : ángulo de apertura de la V (radianes)
-      d            : separación entre robots en el brazo (metros)
-
-    Retorna:
-      offsets : dict { follower_index: (rx, ry) }
-                follower_index va de 1 a n_followers
-    """
-
+def _compute_offsets(n_followers, theta_leader, angle_v, d):
     n_left  = n_followers // 2
-    n_right = n_followers - n_left   # el extra va a la derecha
+    n_right = n_followers - n_left
 
-    # Brazos izquierdo y derecho
-    left_ids  = list(range(1, n_left + 1))
-    right_ids = list(range(n_left + 1, n_followers + 1))
+    def _rot(theta):
+        c, s = math.cos(theta), math.sin(theta)
+        return [[c, -s], [s, c]]
+
+    def _apply(R, vx, vy):
+        return (R[0][0]*vx + R[0][1]*vy, R[1][0]*vx + R[1][1]*vy)
+
+    R_left  = _rot(theta_leader + angle_v)
+    R_right = _rot(theta_leader - angle_v)
 
     offsets = {}
-
-    R_left  = rotation_matrix(theta_leader + angle_v)
-    R_right = rotation_matrix(theta_leader - angle_v)
-
-    for k, idx in enumerate(left_ids, start=1):
-        v = rotate(R_left, [-k * d, 0.0])
-        offsets[idx] = (v[0], v[1])
-
-    for k, idx in enumerate(right_ids, start=1):
-        v = rotate(R_right, [-k * d, 0.0])
-        offsets[idx] = (v[0], v[1])
-
+    for k in range(1, n_left + 1):
+        offsets[k] = _apply(R_left, -k * d, 0.0)
+    for k in range(1, n_right + 1):
+        offsets[n_left + k] = _apply(R_right, -k * d, 0.0)
     return offsets
 
 
 class ConsensusFormation:
 
-    def __init__(self, alpha=0.01, beta=5, vmax=1.0, wmax=1.0):
+    def __init__(self):
+        self._theta_L_smooth = None
+
+    def _update_leader_angle(self, theta_L_raw, percentage=0.05):
+        if self._theta_L_smooth is None:
+            self._theta_L_smooth = theta_L_raw
+        else:
+            diff = theta_L_raw - self._theta_L_smooth
+            if diff >  math.pi: diff -= 2 * math.pi
+            if diff < -math.pi: diff += 2 * math.pi
+            self._theta_L_smooth += percentage * diff
+        return self._theta_L_smooth
+
+
+    def step(self, state, neighbors_dict, leader_id, follower_index, n_followers, angle_v, d, beta):
+        leader_state = None
+        theta_L      = 0.0
+
+        if leader_id in neighbors_dict:
+            xL, yL, theta_L_raw = neighbors_dict[leader_id]
+            leader_state = (xL, yL)
+            theta_L = self._update_leader_angle(theta_L_raw)
+
+        offsets_all = _compute_offsets(n_followers, theta_L, angle_v, d)
+        my_offset   = offsets_all.get(follower_index, (0.0, 0.0))
+
+        neighbors        = []
+        neighbor_offsets = []
+        for rid, (xj, yj, _) in neighbors_dict.items():
+            if rid == leader_id:
+                continue
+            try:
+                j = int(rid.replace('robot', ''))
+            except ValueError:
+                continue
+            neighbors.append((xj, yj))
+            neighbor_offsets.append(offsets_all.get(j, (0.0, 0.0)))
+
+        return self.compute(state, neighbors, leader_state, my_offset, neighbor_offsets, beta)
+
+
+
+    def compute(self, state, neighbors, leader_state, offset, neighbor_offsets=None, beta=1.5):
         """
-        Parámetros:
-          alpha : ganancia del consenso entre vecinos
-          beta  : ganancia de atracción al ancla virtual
-          vmax  : saturación velocidad lineal
-          wmax  : saturación velocidad angular
-        """
+        Ley de consenso relativo:
+          e_i = -Σ_j a_ij [(x_i - r_i) - (x_j - r_j)] - β b_i^0 (x_i - x_0 - r_i)
 
-        self.alpha = alpha
-        self.beta  = beta
-        self.vmax  = vmax
-        self.wmax  = wmax
-
-    def compute(self, state, neighbors, leader_state, offset):
-        """
-        Calcula las velocidades (v, w) para un seguidor.
-
-        Parámetros:
-          state        : (x, y, theta) del seguidor
-          neighbors    : [(xj, yj), ...] — vecinos filtrados por AIRE
-          leader_state : (xL, yL) — posición del líder
-          offset       : (rx, ry) — offset de formación del seguidor
-
-        Retorna:
-          v, w : velocidades a aplicar
+        Retorna (a, alpha):
+          a     : magnitud del vector de error
+          alpha : ángulo del error respecto al heading del robot (rad)
         """
 
         xi, yi, theta = state
-        xL, yL = leader_state
-        rx, ry = offset
+        rix, riy = offset
 
-        # --------------------------------------------------
-        # Ancla virtual del seguidor
-        # --------------------------------------------------
-
-        x_ref = xL + rx
-        y_ref = yL + ry
-
-        # --------------------------------------------------
-        # Error de consenso con vecinos
-        # --------------------------------------------------
+        if neighbor_offsets is None:
+            neighbor_offsets = [(0.0, 0.0)] * len(neighbors)
 
         ex = 0.0
         ey = 0.0
 
-        for xj, yj in neighbors:
-            ex += (xj - xi)
-            ey += (yj - yi)
+        for (xj, yj), (rjx, rjy) in zip(neighbors, neighbor_offsets):
+            ex += (xj - rjx) - (xi - rix)
+            ey += (yj - rjy) - (yi - riy)
 
-        n = max(len(neighbors), 1)
-        ex /= n
-        ey /= n
-
-        # --------------------------------------------------
-        # Error de atracción al ancla virtual
-        # --------------------------------------------------
-
-        ex += self.beta * (x_ref - xi)
-        ey += self.beta * (y_ref - yi)
-
-        # --------------------------------------------------
-        # Ley de control polar
-        # --------------------------------------------------
+        if leader_state is not None:
+            xL, yL = leader_state
+            ex += beta * ((xL + rix) - xi)
+            ey += beta * ((yL + riy) - yi)
 
         a = math.sqrt(ex**2 + ey**2)
 
         if a < 1e-6:
             return 0.0, 0.0
 
-        alpha_angle = math.atan2(ey, ex) - theta
+        alpha = math.atan2(ey, ex) - theta
+        while alpha >  math.pi: alpha -= 2 * math.pi
+        while alpha < -math.pi: alpha += 2 * math.pi
 
-        # Normalización del ángulo
-        while alpha_angle >  math.pi: alpha_angle -= 2 * math.pi
-        while alpha_angle < -math.pi: alpha_angle += 2 * math.pi
-
-        v = 0.8 * a * math.cos(alpha_angle)
-        w = 1.0 * alpha_angle + 0.8 * math.sin(alpha_angle) * math.cos(alpha_angle)
-
-        # Saturación
-        v = max(-self.vmax, min(self.vmax, v))
-        w = max(-self.wmax, min(self.wmax, w))
-
-        return v, w
+        return a, alpha

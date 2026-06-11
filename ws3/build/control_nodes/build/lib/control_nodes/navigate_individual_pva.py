@@ -194,20 +194,7 @@ class NavigateIndividual(Node):
         # PVA
         # --------------------------------------------------
 
-        if self.ranges:
-
-            self.constraints = self.pva.build_constraints(self.ranges)
-
-            v_safe, w_safe = self.pva.solve_qp(
-                v_goal,
-                w_goal,
-                self.constraints
-            )
-
-        else:
-
-            v_safe, w_safe = v_goal, w_goal
-            self.constraints = []
+        v_safe, w_safe, self.constraints = self.pva.apply(v_goal, w_goal, self.ranges)
 
         self.v = v_safe
         self.w = w_safe

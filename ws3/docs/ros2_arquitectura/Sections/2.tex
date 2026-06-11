@@ -1,0 +1,55 @@
+\section{El Ejecutable \texttt{ros2}}
+
+\subsection{Cómo el OS entrega los argumentos}
+
+Cuando el sistema operativo ejecuta cualquier programa, le entrega todos los tokens escritos en la terminal como una lista de strings llamada \texttt{sys.argv}. Para el comando del Listado~\ref{lst:cmd_ejemplo}, esa lista es:
+
+\begin{lstlisting}[style=python, caption={\texttt{sys.argv} recibido por el ejecutable \texttt{ros2}.}]
+sys.argv = [
+    'ros2',
+    'launch',
+    'simulador',
+    'demo_pva.launch.py',
+    'n_rays_used:=5',
+    'vmax:=0.8'
+]
+\end{lstlisting}
+
+Esta es la frontera más baja del sistema. El OS no sabe si \texttt{5} es un entero, un float, o una cadena de texto. Todo es un string. Esta restricción se propaga hacia arriba y obliga a conversiones explícitas de tipo en cada capa.
+
+\subsection{Estructura modular de \texttt{ros2}}
+
+El ejecutable \texttt{ros2} es una CLI (Command Line Interface) modular. Cada subcomando (\texttt{launch}, \texttt{run}, \texttt{topic}, \texttt{node}, \texttt{param}) es un plugin Python separado que se carga bajo demanda. Al recibir \texttt{sys.argv[1] = 'launch'}, el ejecutable carga el plugin \texttt{ros2launch} y le delega el resto de la ejecución. Esto permite extender \texttt{ros2} con subcomandos personalizados sin modificar el ejecutable principal.
+
+\subsection{Parsing de los argumentos \texttt{:=}}
+
+El plugin \texttt{ros2launch} utiliza \texttt{argparse} de Python para separar el nombre del paquete y el archivo launch. Todo lo que queda después de esos dos campos es tratado como overrides de argumentos del launch file. La convención \texttt{clave:=valor} no pertenece a Python ni al OS; es una convención que ROS~2 definió y parsea manualmente mediante string splitting:
+
+\begin{lstlisting}[style=python, caption={Parsing de overrides de argumentos (simplificación del mecanismo interno).}]
+launch_arguments = {}
+for token in remaining_args:
+    if ':=' in token:
+        key, value = token.split(':=', 1)
+        launch_arguments[key] = value  # siempre string
+
+# Resultado para el comando del Listado 1:
+# launch_arguments = {'n_rays_used': '5', 'vmax': '0.8'}
+\end{lstlisting}
+
+El \texttt{split(':=', 1)} asegura que si el valor contiene \texttt{:=} (por ejemplo, una ruta), solo se divide en la primera ocurrencia. El resultado es un diccionario de strings que se entrega al sistema de launch como condiciones iniciales.
+
+\subsection{Localización del launch file con \texttt{ament\_index}}
+
+Una vez parseados los argumentos, \texttt{ros2launch} necesita localizar el archivo \texttt{demo\_pva.launch.py} dentro del paquete \texttt{simulador}. Para ello usa \texttt{ament\_index}: una base de datos de paquetes instalados que vive en \texttt{AMENT\_PREFIX\_PATH}. Cada paquete, al compilarse con \texttt{colcon build}, registra su nombre y ubicación en esa base de datos. \texttt{ament\_index} hace el equivalente a:
+
+\begin{lstlisting}[style=python, caption={Localización del launch file (simplificado).}]
+from ament_index_python.packages import \
+    get_package_share_directory
+
+pkg_dir = get_package_share_directory('simulador')
+# -> '/ws3/install/simulador/share/simulador'
+
+launch_file = pkg_dir + '/launch/demo_pva.launch.py'
+\end{lstlisting}
+
+Finalmente, \texttt{ros2launch} importa ese archivo como módulo Python normal, mediante \texttt{importlib.import\_module}, y busca la función \texttt{generate\_launch\_description()}.

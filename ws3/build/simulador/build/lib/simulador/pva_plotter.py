@@ -1,6 +1,6 @@
 import os
 import math
-import threading
+import signal
 import rclpy
 from rclpy.node import Node
 
@@ -16,14 +16,18 @@ class PVAPlotter(Node):
 
         super().__init__('pva_plotter')
 
+        # ---------------------------------------------
+        # Parámetros de límites de velocidad
+        # ---------------------------------------------
         self.declare_parameter('vmax', 1.0)
         self.declare_parameter('wmax', 1.0)
-        self.declare_parameter('n_robots_expected', 0)
 
         self.vmax = float(self.get_parameter('vmax').value)
         self.wmax = float(self.get_parameter('wmax').value)
-        self.n_robots_expected = int(self.get_parameter('n_robots_expected').value)
 
+        # ---------------------------------------------
+        # Subscriber
+        # ---------------------------------------------
         self.sub = self.create_subscription(
             PVAConstraints,
             '/pva_constraints',
@@ -31,15 +35,26 @@ class PVAPlotter(Node):
             10
         )
 
+        # ---------------------------------------------
+        # Datos por robot
+        # ---------------------------------------------
         self.data = {}
+
+        # ---------------------------------------------
+        # Ejes de visualización
+        # ---------------------------------------------
         self.fig_main = None
         self.axes = {}
 
-        self.declare_parameter('save_dir', '')
-        param_dir = self.get_parameter('save_dir').value
-        self.save_dir = param_dir or os.environ.get('EXP_SAVE_DIR', '') or 'figures_pva'
+        # ---------------------------------------------
+        # Carpeta de salida
+        # ---------------------------------------------
+        self.save_dir = "figures_pva"
         os.makedirs(self.save_dir, exist_ok=True)
 
+        # ---------------------------------------------
+        # Estilo tipo paper
+        # ---------------------------------------------
         plt.rcParams.update({
             "font.family": "Times New Roman",
             "mathtext.fontset": "stix",
@@ -48,10 +63,15 @@ class PVAPlotter(Node):
 
         plt.ion()
 
-        self.timer = self.create_timer(0.2, self.update_plot)
+        self.timer = self.create_timer(1.0 / 7.0, self.update_plot)
 
-        self.get_logger().info("PVA Plotter iniciado — presiona Enter para guardar figuras")
+        # SIGUSR1 → guardar figuras sin detener el nodo
+        signal.signal(signal.SIGUSR1, lambda sig, frame: self.save_figures())
 
+        self.get_logger().info("PVA Plotter iniciado  |  kill -USR1 <pid> para guardar PDF")
+
+    # --------------------------------------------------
+    # CALLBACK
     # --------------------------------------------------
 
     def pva_callback(self, msg):
@@ -69,6 +89,8 @@ class PVAPlotter(Node):
         }
 
     # --------------------------------------------------
+    # CONSTRUIR LAYOUT DINÁMICO
+    # --------------------------------------------------
 
     def build_layout(self):
 
@@ -77,7 +99,7 @@ class PVAPlotter(Node):
         cols = math.ceil(math.sqrt(n))
         rows = math.ceil(n / cols)
 
-        self.fig_main, axs = plt.subplots(rows, cols, figsize=(5*cols, 4*rows))
+        self.fig_main, axs = plt.subplots(rows, cols, figsize=(5*cols,4*rows))
 
         axs = np.atleast_1d(axs).flatten()
 
@@ -92,19 +114,40 @@ class PVAPlotter(Node):
         plt.show(block=False)
 
     # --------------------------------------------------
+    # AGREGAR LÍMITES DEL ROBOT COMO RESTRICCIONES
+    # --------------------------------------------------
 
     def add_velocity_bounds(self, A, B, C):
 
-        A_box = np.array([ 1.0, -1.0,  0.0,  0.0])
-        B_box = np.array([ 0.0,  0.0,  1.0, -1.0])
-        C_box = np.array([ self.vmax,  self.vmax,  self.wmax,  self.wmax])
+        A_box = np.array([
+            1.0,
+           -1.0,
+            0.0,
+            0.0
+        ])
 
-        return (
-            np.concatenate([A, A_box]),
-            np.concatenate([B, B_box]),
-            np.concatenate([C, C_box])
-        )
+        B_box = np.array([
+            0.0,
+            0.0,
+            1.0,
+           -1.0
+        ])
 
+        C_box = np.array([
+            self.vmax,
+            self.vmax,
+            self.wmax,
+            self.wmax
+        ])
+
+        A_all = np.concatenate([A, A_box])
+        B_all = np.concatenate([B, B_box])
+        C_all = np.concatenate([C, C_box])
+
+        return A_all, B_all, C_all
+
+    # --------------------------------------------------
+    # CALCULAR POLÍGONO FACTIBLE
     # --------------------------------------------------
 
     def compute_polygon(self, A, B, C):
@@ -130,6 +173,7 @@ class PVAPlotter(Node):
             return None
 
         points = np.array(points, dtype=float)
+
         points = np.unique(np.round(points, decimals=8), axis=0)
 
         if len(points) < 3:
@@ -137,9 +181,12 @@ class PVAPlotter(Node):
 
         center = np.mean(points, axis=0)
         angles = np.arctan2(points[:, 1] - center[1], points[:, 0] - center[0])
+        order = np.argsort(angles)
 
-        return points[np.argsort(angles)]
+        return points[order]
 
+    # --------------------------------------------------
+    # DIBUJAR UN ROBOT
     # --------------------------------------------------
 
     def draw_robot_pva(self, ax, robot, d):
@@ -147,51 +194,80 @@ class PVAPlotter(Node):
         ax.cla()
 
         ax.set_title(f"PVA - {robot}")
-        ax.set_xlabel(r"Velocidad lineal $v$ (m/s)")
-        ax.set_ylabel(r"Velocidad angular $\omega$ (rad/s)")
+        ax.set_xlabel(r"Linear velocity $v$ (m/s)")
+        ax.set_ylabel(r"Angular velocity $\omega$ (rad/s)")
         ax.grid(True)
 
         ax.axhline(0.0, linestyle="--", color="gray", linewidth=1.0)
         ax.axvline(0.0, linestyle="--", color="gray", linewidth=1.0)
 
-        A_all, B_all, C_all = self.add_velocity_bounds(d["a"], d["b"], d["c"])
+        A = d["a"]
+        B = d["b"]
+        C = d["c"]
+
+        A_all, B_all, C_all = self.add_velocity_bounds(A, B, C)
 
         polygon = self.compute_polygon(A_all, B_all, C_all)
 
         if polygon is not None:
 
             ax.fill(
-                polygon[:, 0], polygon[:, 1],
-                color="lightgreen", alpha=0.35,
-                label="Región admisible"
+                polygon[:,0],
+                polygon[:,1],
+                color="lightgreen",
+                alpha=0.35,
+                label="Admissible region"
             )
 
             ax.plot(
-                np.append(polygon[:, 0], polygon[0, 0]),
-                np.append(polygon[:, 1], polygon[0, 1]),
-                color="black", linewidth=1.6
+                np.append(polygon[:,0], polygon[0,0]),
+                np.append(polygon[:,1], polygon[0,1]),
+                color="black",
+                linewidth=1.6
             )
 
         ax.plot(
-            d["v_goal"], d["w_goal"],
-            marker='o', linestyle='None', markersize=8,
-            color='tab:blue', label=r"$u_{ref}$"
+            d["v_goal"],
+            d["w_goal"],
+            marker='o',
+            linestyle='None',
+            markersize=8,
+            color='tab:blue',
+            label=r"$u_{ref}$"
         )
 
         ax.plot(
-            d["v_star"], d["w_star"],
-            marker='o', linestyle='None', markersize=8,
-            color='tab:red', label=r"$u^{*}$"
+            d["v_star"],
+            d["w_star"],
+            marker='o',
+            linestyle='None',
+            markersize=8,
+            color='tab:red',
+            label=r"$u^{*}$"
         )
 
-        margin_v = 0.15 * self.vmax
-        margin_w = 0.15 * self.wmax
+        # Círculo punteado centrado en u_ref con radio = distancia a u*
+        radius = math.sqrt((d["v_star"] - d["v_goal"])**2 +
+                           (d["w_star"] - d["w_goal"])**2)
+        if radius > 1e-6:
+            theta_c = np.linspace(0, 2 * np.pi, 200)
+            ax.plot(
+                d["v_goal"] + radius * np.cos(theta_c),
+                d["w_goal"] + radius * np.sin(theta_c),
+                linestyle='--',
+                linewidth=1.0,
+                color='gray',
+                alpha=0.7,
+            )
 
-        ax.set_xlim(-self.vmax - margin_v, self.vmax + margin_v)
-        ax.set_ylim(-self.wmax - margin_w, self.wmax + margin_w)
+        ax.set_xlim(-1.0, 1.0)
+        ax.set_ylim(-1.0, 1.0)
+        ax.set_aspect('equal', adjustable='box')
 
         ax.legend()
 
+    # --------------------------------------------------
+    # UPDATE PLOT
     # --------------------------------------------------
 
     def update_plot(self):
@@ -199,40 +275,46 @@ class PVAPlotter(Node):
         if not self.data:
             return
 
-        if self.n_robots_expected > 0 and len(self.data) < self.n_robots_expected:
-            return
-
         if self.fig_main is None or len(self.axes) != len(self.data):
+            if self.fig_main is not None:
+                plt.close(self.fig_main)
             self.build_layout()
 
         for robot, d in self.data.items():
-            self.draw_robot_pva(self.axes[robot], robot, d)
+
+            ax = self.axes[robot]
+
+            self.draw_robot_pva(ax, robot, d)
 
         self.fig_main.tight_layout()
+
         self.fig_main.canvas.draw_idle()
         self.fig_main.canvas.flush_events()
 
     # --------------------------------------------------
+    # SAVE FIGURES
+    # --------------------------------------------------
 
     def save_figures(self):
-
-        if not self.data:
-            self.get_logger().info("Sin datos para guardar.")
-            return
 
         for robot, d in self.data.items():
 
             fig, ax = plt.subplots(figsize=(6.5, 5.0))
+
             self.draw_robot_pva(ax, robot, d)
+
             fig.savefig(
                 os.path.join(self.save_dir, f"pva_{robot}.pdf"),
                 bbox_inches="tight"
             )
+
             plt.close(fig)
 
         self.get_logger().info(f"Figuras guardadas en: {self.save_dir}")
 
 
+# --------------------------------------------------
+# MAIN
 # --------------------------------------------------
 
 def main(args=None):
@@ -241,23 +323,16 @@ def main(args=None):
 
     node = PVAPlotter()
 
-    def esperar_enter():
-        while True:
-            input()
-            node.get_logger().info("Guardando figuras...")
-            node.save_figures()
-
-    hilo = threading.Thread(target=esperar_enter, daemon=True)
-    hilo.start()
-
     try:
         rclpy.spin(node)
+
     except KeyboardInterrupt:
-        pass
-    finally:
-        node.get_logger().info("Guardando figuras antes de salir...")
+        node.get_logger().info("Guardando figuras...")
         node.save_figures()
+
+    finally:
         node.destroy_node()
+
         if rclpy.ok():
             rclpy.shutdown()
 

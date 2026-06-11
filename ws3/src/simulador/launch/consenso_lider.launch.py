@@ -53,6 +53,8 @@ def launch_setup(context, *args, **kwargs):
             positions[i] = follower_positions[seg_idx]
             seg_idx += 1
 
+    late_delay = 3.0 + n * 1.5 + 2.0
+
     actions = []
 
     actions.append(
@@ -100,27 +102,29 @@ def launch_setup(context, *args, **kwargs):
         else:
             control_node = Node(
                 package='control_nodes',
-                executable='consenso_lider_node',
-                name='consenso_lider',
+                executable='consenso_node',
+                name='consenso',
                 namespace=ns,
                 parameters=[{
-                    'leader_id': leader_id,
-                    'vmax':      0.8,
-                    'wmax':      0.8,
-                    'k1':        1.5,
-                    'k2':        1.5,
-                    'k_leader':  1.0,
+                    'consensus_type': 'lider',
+                    'leader_id':      leader_id,
+                    'k_leader':       2.0,
+                    'k1':             1.0,
+                    'k2':             1.5,
+                    'vmax':           0.8,
+                    'wmax':           0.8,
                 }],
                 output='screen'
             )
 
         actions.append(TimerAction(period=delay,       actions=[rsp_node]))
         actions.append(TimerAction(period=delay + 0.5, actions=[spawn_node]))
-        actions.append(TimerAction(period=delay + 1.5, actions=[control_node]))
+
+        # El líder espera a que todos los robots hayan spawneado antes de moverse
+        control_delay = late_delay if ns == leader_id else delay + 1.5
+        actions.append(TimerAction(period=control_delay, actions=[control_node]))
 
     # AIRE y plotters después de que todos los robots estén activos
-    late_delay = 3.0 + n * 1.5 + 2.0
-
     actions.append(TimerAction(period=late_delay, actions=[
         Node(
             package='simulador',
@@ -145,6 +149,19 @@ def launch_setup(context, *args, **kwargs):
         )
     ]))
 
+    # actions.append(TimerAction(period=late_delay, actions=[
+    #     Node(
+    #         package='simulador',
+    #         executable='pva_plotter',
+    #         name='pva_plotter',
+    #         parameters=[{
+    #             'save_dir': save_dir,
+    #             't_final':  t_final,
+    #         }],
+    #         output='screen'
+    #     )
+    # ]))
+
     return actions
 
 
@@ -167,7 +184,7 @@ def generate_launch_description():
             default_value='90.0',
             description='Duración de la simulación (s)'),
         DeclareLaunchArgument('save_dir',
-            default_value='figures_consenso_lider',
+            default_value='figuras/consenso_lider',
             description='Directorio donde se guardan las figuras'),
         OpaqueFunction(function=launch_setup)
     ])

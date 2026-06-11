@@ -1,0 +1,80 @@
+\section{Resultados: Polígonos PVA}
+
+Las Figs.~\ref{fig:pva_0_1}--\ref{fig:pva_4_5} muestran el polígono de velocidades admisibles de cada robot en un instante representativo de la simulación, capturado cuando los robots se encuentran en la región de mayor proximidad entre sí.
+
+Cada gráfica muestra:
+\begin{itemize}
+  \item \textbf{Región verde}: el polígono $\mathcal{P}(v,\omega)$ de velocidades admisibles, acotado por las restricciones del LiDAR y los límites de velocidad.
+  \item \textbf{Punto azul} ($u_{\text{ref}}$): la velocidad de referencia generada por la ley de control nominal.
+  \item \textbf{Punto rojo} ($u^*$): la velocidad óptima resultante de la proyección al polígono.
+\end{itemize}
+
+Cuando $u_{\text{ref}}$ cae dentro del polígono, se tiene $u^* = u_{\text{ref}}$ y no hay corrección por evasión. Cuando $u_{\text{ref}}$ cae fuera, $u^*$ es la proyección más cercana sobre la frontera del polígono, demostrando la acción correctiva del PVA.
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot0}
+    \subcaption{robot0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot1}
+    \subcaption{robot1}
+  \end{minipage}
+  \caption{Polígonos PVA para robot0 y robot1.}
+  \label{fig:pva_0_1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot2}
+    \subcaption{robot2}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot3}
+    \subcaption{robot3}
+  \end{minipage}
+  \caption{Polígonos PVA para robot2 y robot3.}
+  \label{fig:pva_2_3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot4}
+    \subcaption{robot4}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot5}
+    \subcaption{robot5}
+  \end{minipage}
+  \caption{Polígonos PVA para robot4 y robot5.}
+  \label{fig:pva_4_5}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot6}
+    \subcaption{robot6}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{pva_robot7}
+    \subcaption{robot7}
+  \end{minipage}
+  \caption{Polígonos PVA para robot6 y robot7.}
+  \label{fig:pva_6_7}
+\end{figure}

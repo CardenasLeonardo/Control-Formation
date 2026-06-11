@@ -32,10 +32,17 @@ POSES_8 = [
 
 def launch_setup(context, *args, **kwargs):
 
-    n = int(LaunchConfiguration('n_robots').perform(context))
-    R = float(LaunchConfiguration('neighbor_radius').perform(context))
+    n              = int(LaunchConfiguration('n_robots').perform(context))
+    R              = float(LaunchConfiguration('neighbor_radius').perform(context))
+    t_final        = float(LaunchConfiguration('t_final').perform(context))
+    spawn_obstacle = LaunchConfiguration('spawn_obstacle').perform(context).lower() == 'true'
+    obs_x          = float(LaunchConfiguration('obstacle_x').perform(context))
+    obs_y          = float(LaunchConfiguration('obstacle_y').perform(context))
 
     poses = POSES_8[:n]
+
+    simulador_pkg  = get_package_share_directory('simulador')
+    obstacle_sdf   = os.path.join(simulador_pkg, 'models', 'obstacle_cylinder.sdf')
 
     articubot_pkg = get_package_share_directory('articubot_one')
     gazebo_launch = os.path.join(
@@ -50,6 +57,20 @@ def launch_setup(context, *args, **kwargs):
     actions.append(
         IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
     )
+
+    if spawn_obstacle:
+        actions.append(TimerAction(period=3.0, actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-file', obstacle_sdf,
+                    '-entity', 'obstacle_cylinder',
+                    '-x', str(obs_x), '-y', str(obs_y), '-z', '0.5',
+                ],
+                output='screen'
+            )
+        ]))
 
     # Stagger each robot's RSP + spawn + control node to avoid overloading Gazebo
     for i, (x0, y0, yaw) in enumerate(poses):
@@ -81,12 +102,15 @@ def launch_setup(context, *args, **kwargs):
 
         control_node = Node(
             package='control_nodes',
-            executable='consenso_prom_err',
-            name='consenso_prom_err',
+            executable='consenso_node',
+            name='consenso',
             namespace=ns,
             parameters=[{
-                'use_sim_time':       False,
-                'n_robots_expected':  n,
+                'consensus_type': 'prom_err',
+                'k1':             0.8,
+                'k2':             1.0,
+                'vmax':           1.0,
+                'wmax':           1.0,
             }],
             output='screen'
         )
@@ -117,8 +141,8 @@ def launch_setup(context, *args, **kwargs):
                 executable='states_plotter_v2',
                 name='states_plotter_v2',
                 parameters=[{
-                    'save_dir':          'figures_consenso_prom',
-                    't_final':           30.0,
+                    'save_dir':          'figuras/consenso_prom',
+                    't_final':           t_final,
                     'n_robots_expected': n,
                 }],
                 output='screen'
@@ -133,8 +157,8 @@ def launch_setup(context, *args, **kwargs):
                 executable='pva_plotter',
                 name='pva_plotter',
                 parameters=[{
-                    'save_dir':          'figures_consenso_prom',
-                    'n_robots_expected': n,
+                    'save_dir': 'figuras/consenso_prom',
+                    't_final':  t_final,
                 }],
                 output='screen'
             )
@@ -156,6 +180,26 @@ def generate_launch_description():
             'neighbor_radius',
             default_value='5.0',
             description='Radio de percepción AIRE (metros)'
+        ),
+        DeclareLaunchArgument(
+            't_final',
+            default_value='60.0',
+            description='Duración de la simulación en segundos'
+        ),
+        DeclareLaunchArgument(
+            'spawn_obstacle',
+            default_value='false',
+            description='Poner true para agregar un cilindro de prueba'
+        ),
+        DeclareLaunchArgument(
+            'obstacle_x',
+            default_value='4.0',
+            description='Posición X del obstáculo de prueba'
+        ),
+        DeclareLaunchArgument(
+            'obstacle_y',
+            default_value='4.5',
+            description='Posición Y del obstáculo de prueba'
         ),
         OpaqueFunction(function=launch_setup)
     ])

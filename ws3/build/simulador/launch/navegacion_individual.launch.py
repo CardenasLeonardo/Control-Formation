@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws3/src/simulador/launch/navegacion_individual.launch.py

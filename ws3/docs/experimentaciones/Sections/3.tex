@@ -1,0 +1,20 @@
+\section{Polígono de Velocidades Admisibles}
+
+\subsection{Construcción de restricciones desde LiDAR}
+
+El sensor LiDAR entrega $n$ lecturas de distancia $d_i$ a ángulos $\phi_i = -\pi + i\,(2\pi/n)$ uniformemente distribuidos en $[-\pi, \pi)$. Para cada rayo activo —con $0 < d_i \leq d_{\text{inf}}$— se genera una restricción lineal en el espacio $(v, \omega)$:
+\begin{equation}
+  \cos(\phi_i)\, v + r_p \sin(\phi_i)\, \omega \;\leq\; \xi\,\frac{d_i - d_{\text{safe}}}{d_{\text{inf}} - d_{\text{safe}}},
+  \label{eq:restriccion_pva}
+\end{equation}
+donde $d_{\text{safe}}$ es la distancia mínima de seguridad, $d_{\text{inf}}$ es el radio de influencia, $r_p$ es el radio del robot y $\xi$ es un parámetro de suavizado. El conjunto de restricciones activas define el polígono de velocidades admisibles $\mathcal{P}(v,\omega)$.
+
+\subsection{Proyección al conjunto factible}
+
+Dado el vector de referencia $(v_{\text{ref}}, \omega_{\text{ref}})$ de la ley de control nominal, la velocidad segura se obtiene resolviendo el problema de optimización cuadrática:
+\begin{equation}
+  (v^*, \omega^*) = \arg\min_{(v,\omega)\in\mathcal{P}}\;
+  \frac{1}{2}\!\left[(v - v_{\text{ref}})^2 + (\omega - \omega_{\text{ref}})^2\right],
+  \label{eq:qp}
+\end{equation}
+sujeto a las restricciones de la forma~\eqref{eq:restriccion_pva} y a los límites de velocidad $|v| \leq v_{\max}$, $|\omega| \leq \omega_{\max}$. El problema se resuelve con el método SLSQP de \texttt{scipy.optimize.minimize}. Si no existen obstáculos en el radio de influencia, $\mathcal{P}$ es el rectángulo de velocidades máximas y $u^* = u_{\text{ref}}$ saturado.

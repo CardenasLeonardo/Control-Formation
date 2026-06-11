@@ -1,0 +1,79 @@
+\section{Arranque del Nodo}
+
+\subsection{El mecanismo \texttt{entry\_points}}
+
+El ejecutable \texttt{navigate\_individual\_pva} no es un archivo Python que el usuario crea manualmente. Es un script generado automáticamente por \texttt{setuptools} durante \texttt{colcon build}, basado en la declaración en \texttt{setup.py}:
+
+\begin{lstlisting}[style=python, caption={Declaración del ejecutable en \texttt{setup.py}.}]
+entry_points={
+    'console_scripts': [
+        'navigate_individual_pva = '
+        'control_nodes.navigate_individual_pva:main'
+    ],
+}
+\end{lstlisting}
+
+Esta declaración indica que el ejecutable \texttt{navigate\_individual\_pva} debe llamar a la función \texttt{main()} del módulo \texttt{control\_nodes.navigate\_individual\_pva}. \texttt{colcon build} genera un script wrapper en \texttt{ws3/install/control\_nodes/bin/} que hace exactamente eso. Por ello, al agregar un nuevo ejecutable a un paquete es necesario recompilar: el wrapper no existe hasta que \texttt{colcon} lo genera.
+
+\subsection{La función \texttt{main()}}
+
+\begin{lstlisting}[style=python, caption={Función \texttt{main()} típica de un nodo ROS~2.}]
+def main(args=None):
+    rclpy.init(args=args)
+    node = NavigateIndividual()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+\end{lstlisting}
+
+\texttt{rclpy.init(args=args)} inicializa la comunicación con el middleware DDS (Data Distribution Service): la capa de transporte subyacente que gestiona el descubrimiento de nodos, la transmisión de mensajes entre tópicos y el Parameter Server. Sin esta llamada, ninguna funcionalidad de ROS~2 está disponible. Recibe \texttt{args=None} en la mayoría de los casos porque los argumentos \texttt{--ros-args} ya fueron procesados por el runtime de ROS~2 antes de llegar a \texttt{main}.
+
+\texttt{rclpy.spin(node)} bloquea la ejecución del proceso en un loop de eventos (detallado en la Sección~\ref{sec:runtime}). El proceso permanece en esta línea hasta que recibe una señal de terminación (Ctrl+C o \texttt{SIGINT}).
+
+\subsection{El constructor \texttt{\_\_init\_\_} del nodo}
+
+\begin{lstlisting}[style=python, caption={Constructor de un nodo ROS~2.}]
+class NavigateIndividual(Node):
+    def __init__(self):
+        super().__init__('navigate_individual')
+        # ...
+\end{lstlisting}
+
+La llamada \texttt{super().\_\_init\_\_('navigate\_individual')} registra este nodo en el grafo ROS~2 con el nombre indicado. A partir de este momento el nodo es visible para el resto del sistema: \texttt{ros2 node list} lo mostrará. El nombre del nodo es independiente del nombre del ejecutable. Son dos identificadores distintos.
+
+\subsection{Declaración y lectura de parámetros}
+
+\begin{lstlisting}[style=python, caption={Declaración y lectura de parámetros en el nodo.}]
+# Declarar: registrar el parametro con su valor por defecto
+self.declare_parameter('n_rays_used', 0)
+self.declare_parameter('vmax', 1.0)
+
+# Leer: recuperar el valor almacenado
+n_rays = self.get_parameter('n_rays_used').value  # int 5
+vmax   = self.get_parameter('vmax').value          # float 0.8
+\end{lstlisting}
+
+\texttt{declare\_parameter} cumple dos funciones simultáneamente. Por un lado, registra en el Parameter Server interno del nodo que existe un parámetro con ese nombre y ese tipo por defecto. Por otro, si el valor ya llegó a través de \texttt{--ros-args -p n\_rays\_used:=5} (generado por el sistema de launch), lo almacena con ese valor en lugar del default.
+
+\texttt{get\_parameter} accede al Parameter Server y recupera el valor. \texttt{.value} lo devuelve en el tipo Python apropiado (int, float, str, bool, list). El tipo fue inferido automáticamente al parsear el YAML generado por el launch file. Esta es la última frontera de serialización: YAML $\rightarrow$ Python typed value.
+
+\subsection{Las tres fronteras de serialización}
+
+El valor \texttt{5} escrito en la terminal recorre tres conversiones antes de estar disponible en Python:
+
+\begin{table}[H]
+  \centering
+  \caption{Fronteras de serialización del argumento \texttt{n\_rays\_used:=5}.}
+  \label{tab:fronteras}
+  \begin{tabular}{llll}
+    \toprule
+    Frontera & De & A & Mecanismo \\
+    \midrule
+    Terminal $\to$ launch & string \texttt{'5'} & string \texttt{'5'} & \texttt{split(':=')} \\
+    Launch $\to$ proceso  & Python int \texttt{5}  & YAML \texttt{5} & \texttt{ros-args -p} \\
+    Proceso $\to$ nodo    & YAML \texttt{5} & Python int \texttt{5} & \texttt{.value} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+En la primera frontera no hay conversión. Todo permanece como string. La conversión a \texttt{int} la realiza el usuario en el launch file con \texttt{int(LaunchConfiguration(...).perform(context))}. En la tercera frontera, el YAML se deserializa automáticamente y el tipo es inferido.

@@ -16,6 +16,9 @@ setup(
 
         (os.path.join('share', package_name, 'launch'),
             glob('launch/*.launch.py')),
+
+        (os.path.join('share', package_name, 'models'),
+            glob('models/*.sdf')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -27,7 +30,6 @@ setup(
     entry_points={
         'console_scripts': [
             'aire = simulador.AIRE:main',
-            'states_plotter = simulador.plotter_states:main',
             'states_plotter_v2 = simulador.states_plotter_v2:main',
             'pva_plotter = simulador.pva_plotter:main',
         ],

@@ -1,5 +1,5 @@
 WS_DIR := $(shell pwd)
-DOCS_IEEE := docs/paper_ieee
+DOCS_IEEE := docs/congreso_template
 
 # ── Experimentos ────────────────────────────────────────────────
 # Uso: make exp NAME=consenso_lider
@@ -20,11 +20,14 @@ build:
 
 # ── Documentos LaTeX ─────────────────────────────────────────────
 paper:
-	@latexmk -pdf -cd $(DOCS_IEEE)/main.tex
+	@cd $(DOCS_IEEE) && pdflatex -interaction=nonstopmode main.tex > /dev/null 2>&1; \
+	 bibtex main > /dev/null 2>&1; \
+	 pdflatex -interaction=nonstopmode main.tex > /dev/null 2>&1; \
+	 pdflatex -interaction=nonstopmode main.tex 2>&1 | grep -E "pages|Error" | head -5
 	@echo "PDF generado: $(DOCS_IEEE)/main.pdf"
 
 paper-clean:
-	@latexmk -C -cd $(DOCS_IEEE)/main.tex
+	@cd $(DOCS_IEEE) && rm -f *.aux *.bbl *.blg *.log *.out *.toc *.fls *.fdb_latexmk
 
 # ── Copiar figuras del último experimento al paper ───────────────
 # Uso: make use-exp EXP=2026-05-07_15-30-00_consenso_lider

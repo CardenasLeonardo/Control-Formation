@@ -27,11 +27,13 @@ class NavigateWaypoints(Node):
         # --------------------------------------------------
 
         self.declare_parameter('waypoints', [0.0, 0.0, 5.0, 0.0])
-        self.declare_parameter('vmax', 1.0)
-        self.declare_parameter('wmax', 1.0)
+        self.declare_parameter('vmax',     1.0)
+        self.declare_parameter('wmax',     1.0)
+        self.declare_parameter('n_rays_used', 0)
 
-        vmax = float(self.get_parameter('vmax').value)
-        wmax = float(self.get_parameter('wmax').value)
+        vmax        = float(self.get_parameter('vmax').value)
+        wmax        = float(self.get_parameter('wmax').value)
+        n_rays_used = int(self.get_parameter('n_rays_used').value) or None
 
         raw = list(self.get_parameter('waypoints').value)
 
@@ -65,7 +67,7 @@ class NavigateWaypoints(Node):
             rp=0.25,
             v_max=vmax,
             w_max=wmax,
-            deadlock_tol=0.05
+            n_rays_used=n_rays_used,
         )
 
         self.vmax = vmax
@@ -181,12 +183,6 @@ class NavigateWaypoints(Node):
 
     def next_waypoint(self):
 
-        # Resetear boundary following al cambiar de objetivo
-        self.pva.mode = 'reaching_goal'
-        self.pva.V_block = None
-        self.pva.constraint_to_follow = None
-        self.pva.search_direction = None
-
         self.wp_index = (self.wp_index + 1) % len(self.waypoints)
         self.goal_x, self.goal_y = self.waypoints[self.wp_index]
 
@@ -222,36 +218,15 @@ class NavigateWaypoints(Node):
         v_goal = max(-self.vmax, min(self.vmax, v_goal))
         w_goal = max(-self.wmax, min(self.wmax, w_goal))
 
-        # a y alpha para V(z) = ½a² + ½α²
+        # a y alpha para error
         a     = self.controller.a
         alpha = self.controller.alpha
 
         # --------------------------------------------------
-        # PVA + BOUNDARY FOLLOWING
+        # PVA
         # --------------------------------------------------
 
-        if self.ranges:
-
-            self.constraints = self.pva.build_constraints(self.ranges)
-
-            v_safe, w_safe, mode = self.pva.compute(
-                v_goal,
-                w_goal,
-                self.constraints,
-                a,
-                alpha
-            )
-
-            if mode == 'boundary_following':
-                self.get_logger().info(
-                    f"{self.robot_id} [BOUNDARY FOLLOWING]",
-                    throttle_duration_sec=1.0
-                )
-
-        else:
-
-            v_safe, w_safe = v_goal, w_goal
-            self.constraints = []
+        v_safe, w_safe, self.constraints = self.pva.apply(v_goal, w_goal, self.ranges)
 
         # --------------------------------------------------
         # PUBLICAR PVA

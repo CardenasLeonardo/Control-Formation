@@ -1,45 +1,38 @@
 import math
-from math import atan2, sqrt, cos, sin
+from math import atan2, sqrt
 
-k1 = 0.8
-k2 = 1.0
 
 class ConsensusPromErr:
+    """
+    Protocolo de consenso por promedio de errores.
 
-    def __init__(self, vmax=1.0, wmax=1.0):
-        self.vmax = vmax
-        self.wmax = wmax
+    Retorna el error polar (a, alpha) — magnitud y ángulo del error de consenso
+    respecto a la orientación del robot.
+    """
 
-    def compute(self, self_state, neighbors):
-        """
-        self_state = (x, y, theta)
-        neighbors = [(xj, yj), ...]
-        """
+    def step(self, state, neighbors_dict):
+        if not neighbors_dict:
+            return None
+        neighbors = [(x, y) for x, y, _ in neighbors_dict.values()]
+        return self.compute(state, neighbors)
+
+    def compute(self, state, neighbors):
 
         if len(neighbors) == 0:
             return 0.0, 0.0
 
-        x, y, theta = self_state
+        x, y, theta = state
 
-        suma_x = sum(nx - x for nx, _ in neighbors)
-        suma_y = sum(ny - y for _, ny in neighbors)
-
-        ex = suma_x / len(neighbors)
-        ey = suma_y / len(neighbors)
+        ex = sum(nx - x for nx, _ in neighbors) / len(neighbors)
+        ey = sum(ny - y for _, ny in neighbors) / len(neighbors)
 
         a = sqrt(ex**2 + ey**2)
+
+        if a < 1e-6:
+            return 0.0, 0.0
+
         alpha = atan2(ey, ex) - theta
+        while alpha >  math.pi: alpha -= 2 * math.pi
+        while alpha < -math.pi: alpha += 2 * math.pi
 
-        # normalización , aprovechar el modulo que ya emple
-        if alpha > math.pi:
-            alpha -= 2 * math.pi
-        if alpha < -math.pi:
-            alpha += 2 * math.pi
-
-        v = k1 * a * cos(alpha)
-        w = k2 * alpha + k1 * sin(alpha) * cos(alpha)
-
-        v = max(-self.vmax, min(self.vmax, v))
-        w = max(-self.wmax, min(self.wmax, w))
-
-        return v, w
+        return a, alpha

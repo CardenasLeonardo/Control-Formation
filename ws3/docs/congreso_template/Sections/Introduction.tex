@@ -1,0 +1,11 @@
+\section{Introduction}
+
+Multi-agent systems operating in formation have attracted significant research attention due to their potential in applications such as search and rescue, surveillance, and industrial automation~\cite{chen2023survey}.
+
+Coordinating a group of mobile robots to maintain a desired geometric configuration while navigating among other agents remains, however, an open problem. Most existing approaches model agents as holonomic particles, abstracting away the kinematic constraints inherent to real robotic platforms. While this simplification yields tractable control laws, it compromises the fidelity of the resulting solutions when deployed on differential-drive robots, one of the most widely used platforms in industrial navigation tasks.
+
+Consensus-based protocols have emerged as a principled framework for multi-agent coordination, providing convergence guarantees under mild assumptions on the communication topology. Formation control strategies, including leader-follower, behavioral, and virtual structure approaches, have been shown to be expressible within this unified framework~\cite{ren2006consensus}. 
+
+The communication structure of such systems is naturally described through graph-theoretic tools~\cite{mesbahi2010graph}, which characterize how information flows among agents. Nevertheless, the vast majority of consensus-based formation controllers are derived for first- or second-order integrator dynamics, leaving the non-holonomic case largely unaddressed.
+
+This work proposes an extension of an existing autonomous navigation law for differential-drive robots~\cite{ramirez2001collision} toward a multi-agent formation control scenario. The proposed scheme leverages consensus protocols to coordinate local interactions among agents, while explicitly preserving the non-holonomic kinematic constraints of each robot. Inter-agent collision avoidance is incorporated through the Feasible Velocities Polygon (FVP), an anisotropic representation that maps each neighboring agent detected by the LiDAR sensor as a linear constraint in the robot's velocity space $(v, \omega)$~\cite{ramirez2001collision}, in contrast to the isotropic potential fields commonly found in the literature~\cite{khatib1986realtime}.

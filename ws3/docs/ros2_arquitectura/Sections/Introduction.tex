@@ -1,0 +1,16 @@
+\section{Introducción}
+
+ROS~2 (Robot Operating System 2) es un middleware de código abierto para el desarrollo de sistemas robóticos~\cite{macenski2022robot}. A diferencia de un sistema operativo convencional, ROS~2 no gestiona hardware directamente. Provee una capa de abstracción que permite a procesos independientes, llamados nodos, comunicarse entre sí mediante tópicos, servicios y acciones, sin conocer los detalles de implementación del otro.
+
+Una característica que suele generar confusión en desarrolladores que se inician en ROS~2 es que el sistema no oculta sus capas internas. Para usarlo correctamente es necesario entender cómo el sistema operativo gestiona procesos, qué son las variables de entorno, y cómo un argumento escrito en la terminal termina disponible como un valor numérico dentro de una clase Python.
+
+Este documento traza ese recorrido de forma exhaustiva. Las primeras dos secciones cubren el entorno del sistema operativo: variables de entorno, el comando \texttt{source} y la naturaleza del ejecutable \texttt{ros2}. La sección sobre el launch file explica los mecanismos de sustitución diferida y la creación de descriptores de nodo. La sección sobre el arranque del nodo describe el ciclo de inicialización, el Parameter Server y las comunicaciones DDS. Las secciones finales cubren el paso de parámetros a clases Python puras y el loop de eventos en tiempo real.
+
+A lo largo del documento se utiliza como hilo conductor el siguiente comando, representativo de los experimentos de control de formación desarrollados en este trabajo:
+
+\begin{lstlisting}[style=bash, caption={Comando de ejemplo utilizado a lo largo del documento.}, label={lst:cmd_ejemplo}]
+ros2 launch simulador demo_pva.launch.py \
+    n_rays_used:=5 vmax:=0.8
+\end{lstlisting}
+
+Este comando lanza una simulación en Gazebo con nodos de control que implementan el Polígono de Velocidades Admisibles (PVA)~\cite{ramirez2001collision}. Cada argumento pasado en la terminal recorrerá las cuatro capas descritas antes de llegar al constructor de la clase \texttt{PVA}.
