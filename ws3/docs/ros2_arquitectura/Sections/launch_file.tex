@@ -1,0 +1,95 @@
+\section{El Launch File}
+
+Un launch file es un script Python cuya única responsabilidad es describir qué nodos lanzar, con qué parámetros y en qué orden. \texttt{ros2 launch} lo importa como módulo y busca la función \texttt{generate\_launch\_description()}, que debe retornar un objeto \texttt{LaunchDescription}: una lista ordenada de acciones que el sistema procesa en secuencia.
+
+Toda la configuración de parámetros pasa por el mismo par de piezas: \texttt{DeclareLaunchArgument} registra el argumento y establece su valor por defecto; \texttt{LaunchConfiguration} lo recupera después. El valor \textit{siempre} viaja como string —ROS~2 nunca convierte tipos automáticamente.
+
+Existen dos variantes del patrón según si se necesita o no ejecutar lógica Python sobre los valores.
+
+% ------------------------------------------------------------------
+\subsection{Caso 1: parámetros escalares simples}
+
+Cuando los parámetros se pasan directamente al nodo sin transformación, \texttt{LaunchConfiguration} puede usarse como sustitución en línea. ROS~2 resuelve su valor en el momento de lanzar el proceso.
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Launch file sin lógica Python. \texttt{LaunchConfiguration}
+             actúa como sustitución diferida.},
+    label={lst:launch_simple}]
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        DeclareLaunchArgument('vmax', default_value='0.5'),
+        DeclareLaunchArgument('wmax', default_value='1.0'),
+
+        Node(
+            package='control_nodes',
+            executable='consenso_node',
+            namespace='robot0',
+            parameters=[{
+                'vmax': LaunchConfiguration('vmax'),
+                'wmax': LaunchConfiguration('wmax'),
+            }],
+        ),
+    ])
+\end{lstlisting}
+\end{figure}
+
+Este patrón es suficiente cuando no hay cálculo ni conversión de tipos: ROS~2 entrega el string al nodo y el nodo lo interpreta.
+
+% ------------------------------------------------------------------
+\subsection{Caso 2: lógica Python sobre los argumentos}
+
+Cuando se necesita procesar el valor en Python —convertir tipos, iterar, calcular retardos— se añade \texttt{OpaqueFunction}. Al llegar a esa acción, el sistema llama a la función indicada y le pasa el \textit{context}: el estado global de la ejecución que contiene todos los valores ya resueltos. Dentro de la función, \texttt{.perform(context)} extrae el string del context para que el código Python pueda operarlo.
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Launch file con \texttt{OpaqueFunction}. Se usa cuando
+             hay conversión de tipos o cálculos sobre los argumentos.},
+    label={lst:launch_opaque}]
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+def launch_setup(context, *args, **kwargs):
+    vmax = float(LaunchConfiguration('vmax').perform(context))
+    # Los waypoints llegan como string: "1.0,0.0,4.0,0.0"
+    raw  = LaunchConfiguration('waypoints').perform(context)
+    wps  = [float(v) for v in raw.split(',')]
+
+    return [
+        Node(
+            package='control_nodes',
+            executable='navigate_waypoints_pva',
+            namespace='robot0',
+            parameters=[{
+                'vmax':      vmax,
+                'waypoints': wps,
+            }],
+        )
+    ]
+
+def generate_launch_description():
+    return LaunchDescription([
+        DeclareLaunchArgument('vmax',
+            default_value='0.5'),
+        DeclareLaunchArgument('waypoints',
+            default_value='4.0,0.0,4.0,4.0,0.0,4.0'),
+        OpaqueFunction(function=launch_setup),
+    ])
+\end{lstlisting}
+\end{figure}
+
+La diferencia práctica: en el Caso~1, \texttt{LaunchConfiguration} es una promesa que ROS~2 resuelve solo; en el Caso~2, \texttt{.perform(context)} fuerza la resolución de inmediato para que el código Python pueda operar sobre el valor real.
+
+% ------------------------------------------------------------------
+\subsection{Flujo de un valor de extremo a extremo}
+
+El tipo del argumento cambia solo donde el usuario escribe una conversión explícita: \texttt{int()} o \texttt{float()} en el launch file, e implícitamente al deserializar YAML en el Parameter Server. ROS~2 nunca convierte tipos por cuenta propia en ninguna de las etapas.

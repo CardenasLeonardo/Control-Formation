@@ -9,7 +9,7 @@ NAME   ?= experimento
 LAUNCH ?= consenso_lider.launch.py
 ARGS   ?=
 
-.PHONY: exp build paper install-latex last
+.PHONY: exp build paper paper-clean ros2 ros2-clean experimentaciones experimentaciones-clean last use-exp help
 
 exp: build
 	@./run_experiment.sh $(NAME) $(LAUNCH) $(ARGS)
@@ -28,6 +28,26 @@ paper:
 
 paper-clean:
 	@cd $(DOCS_IEEE) && rm -f *.aux *.bbl *.blg *.log *.out *.toc *.fls *.fdb_latexmk
+
+ros2:
+	@cd docs/ros2_arquitectura && pdflatex -interaction=nonstopmode main.tex > /dev/null 2>&1; \
+	 bibtex main > /dev/null 2>&1; \
+	 pdflatex -interaction=nonstopmode main.tex > /dev/null 2>&1; \
+	 pdflatex -interaction=nonstopmode main.tex 2>&1 | grep -E "pages|Error" | head -5
+	@echo "PDF generado: docs/ros2_arquitectura/main.pdf"
+
+ros2-clean:
+	@cd docs/ros2_arquitectura && rm -f *.aux *.bbl *.blg *.log *.out *.toc *.fls *.fdb_latexmk
+
+experimentaciones:
+	@cd docs/experimentaciones && pdflatex -interaction=nonstopmode main.tex > /dev/null 2>&1; \
+	 bibtex main > /dev/null 2>&1; \
+	 pdflatex -interaction=nonstopmode main.tex > /dev/null 2>&1; \
+	 pdflatex -interaction=nonstopmode main.tex 2>&1 | grep -E "pages|Error" | head -5
+	@echo "PDF generado: docs/experimentaciones/main.pdf"
+
+experimentaciones-clean:
+	@cd docs/experimentaciones && rm -f *.aux *.bbl *.blg *.log *.out *.toc *.fls *.fdb_latexmk
 
 # ── Copiar figuras del último experimento al paper ───────────────
 # Uso: make use-exp EXP=2026-05-07_15-30-00_consenso_lider
@@ -58,11 +78,13 @@ help:
 	@echo "  make exp   NAME=<nombre> [LAUNCH=<launch>] [ARGS=<ros_args>]"
 	@echo "             Corre experimento y guarda figuras automáticamente"
 	@echo ""
-	@echo "  make last  Copia figuras del experimento más reciente al paper"
-	@echo "  make paper Compila docs/paper_ieee/main.tex → PDF"
-	@echo "  make build Recompila paquetes ROS2"
+	@echo "  make last              Copia figuras del experimento mas reciente al paper"
+	@echo "  make paper             Compila docs/congreso_template"
+	@echo "  make ros2              Compila docs/ros2_arquitectura"
+	@echo "  make experimentaciones Compila docs/experimentaciones"
+	@echo "  make build             Recompila paquetes ROS2"
 	@echo ""
-	@echo "  Flujo típico:"
+	@echo "  Flujo tipico:"
 	@echo "    make exp NAME=consenso_lider"
 	@echo "    make last"
 	@echo "    make paper"

@@ -1,0 +1,35 @@
+{\renewcommand{\lstlistingname}{Script}
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={consenso\_prom.launch.py -- Parte 1: imports y poses iniciales.},
+    label={lst:consenso_part1}]
+import os
+import math
+
+from launch import LaunchDescription
+from launch.actions import (
+    DeclareLaunchArgument, IncludeLaunchDescription,
+    OpaqueFunction, TimerAction
+)
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+
+# Posiciones (x, y, yaw) de los 8 robots en el mundo de Gazebo.
+# El layout esta disenado para que todos los pares esten a menos
+# de 5.0 m entre si, garantizando conectividad con ese radio.
+POSES_8 = [
+    (0.0, 0.0,   math.pi / 4),      # robot0 -- esquina BL
+    (4.0, 1.0,  -math.pi / 2),      # robot1 -- borde inferior
+    (8.0, 0.0,  -math.pi / 4),      # robot2 -- esquina BR
+    (1.0, 4.0,   math.pi),          # robot3 -- borde izquierdo
+    (8.0, 4.0,   0.0),              # robot4 -- borde derecho
+    (0.0, 8.0,   3*math.pi / 4),    # robot5 -- esquina TL
+    (4.0, 9.0,   math.pi / 2),      # robot6 -- borde superior
+    (8.0, 8.0,  -3*math.pi / 4),    # robot7 -- esquina TR
+]
+\end{lstlisting}
+\end{figure*}
+}

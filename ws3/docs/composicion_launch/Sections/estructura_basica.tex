@@ -1,0 +1,15 @@
+\section{Estructura básica de un launch file}
+
+Un launch file es un módulo Python con una sola función obligatoria: generate\_launch\_description(). Esta función debe retornar un objeto LaunchDescription, que no es más que una lista ordenada de acciones. ros2 launch importa el módulo, llama a esa función, y procesa las acciones en secuencia.
+
+\subsection{LaunchDescription y acciones}
+
+Una acción es cualquier objeto que el sistema de launch sabe cómo ejecutar. Las acciones más importantes son: DeclareLaunchArgument (registra un argumento con valor por defecto), Node (lanza un nodo ROS~2), IncludeLaunchDescription (ejecuta otro launch file), OpaqueFunction (ejecuta una función Python arbitraria), y TimerAction (retrasa la ejecución de otras acciones). El Código~\ref{lst:estructura_minima} muestra la forma mínima:
+
+\input{Codes/estructura_minima}
+
+\subsection{DeclareLaunchArgument y LaunchConfiguration}
+
+Para que el usuario pueda pasar valores desde la terminal, el launch file los declara con DeclareLaunchArgument y los recupera con LaunchConfiguration. El valor siempre viaja como string; la conversión de tipos es responsabilidad del usuario.
+
+Cuando el valor se pasa directamente a un nodo sin transformación, LaunchConfiguration puede usarse como sustitución en línea: ROS~2 resuelve su valor en el momento de lanzar el proceso sin necesidad de código Python explícito. Cuando se necesita operar sobre el valor (convertir a int, hacer cálculos, iterar), se usa OpaqueFunction, que se describe en la sección siguiente.

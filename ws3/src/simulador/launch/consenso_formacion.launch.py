@@ -101,8 +101,8 @@ def launch_setup(context, *args, **kwargs):
                 namespace=ns,
                 parameters=[{
                     'waypoints': waypoints,
-                    'vmax': 0.25,
-                    'wmax': 0.5,
+                    'vmax': 0.5,
+                    'wmax': 0.6,
                 }],
                 output='screen'
             )
@@ -113,7 +113,7 @@ def launch_setup(context, *args, **kwargs):
                 name='consenso',
                 namespace=ns,
                 parameters=[{
-                    'consensus_type': 'formacion',
+                    'consensus_type': 'formacion_vs_ppc',
                     'leader_id':      leader_id,
                     'n_robots':       n,
                     'angle_v':        angle_v,
@@ -123,6 +123,10 @@ def launch_setup(context, *args, **kwargs):
                     'k2':             1.5,
                     'vmax':           0.8,
                     'wmax':           0.8,
+                    'anchor_speed':   0.5,
+                    'rho_0':          3.0,
+                    'rho_inf':        0.10,
+                    'l_rate':         0.05,
                 }],
                 output='screen'
             )
@@ -193,10 +197,10 @@ def generate_launch_description():
             default_value='1.0',
             description='Separación entre robots en el brazo de la V (m)'),
         DeclareLaunchArgument('waypoints',
-            default_value='5.0,0.0,5.0,5.0,0.0,5.0,0.0,0.0',
+            default_value='6.0,0.0,6.0,5.0,10.0,8.0,10.0,3.0,6.0,3.0,3.0,6.0,0.0,6.0,0.0,1.0,4.0,-2.0,8.0,-2.0',
             description='Waypoints del líder: x0,y0,x1,y1,...'),
         DeclareLaunchArgument('t_final',
-            default_value='70.0',
+            default_value='120.0',
             description='Duración de la simulación (s)'),
         DeclareLaunchArgument('save_dir',
             default_value='figuras/formacion',

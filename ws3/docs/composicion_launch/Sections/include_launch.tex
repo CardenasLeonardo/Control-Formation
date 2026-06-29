@@ -1,0 +1,31 @@
+\section{Composición jerárquica con IncludeLaunchDescription}
+
+\subsection{El problema de la monolítica}
+
+Un launch file que lanza Gazebo, describe robots, los spawnea, y corre nodos de control podría escribirse como un bloque de código lineal. El problema es que cada uno de esos componentes tiene su propio launch file oficial y bien probado: gazebo.launch.py de gazebo\_ros, rsp.launch.py de articubot\_one. Duplicar su contenido es error-prone y rompe la mantenibilidad.
+
+IncludeLaunchDescription resuelve esto: permite que un launch file ejecute otro como si fuera una subrutina. El launch file padre construye la secuencia de alto nivel; los hijos manejan sus propios detalles internos.
+
+\subsection{Anatomía de IncludeLaunchDescription}
+
+La acción recibe dos piezas: la fuente del launch file (cómo localizarlo) y, opcionalmente, un diccionario de argumentos que sobreescribe los valores por defecto del launch hijo. El Código~\ref{lst:include_gazebo} muestra el patrón para incluir Gazebo:
+
+\input{Codes/include_gazebo}
+
+get\_package\_share\_directory usa ament\_index para localizar el directorio de instalación del paquete, independientemente de dónde esté físicamente en el sistema de archivos. Esto hace el código portátil entre distintas instalaciones y workspaces.
+
+\subsection{Pasando argumentos al launch hijo}
+
+Cuando el launch hijo declara argumentos propios, el padre puede sobreescribirlos mediante el parámetro launch\_arguments. El Código~\ref{lst:include_rsp} muestra cómo se pasa el namespace al launch de descripción del robot:
+
+\input{Codes/include_rsp}
+
+El valor de ns es un string Python calculado dentro de launch\_setup. Notar que use\_sim\_time se pasa como string 'false': los argumentos de launch siempre son strings, sin excepción.
+
+\subsection{spawn\_entity.py como nodo auxiliar}
+
+El spawn de un modelo en Gazebo no se hace mediante un launch file sino mediante un nodo especial de gazebo\_ros que se ejecuta una sola vez y termina. Se lanza con la acción Node normal, pero sus argumentos de línea de comandos (posición, nombre de entidad, fuente del modelo) se pasan mediante el parámetro arguments, no mediante parameters. El Código~\ref{lst:spawn_node} muestra el patrón:
+
+\input{Codes/spawn_node}
+
+El flag -topic indica que spawn\_entity.py debe leer la descripción del robot desde el tópico /robot0/robot\_description, que es el que publica el nodo RSP (Robot State Publisher\footnote{El Robot State Publisher (RSP) es el nodo estándar de ROS~2 que lee un archivo URDF y publica la descripción del robot como string en el tópico robot\_description, además de calcular y publicar las transformadas entre los eslabones del robot en el tópico /tf.}) lanzado instantes antes. Por eso el spawn se retrasa: necesita que el RSP esté publicando antes de intentar leer el tópico.

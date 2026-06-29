@@ -24,32 +24,54 @@ def _compute_offsets(n_followers, theta_leader, angle_v, d):
 
 
 class ConsensusFormation:
+    """
+    Formación en V con rate-limiting sobre la posición del ancla virtual.
 
-    def __init__(self):
-        self._theta_L_smooth = None
+    Cuando el líder gira, el ancla de cada seguidor no salta a la nueva posición
+    instantáneamente: se desplaza hacia ella a un máximo de anchor_speed m/s.
+    Esto evita que el destino aparezca "detrás" del robot y obligue a reversear.
+    """
 
-    def _update_leader_angle(self, theta_L_raw, percentage=0.05):
-        if self._theta_L_smooth is None:
-            self._theta_L_smooth = theta_L_raw
+    DT = 0.1  # periodo del loop de control (s), debe coincidir con create_timer
+
+    def __init__(self, anchor_speed=0.5):
+        self._anchor_speed = anchor_speed
+        self._smooth_offset = {}   # {follower_index: (rx, ry)}  frame mundo
+
+    def _advance(self, i, desired_x, desired_y):
+        max_step = self._anchor_speed * self.DT
+        if i not in self._smooth_offset:
+            self._smooth_offset[i] = (desired_x, desired_y)
+            return desired_x, desired_y
+
+        cx, cy = self._smooth_offset[i]
+        dx, dy = desired_x - cx, desired_y - cy
+        dist   = math.sqrt(dx*dx + dy*dy)
+
+        if dist <= max_step:
+            self._smooth_offset[i] = (desired_x, desired_y)
         else:
-            diff = theta_L_raw - self._theta_L_smooth
-            if diff >  math.pi: diff -= 2 * math.pi
-            if diff < -math.pi: diff += 2 * math.pi
-            self._theta_L_smooth += percentage * diff
-        return self._theta_L_smooth
+            cx += max_step * dx / dist
+            cy += max_step * dy / dist
+            self._smooth_offset[i] = (cx, cy)
 
+        return self._smooth_offset[i]
 
     def step(self, state, neighbors_dict, leader_id, follower_index, n_followers, angle_v, d, beta):
         leader_state = None
         theta_L      = 0.0
 
         if leader_id in neighbors_dict:
-            xL, yL, theta_L_raw = neighbors_dict[leader_id]
+            xL, yL, theta_L = neighbors_dict[leader_id]
             leader_state = (xL, yL)
-            theta_L = self._update_leader_angle(theta_L_raw)
 
-        offsets_all = _compute_offsets(n_followers, theta_L, angle_v, d)
-        my_offset   = offsets_all.get(follower_index, (0.0, 0.0))
+        # Posiciones deseadas instantáneas (según ángulo actual del líder)
+        desired = _compute_offsets(n_followers, theta_L, angle_v, d)
+
+        # Avanzar cada ancla a velocidad limitada
+        smooth = {i: self._advance(i, ox, oy) for i, (ox, oy) in desired.items()}
+
+        my_offset = smooth.get(follower_index, (0.0, 0.0))
 
         neighbors        = []
         neighbor_offsets = []
@@ -61,30 +83,18 @@ class ConsensusFormation:
             except ValueError:
                 continue
             neighbors.append((xj, yj))
-            neighbor_offsets.append(offsets_all.get(j, (0.0, 0.0)))
+            neighbor_offsets.append(smooth.get(j, (0.0, 0.0)))
 
         return self.compute(state, neighbors, leader_state, my_offset, neighbor_offsets, beta)
 
-
-
     def compute(self, state, neighbors, leader_state, offset, neighbor_offsets=None, beta=1.5):
-        """
-        Ley de consenso relativo:
-          e_i = -Σ_j a_ij [(x_i - r_i) - (x_j - r_j)] - β b_i^0 (x_i - x_0 - r_i)
-
-        Retorna (a, alpha):
-          a     : magnitud del vector de error
-          alpha : ángulo del error respecto al heading del robot (rad)
-        """
-
         xi, yi, theta = state
         rix, riy = offset
 
         if neighbor_offsets is None:
             neighbor_offsets = [(0.0, 0.0)] * len(neighbors)
 
-        ex = 0.0
-        ey = 0.0
+        ex, ey = 0.0, 0.0
 
         for (xj, yj), (rjx, rjy) in zip(neighbors, neighbor_offsets):
             ex += (xj - rjx) - (xi - rix)
@@ -96,7 +106,6 @@ class ConsensusFormation:
             ey += beta * ((yL + riy) - yi)
 
         a = math.sqrt(ex**2 + ey**2)
-
         if a < 1e-6:
             return 0.0, 0.0
 

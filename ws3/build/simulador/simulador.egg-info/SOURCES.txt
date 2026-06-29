@@ -8,7 +8,10 @@ setup.py
 ../../build/simulador/simulador.egg-info/requires.txt
 ../../build/simulador/simulador.egg-info/top_level.txt
 ../../build/simulador/simulador.egg-info/zip-safe
+launch/circulo_pivote.launch.py
+launch/consenso_circular.launch.py
 launch/consenso_formacion.launch.py
+launch/consenso_formacion2.launch.py
 launch/consenso_lider.launch.py
 launch/consenso_prom.launch.py
 launch/demo_pva.launch.py

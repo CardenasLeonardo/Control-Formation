@@ -1,11 +1,9 @@
 import os
 import math
-
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument, IncludeLaunchDescription,
-    OpaqueFunction, TimerAction
-)
+    OpaqueFunction, TimerAction)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -13,114 +11,89 @@ from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
 
-# Layout 8x9 m sin robot en el centro.
-# Solo robot0 y robot7 apuntan HACIA el centroide.
-# Los otros 6 apuntan LEJOS → movimiento en reversa.
-# robot3 y robot4 apuntan exactamente opuestos a la dirección al centroide.
-# Conectividad garantizada con R=5.0 m.
 POSES_8 = [
-    (0.0, 0.0,   math.pi / 4),       # robot0 — esquina BL → hacia centro  (único hacia adelante)
-    (4.0, 1.0,  -math.pi / 2),       # robot1 — borde inf  → sur  (reversa)
-    (8.0, 0.0,  -math.pi / 4),       # robot2 — esquina BR → sureste (reversa)
-    (1.0, 4.0,   math.pi),           # robot3 — borde izq  → oeste (reversa exacta)
-    (8.0, 4.0,   0.0),               # robot4 — borde der  → este  (reversa exacta)
-    (0.0, 8.0,   3*math.pi / 4),     # robot5 — esquina TL → noroeste (reversa)
-    (4.0, 9.0,   math.pi / 2),       # robot6 — borde sup  → norte (reversa)
-    (8.0, 8.0,  -3*math.pi / 4),     # robot7 — esquina TR → hacia centro (único hacia adelante)
+    (0.0, 0.0,   math.pi / 4),       # robot0 
+    (4.0, 1.0,  -math.pi / 2),       # robot1 
+    (8.0, 0.0,  -math.pi / 4),       # robot2 
+    (1.0, 4.0,   math.pi),           # robot3 
+    (8.0, 4.0,   0.0),               # robot4 
+    (0.0, 8.0,   3*math.pi / 4),     # robot5 
+    (4.0, 9.0,   math.pi / 2),       # robot6 
+    (8.0, 8.0,  -3*math.pi / 4),     # robot7 
 ]
 
 
 def launch_setup(context, *args, **kwargs):
+    # Leer parámetros del launch #
+    n       = int(LaunchConfiguration('n_robots').perform(context))           # número de robots activos
+    R       = float(LaunchConfiguration('neighbor_radius').perform(context))  # radio de percepción AIRE (m)
+    t_final = float(LaunchConfiguration('t_final').perform(context))          # duración de la simulación (s)
+    poses   = POSES_8[:n]                                                     # recortar poses a los n robots usados
 
-    n              = int(LaunchConfiguration('n_robots').perform(context))
-    R              = float(LaunchConfiguration('neighbor_radius').perform(context))
-    t_final        = float(LaunchConfiguration('t_final').perform(context))
-    spawn_obstacle = LaunchConfiguration('spawn_obstacle').perform(context).lower() == 'true'
-    obs_x          = float(LaunchConfiguration('obstacle_x').perform(context))
-    obs_y          = float(LaunchConfiguration('obstacle_y').perform(context))
-
-    poses = POSES_8[:n]
-
-    simulador_pkg  = get_package_share_directory('simulador')
-    obstacle_sdf   = os.path.join(simulador_pkg, 'models', 'obstacle_cylinder.sdf')
-
-    articubot_pkg = get_package_share_directory('articubot_one')
-    gazebo_launch = os.path.join(
+    # Rutas de paquetes y archivos de launch #
+    articubot_pkg = get_package_share_directory('articubot_one')              # path del paquete articubot_one
+    gazebo_launch = os.path.join(                                             # launch file principal de Gazebo
         get_package_share_directory('gazebo_ros'),
         'launch',
         'gazebo.launch.py'
     )
-    rsp_launch = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
+    rsp_launch    = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')   # launch del robot state publisher
 
+    # Arranque de Gazebo #
     actions = []
-
     actions.append(
-        IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
+        IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))  # lanza el simulador vacío
     )
 
-    if spawn_obstacle:
-        actions.append(TimerAction(period=3.0, actions=[
-            Node(
-                package='gazebo_ros',
-                executable='spawn_entity.py',
-                arguments=[
-                    '-file', obstacle_sdf,
-                    '-entity', 'obstacle_cylinder',
-                    '-x', str(obs_x), '-y', str(obs_y), '-z', '0.5',
-                ],
-                output='screen'
-            )
-        ]))
-
-    # Stagger each robot's RSP + spawn + control node to avoid overloading Gazebo
+    # Spawn escalonado: RSP → robot → nodo de control (uno por uno para no sobrecargar Gazebo) #
     for i, (x0, y0, yaw) in enumerate(poses):
 
-        ns = f'robot{i}'
-        delay = 3.0 + i * 1.5   # robot0 at 3s, robot1 at 4.5s, ..., robot7 at 13.5s
+        ns    = f'robot{i}'                  # namespace del robot (robot0, robot1, ...)
+        delay = 3.0 + i * 1.5               # robot0 a 3 s, robot1 a 4.5 s, ..., robot7 a 13.5 s
 
-        rsp_node = IncludeLaunchDescription(
+        rsp_node = IncludeLaunchDescription(                    # publica robot_description en /{ns}/robot_description
             PythonLaunchDescriptionSource(rsp_launch),
             launch_arguments={
-                'namespace': ns,
+                'namespace':    ns,
                 'use_sim_time': 'false'
             }.items()
         )
 
-        spawn_node = Node(
+        spawn_node = Node(                                       # inserta el modelo URDF en Gazebo
             package='gazebo_ros',
             executable='spawn_entity.py',
             arguments=[
-                '-topic', f'/{ns}/robot_description',
-                '-entity', ns,
-                '-x', str(round(x0, 4)),
-                '-y', str(round(y0, 4)),
-                '-z', '0.1',
-                '-Y', str(round(yaw, 4)),
+                '-topic', f'/{ns}/robot_description',           # lee el URDF desde el topic
+                '-entity', ns,                                  # nombre de la entidad en Gazebo
+                '-x', str(round(x0, 4)),                        # posición inicial X
+                '-y', str(round(y0, 4)),                        # posición inicial Y
+                '-z', '0.1',                                    # altura sobre el suelo
+                '-Y', str(round(yaw, 4)),                       # orientación inicial (yaw)
             ],
             output='screen'
         )
 
-        control_node = Node(
+        control_node = Node(                                     # nodo de consenso para este robot
             package='control_nodes',
             executable='consenso_node',
             name='consenso',
             namespace=ns,
             parameters=[{
-                'consensus_type': 'prom_err',
-                'k1':             0.8,
-                'k2':             1.0,
-                'vmax':           1.0,
-                'wmax':           1.0,
+                'consensus_type': 'prom_err',                   # tipo: consenso por promedio de errores
+                'k1':             0.8,                          # ganancia lineal
+                'k2':             1.0,                          # ganancia angular
+                'vmax':           1.0,                          # velocidad lineal máx (m/s)
+                'wmax':           1.0,                          # velocidad angular máx (rad/s)
             }],
             output='screen'
         )
 
-        actions.append(TimerAction(period=delay, actions=[rsp_node]))
-        actions.append(TimerAction(period=delay + 0.5, actions=[spawn_node]))
-        actions.append(TimerAction(period=delay + 1.5, actions=[control_node]))
+        actions.append(TimerAction(period=delay,       actions=[rsp_node]))      # publica URDF
+        actions.append(TimerAction(period=delay + 0.5, actions=[spawn_node]))    # spawn en Gazebo
+        actions.append(TimerAction(period=delay + 1.5, actions=[control_node]))  # arranca control
 
-    # AIRE and plotters after all robots are launched
-    late_delay = 3.0 + n * 1.5 + 2.0
+    # Nodos globales: AIRE + plotters (esperan a que todos los robots estén listos) #
+    late_delay = 3.0 + n * 1.5 + 2.0                            # margen de 2 s tras el último robot
 
     actions.append(
         TimerAction(period=late_delay, actions=[
@@ -128,7 +101,7 @@ def launch_setup(context, *args, **kwargs):
                 package='simulador',
                 executable='aire',
                 name='aire',
-                parameters=[{'neighbor_radius': R}],
+                parameters=[{'neighbor_radius': R}],             # publica vecindades dentro del radio R
                 output='screen'
             )
         ])
@@ -141,9 +114,9 @@ def launch_setup(context, *args, **kwargs):
                 executable='states_plotter_v2',
                 name='states_plotter_v2',
                 parameters=[{
-                    'save_dir':          'figuras/consenso_prom',
-                    't_final':           t_final,
-                    'n_robots_expected': n,
+                    'save_dir':          'figuras/consenso_prom', # carpeta de destino de las figuras
+                    't_final':           t_final,                 # cierra y guarda al llegar a t_final
+                    'n_robots_expected': n,                       # espera a tener datos de n robots
                 }],
                 output='screen'
             )
@@ -157,8 +130,8 @@ def launch_setup(context, *args, **kwargs):
                 executable='pva_plotter',
                 name='pva_plotter',
                 parameters=[{
-                    'save_dir': 'figuras/consenso_prom',
-                    't_final':  t_final,
+                    'save_dir': 'figuras/consenso_prom',          # carpeta de destino
+                    't_final':  t_final,                          # cierra al llegar a t_final
                 }],
                 output='screen'
             )
@@ -185,21 +158,6 @@ def generate_launch_description():
             't_final',
             default_value='60.0',
             description='Duración de la simulación en segundos'
-        ),
-        DeclareLaunchArgument(
-            'spawn_obstacle',
-            default_value='false',
-            description='Poner true para agregar un cilindro de prueba'
-        ),
-        DeclareLaunchArgument(
-            'obstacle_x',
-            default_value='4.0',
-            description='Posición X del obstáculo de prueba'
-        ),
-        DeclareLaunchArgument(
-            'obstacle_y',
-            default_value='4.5',
-            description='Posición Y del obstáculo de prueba'
         ),
         OpaqueFunction(function=launch_setup)
     ])

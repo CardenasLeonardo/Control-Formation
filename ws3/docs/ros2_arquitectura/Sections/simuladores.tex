@@ -1,0 +1,52 @@
+\section{Simuladores y Compatibilidad con ROS~2}
+
+La simulación es un componente central en el desarrollo de sistemas robóticos. Permite probar algoritmos sin riesgo de dañar hardware, repetir experimentos en condiciones controladas, acelerar el tiempo de ejecución para pruebas de duración larga, y ejecutar múltiples instancias en paralelo para búsqueda de parámetros. En investigación de control de formación multi-robot, la simulación es prácticamente indispensable: orquestar cinco robots físicos simultáneamente para cada iteración de desarrollo sería inviable.
+
+\subsection{Gazebo Classic}
+
+Gazebo es el simulador más usado en el ecosistema ROS y su historia está directamente ligada a la de ROS~1. Fue creado por Andrew Howard y Nate Koenig en 2002 en la Universidad del Sur de California~\cite{koenig2004design} y fue adoptado por Willow Garage como el simulador estándar de ROS~1. Durante más de una década fue la herramienta de facto para simulación robótica en investigación académica.
+
+\textbf{Arquitectura.} Gazebo Classic opera con dos procesos separados: \texttt{gzserver} corre la simulación física y publica el estado del mundo, mientras que \texttt{gzclient} es la interfaz gráfica que visualiza ese estado. Esta separación permite correr simulaciones sin GUI en servidores remotos o en pipelines de CI/CD. Los dos procesos se comunican mediante el protocolo interno de Gazebo (no DDS), lo que significa que \texttt{gzserver} puede correrse solo sin interfaz gráfica con el flag \texttt{--headless}.
+
+\textbf{Formato SDF.} Los mundos y modelos en Gazebo se describen en SDF (Simulation Description Format), un formato XML propio de Gazebo. SDF define la geometría de colisión, la geometría visual, las propiedades de inercia, las articulaciones, y los plugins de sensores y actuadores. Es más expressive que URDF (Unified Robot Description Format) de ROS~1, aunque menos portable. Los archivos \texttt{.urdf} pueden convertirse a SDF automáticamente; los archivos SDF son el formato nativo de Gazebo.
+
+\textbf{Plugins.} La integración entre Gazebo y ROS~2 se realiza mediante plugins del paquete \texttt{gazebo\_ros\_pkgs}. Un plugin es una biblioteca dinámica que Gazebo carga en tiempo de ejecución y que puede publicar o suscribirse a tópicos ROS~2. Los plugins más comunes son el plugin de diferencial (\texttt{gazebo\_ros\_diff\_drive}), que simula la cinemática de un robot de tracción diferencial y publica odometría; el plugin de LiDAR (\texttt{gazebo\_ros\_ray\_sensor}), que simula un escáner láser y publica mensajes \texttt{sensor\_msgs/LaserScan}; y el plugin de cámara, que simula una cámara RGB y publica imágenes.
+
+\textbf{Física.} Gazebo Classic soporta múltiples motores de física intercambiables: ODE (Open Dynamics Engine) es el motor por defecto y el más probado; Bullet, DART y Simbody son alternativas con distintas características de precisión y rendimiento. ODE es suficiente para la mayoría de aplicaciones de investigación en robots de ruedas.
+
+\subsection{New Gazebo (Gazebo Harmonic)}
+
+El nuevo Gazebo (anteriormente llamado Ignition Gazebo, ahora simplemente Gazebo) es una reescritura completa que comenzó en 2019~\cite{koenig2004design}. Su arquitectura es modular: en lugar de un simulador monolítico, es un conjunto de librerías independientes (gz-sim, gz-physics, gz-rendering, gz-sensors) que pueden usarse por separado. Esta modularidad facilita integrar motores de física alternativos (como Bullet o Drake) o renderers distintos (OGRE 2, Vulkan).
+
+La integración con ROS~2 se realiza mediante el paquete \texttt{ros\_gz\_bridge}, que traduce mensajes entre el sistema de transporte interno de Gazebo (gz-transport, que usa protobuf) y los tópicos ROS~2. El bridge es configurable: se especifica qué tópicos de Gazebo se deben exponer a ROS~2 y con qué tipos de mensajes.
+
+El nuevo Gazebo tiene mejor soporte de sensores (cámaras de profundidad, IMU, GPS, LIDAR 3D), mejor rendimiento gráfico, y una API de plugins más limpia. Sin embargo, su documentación aún está en desarrollo activo y la cantidad de ejemplos disponibles es significativamente menor que la de Gazebo Classic.
+
+\subsection{Tabla de compatibilidad}
+
+La Tabla~\ref{tab:gazebo_compat} resume la compatibilidad oficial entre distribuciones de ROS~2 y versiones de Gazebo.
+
+\begin{table}[H]
+  \centering
+  \caption{Compatibilidad entre ROS~2 y versiones de Gazebo.}
+  \label{tab:gazebo_compat}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    ROS~2 & Gazebo Classic & New Gazebo \\
+    \midrule
+    Foxy   & 11        & Citadel \\
+    Humble & 11        & Fortress / Harmonic \\
+    Jazzy  & N/A       & Harmonic (recomendado) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Gazebo Classic 11 sobre ROS~2 Humble es la combinación con mayor cantidad de documentación, tutoriales y paquetes de terceros disponibles. Es la elección pragmática para investigación en control de formación: el stack \texttt{gazebo\_ros\_pkgs} está muy maduro, los plugins de odometría y LiDAR funcionan de forma confiable, y la mayoría de robots de ejemplo disponibles en internet están descritos para esta combinación.
+
+\subsection{Alternativas}
+
+\textbf{Webots.} Webots es un simulador de código abierto desarrollado originalmente por la École Polytechnique Fédérale de Lausanne (EPFL) y actualmente mantenido por Cyberbotics~\cite{webots2019}. Tiene integración oficial con ROS~2 mediante el paquete \texttt{webots\_ros2}. Su interfaz gráfica es más amigable que la de Gazebo y su instalación es más simple (no depende de ROS). Es una buena alternativa para proyectos que priorizan facilidad de uso sobre profundidad de configuración.
+
+\textbf{NVIDIA Isaac Sim.} Isaac Sim es el simulador de NVIDIA basado en la plataforma Omniverse~\cite{issac2023}. Ofrece renderizado fotorrealista en tiempo real, simulación de sensores de alta fidelidad (LiDAR, cámara de profundidad, IMU), y capacidades de síntesis de datos para entrenamiento de redes neuronales. Requiere GPU NVIDIA con soporte RTX. Su integración con ROS~2 es oficial y bien documentada. Es la opción de mayor fidelidad disponible, pero también la de mayor costo computacional y complejidad de configuración.
+
+Para el trabajo de control de formación multi-robot presentado en este documento, Gazebo Classic 11 sobre ROS~2 Humble es la elección que ofrece el mejor equilibrio entre madurez del ecosistema, disponibilidad de documentación, y simplicidad de configuración.

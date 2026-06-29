@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.5.8)  10 JUN 2026 15:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.5.8)  16 JUN 2026 11:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -308,6 +308,10 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
 )
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count283
 \lst@gtempboxa=\box56
@@ -332,48 +336,84 @@ File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
 File: listings.cfg 2020/03/24 1.8d listings configuration
 ))
 Package: listings 2020/03/24 1.8d (Carsten Heinz)
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 60
-.
 
-(/usr/share/texmf/tex/latex/lm/t1lmr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen190
+\captionmargin@=\dimen191
+\captionwidth=\dimen192
+\caption@tempdima=\dimen193
+\caption@indent=\dimen194
+\caption@parindent=\dimen195
+\caption@hangindent=\dimen196
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+Package caption Info: \@makecaption = \long macro:#1#2->\ifx \@captype \@IEEEta
+blestring \footnotesize \bgroup \par \centering \@IEEEtabletopskipstrut {\norma
+lfont \footnotesize #1}\\{\normalfont \footnotesize \scshape #2}\par \addvspace
+ {0.5\baselineskip }\egroup \@IEEEtablecaptionsepspace \else \@IEEEfigurecaptio
+nsepspace \setbox \@tempboxa \hbox {\normalfont \footnotesize {#1.}\nobreakspac
+e \nobreakspace #2}\ifdim \wd \@tempboxa >\hsize \setbox \@tempboxa \hbox {\nor
+malfont \footnotesize {#1.}\nobreakspace \nobreakspace }\parbox [t]{\hsize }{\n
+ormalfont \footnotesize \noindent \unhbox \@tempboxa #2}\else \ifCLASSOPTIONcon
+ference \hbox to\hsize {\normalfont \footnotesize \hfil \box \@tempboxa \hfil }
+\else \hbox to\hsize {\normalfont \footnotesize \box \@tempboxa \hfil }\fi \fi 
+\fi  on input line 1139.
+)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+\c@caption@flags=\count291
+\c@continuedfloat=\count292
+Package caption Info: float package is loaded.
+Package caption Info: listings package is loaded.
+)
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 65
+.
+ (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count291
+\l__color_backend_stack_int=\count293
 \l__pdf_internal_box=\box58
 )
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
 
 -- Lines per column: 56 (exact).
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count292
-\scratchdimen=\dimen190
+\scratchcounter=\count294
+\scratchdimen=\dimen197
 \scratchbox=\box59
-\nofMPsegments=\count293
-\nofMParguments=\count294
+\nofMPsegments=\count295
+\nofMParguments=\count296
 \everyMPshowfont=\toks28
-\MPscratchCnt=\count295
-\MPscratchDim=\dimen191
-\MPnumerator=\count296
-\makeMPintoPDFobject=\count297
+\MPscratchCnt=\count297
+\MPscratchDim=\dimen198
+\MPnumerator=\count298
+\makeMPintoPDFobject=\count299
 \everyMPtoPDFconversion=\toks29
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -384,197 +424,312 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count298
+\c@lstlisting=\count300
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 
 (./Sections/Authors.tex) (./Sections/Abstract.tex
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4
 .
 
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <9> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 2.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 4.
 ) (./Sections/Keywords.tex)
-(./Sections/Introduction.tex
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-))
-(./Sections/1.tex
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
+(./Sections/Introduction.tex) (./Sections/ros_vs_ros2.tex [1{/home/calafaker/.t
+exlive2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+])
+(./Sections/sistemas_distribuidos.tex [2]
+Underfull \hbox (badness 3930) in paragraph at lines 21--22
+[]\T1/lmr/bx/n/10 Acciones. \T1/lmr/m/n/10 Para op-era-ciones largas que re-qui
+eren
+ []
+
+) (./Sections/dds.tex
+Underfull \hbox (badness 10000) in paragraph at lines 33--1
+\T1/lmr/m/n/10 ofrece políti-cas de sin-cronización por times-tamp
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--1
+\T1/lmr/m/n/10 (\T1/lmtt/m/n/10 TimeSynchronizer\T1/lmr/m/n/10 , \T1/lmtt/m/n/1
+0 ApproximateTimeSynchronizer\T1/lmr/m/n/10 )
+ []
+
+[3]
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 4
 3.
  (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 4
 3.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-13.
+43.
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-13.
+43.
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 13.
+(Font)              <8> on input line 43.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 13.
+(Font)              <6> on input line 43.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 13.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 13.
+(Font)              <5> on input line 43.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 43.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 13.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 43.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1{/home/calafaker/.texlive2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+))
+(./Sections/distribuciones.tex [4]
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]\T1/lmr/m/n/8 Expirado (may.
+ []
 
 
-]
-Underfull \hbox (badness 2617) in paragraph at lines 88--89
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+[]\T1/lmr/m/n/8 Expirado (dic.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/lmr/m/n/8 Expirado (nov.
+ []
+
+) (./Sections/simuladores.tex [5]
+Underfull \hbox (badness 3158) in paragraph at lines 13--14
+\T1/lmr/m/n/10 Un plu-gin es una bib-lioteca dinámica que Gazebo
+ []
+
+
+Underfull \hbox (badness 2781) in paragraph at lines 13--14
+\T1/lmr/m/n/10 que sim-ula la cin-emática de un robot de trac-ción
+ []
+
+
+Underfull \hbox (badness 3250) in paragraph at lines 19--20
+[]\T1/lmr/m/n/10 El nuevo Gazebo (an-te-ri-or-mente lla-mado Ig-ni-tion
+ []
+
+) (./Sections/arquitectura_nodos.tex [6]
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+\T1/lmr/m/n/10 por ejem-plo, con-tiene dos vec-tores 3D que
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+\T1/lmr/m/n/10 rep-re-sen-tan ve-loci-dad lin-eal y an-gu-lar. El tipo
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+\T1/lmtt/m/n/10 sensor_msgs/msg/LaserScan \T1/lmr/m/n/10 con-tiene un ar-ray de
+
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
+Underfull \hbox (badness 1400) in paragraph at lines 67--68
+[]\T1/lmr/m/n/10 El archivo YAML sigue una con-ven-ción jerárquica
+ []
+
+
+Underfull \hbox (badness 4479) in paragraph at lines 81--82
+[]\T1/lmr/m/n/10 En código Python, el flujo es siem-pre: primero
+ []
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 98.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 98.
+)
+(./Sections/entorno.tex [8]
+Underfull \hbox (badness 2617) in paragraph at lines 82--83
 []\T1/lmr/m/n/10 El archivo \T1/lmtt/m/n/10 ws3/install/setup.bash \T1/lmr/m/n/
 10 gen-er-ado por
  []
 
-[2]) (./Sections/2.tex
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-)
-Underfull \hbox (badness 2269) in paragraph at lines 43--44
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9])
+(./Sections/ejecutable.tex [10]
+Underfull \hbox (badness 2269) in paragraph at lines 56--57
 \T1/lmr/m/n/10 sita lo-calizar el archivo \T1/lmtt/m/n/10 demo_pva.launch.py \T
 1/lmr/m/n/10 den-tro
  []
 
 
-Underfull \hbox (badness 1762) in paragraph at lines 43--44
+Underfull \hbox (badness 1762) in paragraph at lines 56--57
 \T1/lmr/m/n/10 del pa-quete \T1/lmtt/m/n/10 simulador\T1/lmr/m/n/10 . Para ello
  usa \T1/lmtt/m/n/10 ament_index\T1/lmr/m/n/10 :
  []
 
-) (./Sections/3.tex
-Underfull \hbox (badness 10000) in paragraph at lines 55--1
+) (./Sections/launch_file.tex
+Underfull \hbox (badness 10000) in paragraph at lines 71--1
 []\T1/lmr/m/n/10 Finalmente, \T1/lmtt/m/n/10 ros2launch \T1/lmr/m/n/10 im-porta
  ese archivo
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 55--1
+Underfull \hbox (badness 10000) in paragraph at lines 71--1
 \T1/lmr/m/n/10 como mó-dulo Python nor-mal, me-di-ante
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 55--1
+Underfull \hbox (badness 10000) in paragraph at lines 71--1
 \T1/lmtt/m/n/10 importlib.import_module\T1/lmr/m/n/10 , y busca la fun-ción
  []
 
-[3]
-Underfull \hbox (badness 1783) in paragraph at lines 26--27
-\T1/lmr/m/n/10 ramien-tas como \T1/lmtt/m/n/10 ros2 launch --show-args\T1/lmr/m
-/n/10 . Al mismo
+
+Underfull \hbox (badness 2150) in paragraph at lines 5--6
+[]\T1/lmr/m/n/10 Toda la con-fig-u-ración de parámet-ros pasa por el
  []
 
 
-Underfull \hbox (badness 6542) in paragraph at lines 48--49
-\T1/lmr/m/n/10 in-medi-ata-mente. Crea un ob-jeto Sub-sti-tu-tion: una
- []
-
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 76.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 76.
-) (./Sections/4.tex
-Underfull \hbox (badness 2035) in paragraph at lines 5--6
-[]\T1/lmr/m/n/10 El eje-cutable \T1/lmtt/m/n/10 navigate_individual_pva \T1/lmr
-/m/n/10 no es un
- []
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-[]\T1/lmr/m/n/10 Esta declaración in-dica que el eje-
+Underfull \hbox (badness 1629) in paragraph at lines 5--6
+\T1/lmr/m/n/10 mismo par de piezas: \T1/lmtt/m/n/10 DeclareLaunchArgument \T1/l
+mr/m/n/10 reg-is-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-\T1/lmr/m/n/10 cutable \T1/lmtt/m/n/10 navigate_individual_pva \T1/lmr/m/n/10 d
-ebe
+Underfull \hbox (badness 2277) in paragraph at lines 5--6
+\T1/lmr/m/n/10 tra el ar-gu-mento y es-tablece su valor por de-fecto;
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-\T1/lmr/m/n/10 lla-mar a la fun-ción \T1/lmtt/m/n/10 main() \T1/lmr/m/n/10 del 
-mó-dulo
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
+[]\T1/lmr/m/n/10 Terminal 20: |Launch file sin lóg-ica Python.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-\T1/lmtt/m/n/10 control_nodes.navigate_individual_pva\T1/lmr/m/n/10 .
+Underfull \hbox (badness 3240) in paragraph at lines 48--49
+[]\T1/lmr/m/n/10 Cuando se nece-sita proce-sar el valor en Python
+ []
+
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 90--91
+[]\T1/lmr/m/n/10 La difer-en-cia prác-tica: en el Caso 1,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-\T1/lmtt/m/n/10 colcon build \T1/lmr/m/n/10 gen-era un script wrap-per en
+Underfull \hbox (badness 3646) in paragraph at lines 90--91
+\T1/lmtt/m/n/10 LaunchConfiguration \T1/lmr/m/n/10 es una promesa que ROS 2
+ []
+
+) (./Sections/arranque.tex
+Underfull \hbox (badness 2326) in paragraph at lines 5--6
+\T1/lmr/m/n/10 eje-cuta di-rec-ta-mente el archivo Python del usuario.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-\T1/lmtt/m/n/10 ws3/install/control_nodes/bin/ \T1/lmr/m/n/10 que hace
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+[]\T1/lmr/m/n/10 La sin-taxis \T1/lmtt/m/n/10 nombre = modulo:funcion \T1/lmr/m
+/n/10 le
  []
 
 
-Overfull \hbox (13.1511pt too wide) in paragraph at lines 42--43
-[]\T1/lmr/m/n/10 La lla-mada \T1/lmtt/m/n/10 super().__init__('navigate_individ
-ual')
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+\T1/lmr/m/n/10 dice a \T1/lmtt/m/n/10 setuptools\T1/lmr/m/n/10 : cuando al-guie
+n eje-cute
+ []
+
+[12]
+Overfull \hbox (8.97673pt too wide) in paragraph at lines 67--68
+[][] 
  []
 
 
-Overfull \hbox (9.0096pt too wide) in paragraph at lines 68--77
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
+[]\T1/lmr/bx/n/10 Por qué este or-den. \T1/lmr/m/n/10 La lla-mada
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
+\T1/lmtt/m/n/10 super().__init__('navigate_individual') \T1/lmr/m/n/10 debe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
+\T1/lmr/m/n/10 (de-clare_parameter, cre-ate_subscription, get_logger,
+ []
+
+
+Underfull \hbox (badness 3078) in paragraph at lines 82--83
+[]\T1/lmr/m/n/10 Los parámet-ros deben declararse antes de leerse.
+ []
+
+[13]
+Overfull \hbox (13.2596pt too wide) in paragraph at lines 134--143
  [][] 
  []
 
-) (./Sections/5.tex
-Underfull \hbox (badness 10000) in paragraph at lines 79--1
-[]\T1/lmr/m/n/10 En la primera fron-tera no hay con-ver-sión.
+) (./Sections/nodo_modulo.tex [14]) (./Sections/runtime.tex
+Underfull \hbox (badness 10000) in paragraph at lines 10--10
+[]\T1/lmr/m/n/10 Terminal 29: |Com-por-tamiento con-cep-tual de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--1
-\T1/lmr/m/n/10 Todo per-manece como string. La con-ver-sión a
+Underfull \vbox (badness 1472) has occurred while \output is active []
+
+ [15]
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
+[]\T1/lmr/m/n/10 Por de-fecto, \T1/lmtt/m/n/10 rclpy.spin() \T1/lmr/m/n/10 uti-
+liza un
  []
 
 
-Underfull \hbox (badness 7133) in paragraph at lines 79--1
-\T1/lmtt/m/n/10 int \T1/lmr/m/n/10 la re-al-iza el usuario en el launch file co
-n
+Underfull \hbox (badness 1668) in paragraph at lines 98--99
+\T1/lmtt/m/n/10 SingleThreadedExecutor\T1/lmr/m/n/10 , lo que sig-nifica que to
+-dos
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--1
-\T1/lmtt/m/n/10 int(LaunchConfiguration(...).perform(context))\T1/lmr/m/n/10 .
+Underfull \hbox (badness 3407) in paragraph at lines 100--101
+[]\T1/lmr/m/n/10 Primero, el ac-ceso a vari-ables com-par-tidas como
+ []
+
+[16]) (./Sections/resumen.tex
+Underfull \hbox (badness 10000) in paragraph at lines 7--7
+[]\T1/lmr/m/n/10 TABLE V: |Flujo com-pleto del ar-gu-mento
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--1
-\T1/lmr/m/n/10 En la ter-cera fron-tera, el YAML se de-se-ri-al-iza
- []
-
-[5]) (./Sections/6.tex [6]) (./Sections/7.tex
 Underfull \hbox (badness 10000) in paragraph at lines 11--11
 []\T1/lmr/m/n/8 Forma del
  []
@@ -617,8 +772,13 @@ Overfull \hbox (6.55063pt too wide) in paragraph at lines 9--35
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+) [17]
+(./main.bbl
+Underfull \hbox (badness 5359) in paragraph at lines 35--38
+[]\T1/lmr/m/n/8 S. Ma-cen-ski, T. Foote, B. Gerkey, C. Lalancette, and
+ []
+
 )
-(./main.bbl [7])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -630,17 +790,18 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[8
+[18
+
 
 ] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 6733 strings out of 480247
- 99301 string characters out of 5896107
- 841091 words of memory out of 5000000
- 24534 multiletter control sequences out of 15000+600000
- 665692 words of font info for 145 fonts, out of 8000000 for 9000
+ 8186 strings out of 480247
+ 127703 string characters out of 5896107
+ 867374 words of memory out of 5000000
+ 25958 multiletter control sequences out of 15000+600000
+ 665563 words of font info for 144 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 55i,11n,69p,1008b,1743s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,11n,69p,1507b,1458s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texm
 f/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx
 10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx9.pfb></usr/share/texmf/font
@@ -648,17 +809,18 @@ s/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.p
 fb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/ty
 pe1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.pfb></usr
 /share/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/texmf/fonts/type1/publi
-c/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/te
-xmf/fonts/type1/public/lm/lmri8.pfb></usr/share/texmf/fonts/type1/public/lm/lms
-y10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fon
-ts/type1/public/lm/lmtcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/
-type1/public/lm/lmtt8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></u
-sr/share/texmf/fonts/type1/public/lm/lmtti10.pfb>
-Output written on main.pdf (8 pages, 500039 bytes).
+c/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
+.pfb></usr/share/texmf/fonts/type1/public/lm/lmri8.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></
+usr/share/texmf/fonts/type1/public/lm/lmtcsc10.pfb></usr/share/texmf/fonts/type
+1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr
+/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texmf/fonts/type1/publ
+ic/lm/lmtt9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtti10.pfb>
+Output written on main.pdf (18 pages, 620107 bytes).
 PDF statistics:
- 128 PDF objects out of 1000 (max. 8388607)
- 79 compressed objects within 1 object stream
+ 170 PDF objects out of 1000 (max. 8388607)
+ 106 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

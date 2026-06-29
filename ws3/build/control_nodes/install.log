@@ -4,8 +4,13 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__init__.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_lider.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/control_law.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_formation_3.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/ancla_fija.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_formation_2.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__init__.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/formacion_vs.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_prom_err.py
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/formacion_vs_ppc.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/consensus_formation.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/pva.py
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/navigate_waypoints_pva.cpython-310.pyc
@@ -14,8 +19,13 @@
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/__pycache__/__init__.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/consensus_lider.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/control_law.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/consensus_formation_3.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/ancla_fija.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/consensus_formation_2.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/__init__.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/formacion_vs.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/consensus_prom_err.cpython-310.pyc
+/home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/formacion_vs_ppc.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/consensus_formation.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/lib/python3.10/site-packages/control_nodes/algorithms/__pycache__/pva.cpython-310.pyc
 /home/calafaker/Control-Formation/ws3/install/control_nodes/share/ament_index/resource_index/packages/control_nodes

@@ -1,0 +1,25 @@
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Inclusión de gazebo.launch.py desde el launch padre.},
+    label={lst:include_gazebo}]
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import (
+    PythonLaunchDescriptionSource
+)
+from ament_index_python.packages import get_package_share_directory
+import os
+
+gazebo_launch = os.path.join(
+    get_package_share_directory('gazebo_ros'),
+    'launch',
+    'gazebo.launch.py'
+)
+
+actions.append(
+    IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(gazebo_launch)
+    )
+)
+\end{lstlisting}
+\end{figure*}

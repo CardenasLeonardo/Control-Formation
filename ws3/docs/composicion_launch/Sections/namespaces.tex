@@ -1,0 +1,29 @@
+\section{El patrón namespace para sistemas multi-robot}
+
+\subsection{El problema del nombre único}
+
+Cuando dos robots ejecutan el mismo nodo de control, ambos intentan publicar en /cmd\_vel y suscribirse a /odom. DDS conecta a todos los publicadores y suscriptores del mismo tópico entre sí, sin distinción. Robot 0 recibiría la odometría de robot 1 y viceversa; los comandos de velocidad se mezclarían entre ambos. El sistema colapsaría.
+
+La solución es el namespace: un prefijo jerárquico que califica todos los nombres de tópicos de un nodo. Un nodo con namespace robot0 que publica en cmd\_vel en realidad publica en /robot0/cmd\_vel. Un nodo con namespace robot1 publica en /robot1/cmd\_vel. Los dos canales son distintos y no interfieren.
+
+\subsection{Asignación de namespace en el launch file}
+
+El namespace se asigna mediante el parámetro namespace de la acción Node. Todos los tópicos, servicios, parámetros y el propio nombre del nodo quedan bajo ese prefijo automáticamente, sin necesidad de modificar el código del nodo. El Código~\ref{lst:ns_node} muestra el patrón:
+
+\input{Codes/ns_node}
+
+Con namespace='robot0' y name='consenso', el nombre completo del nodo en el grafo ROS~2 es /robot0/consenso. Sus tópicos quedan en /robot0/cmd\_vel, /robot0/odom, etc.
+
+\subsection{Namespace en IncludeLaunchDescription}
+
+El mismo principio aplica cuando se incluye el launch file de descripción del robot. El namespace debe pasarse como argumento al launch hijo para que el RSP publique el tópico robot\_description bajo el namespace correcto:
+
+\input{Codes/ns_rsp}
+
+Internamente, rsp.launch.py usa ese argumento para asignar el namespace al nodo robot\_state\_publisher, que entonces publica en /robot0/robot\_description. El nodo de spawn lee ese tópico exacto mediante el flag -topic /{ns}/robot\_description, cerrando la cadena.
+
+\subsection{Verificación desde la terminal}
+
+Con un sistema multi-robot corriendo, la CLI de ROS~2 permite inspeccionar la separación por namespaces desde la Terminal~\ref{lst:ns_inspect}:
+
+\input{Codes/ns_inspect}

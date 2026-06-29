@@ -51,16 +51,7 @@ class PVA:
     # ------------------------------------------------------------------
 
     def solve_qp(self, v_ref, w_ref, constraints):
-        """
-        Resuelve el QP convexo de 2 variables con SLSQP (scipy):
-
-            min  0.5 * ||u - u_ref||²
-            s.t. A_i·v + B_i·w ≤ C_i   ∀i
-                 -v_max ≤ v ≤ v_max
-                 -w_max ≤ w ≤ w_max
-
-        Fallback: referencia saturada si no hay restricciones o si el solver falla.
-        """
+        
         v0 = float(np.clip(v_ref, -self.v_max, self.v_max))
         w0 = float(np.clip(w_ref, -self.w_max, self.w_max))
 

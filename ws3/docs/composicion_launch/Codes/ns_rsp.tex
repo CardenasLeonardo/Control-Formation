@@ -1,0 +1,14 @@
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Namespace propagado al launch de descripción del robot.},
+    label={lst:ns_rsp}]
+rsp_node = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(rsp_launch),
+    launch_arguments={
+        'namespace':    ns,
+        'use_sim_time': 'false'
+    }.items()
+)
+\end{lstlisting}
+\end{figure*}
