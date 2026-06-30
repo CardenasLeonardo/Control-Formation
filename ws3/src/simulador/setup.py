@@ -19,6 +19,9 @@ setup(
 
         (os.path.join('share', package_name, 'models'),
             glob('models/*.sdf')),
+
+        (os.path.join('share', package_name, 'worlds'),
+            glob('worlds/*.world')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -29,9 +32,11 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'aire = simulador.AIRE:main',
+            'aire              = simulador.AIRE:main',
             'states_plotter_v2 = simulador.states_plotter_v2:main',
-            'pva_plotter = simulador.pva_plotter:main',
+            'pva_plotter        = simulador.pva_plotter:main',
+            'sphere_demo        = simulador.sphere_demo:main',
+            'vs_node            = simulador.vs_node:main',
         ],
     },
 )

@@ -113,7 +113,7 @@ def launch_setup(context, *args, **kwargs):
                 name='consenso',
                 namespace=ns,
                 parameters=[{
-                    'consensus_type': 'formacion_vs_ppc',
+                    'consensus_type': 'formacion',
                     'leader_id':      leader_id,
                     'n_robots':       n,
                     'angle_v':        angle_v,
@@ -123,10 +123,6 @@ def launch_setup(context, *args, **kwargs):
                     'k2':             1.5,
                     'vmax':           0.8,
                     'wmax':           0.8,
-                    'anchor_speed':   0.5,
-                    'rho_0':          3.0,
-                    'rho_inf':        0.10,
-                    'l_rate':         0.05,
                 }],
                 output='screen'
             )

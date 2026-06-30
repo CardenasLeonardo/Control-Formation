@@ -8,15 +8,11 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from multi_robot_interfaces.msg import RobotState, PVAConstraints
 
-from control_nodes.algorithms.consensus_prom_err   import ConsensusPromErr
-from control_nodes.algorithms.consensus_lider      import ConsensusLeader
-from control_nodes.algorithms.consensus_formation  import ConsensusFormation
-from control_nodes.algorithms.consensus_formation_2 import ConsensusFormation2
-from control_nodes.algorithms.consensus_formation_3 import ConsensusFormation3
-from control_nodes.algorithms.formacion_vs          import FormacionVS
-from control_nodes.algorithms.formacion_vs_ppc      import FormacionVSPPC
-from control_nodes.algorithms.control_law          import PolarControlLaw
-from control_nodes.algorithms.pva                  import PVA
+from control_nodes.algorithms.consensus_prom_err  import ConsensusPromErr
+from control_nodes.algorithms.consensus_lider     import ConsensusLeader
+from control_nodes.algorithms.consensus_formation import ConsensusFormation
+from control_nodes.algorithms.control_law         import PolarControlLaw
+from control_nodes.algorithms.pva                 import PVA
 
 
 class ConsensoNode(Node):
@@ -26,141 +22,87 @@ class ConsensoNode(Node):
 
         self.robot_id = self.get_namespace().strip('/')
 
-        # Parámetros comunes
-        self.declare_parameter('consensus_type',    'prom_err')
-        self.declare_parameter('forward_only',      False)
-        self.declare_parameter('k1',                0.8)
-        self.declare_parameter('k2',                1.0)
-        self.declare_parameter('vmax',              1.0)
-        self.declare_parameter('wmax',              1.0)
-        self.declare_parameter('d_safe',            0.85)
-        self.declare_parameter('d_influence',       3.0)
-        # lider / formacion
-        self.declare_parameter('leader_id',         'robot0')
-        self.declare_parameter('k_leader',          1.0)
-        # formacion / formacion2
-        self.declare_parameter('n_robots',          5)
-        self.declare_parameter('angle_v',           0.785398)
-        self.declare_parameter('arc_span',          3.14159)
-        self.declare_parameter('d',                 1.5)
-        self.declare_parameter('beta',              2.0)
-        self.declare_parameter('anchor_speed',      0.5)
-        self.declare_parameter('gamma',             0.3)
-        self.declare_parameter('rho_0',             3.0)
-        self.declare_parameter('rho_inf',           0.1)
-        self.declare_parameter('l_rate',            0.05)
-        self.declare_parameter('n_rays_used',       0)
+        # --- Parámetros comunes ---
+        self.declare_parameter('consensus_type', 'prom_err')
+        self.declare_parameter('k1',   0.8)
+        self.declare_parameter('k2',   1.0)
+        self.declare_parameter('vmax', 1.0)
+        self.declare_parameter('wmax', 1.0)
 
+        # --- Parámetros de formación ---
+        self.declare_parameter('leader_id', 'robot0')
+        self.declare_parameter('k_leader',  1.0)
+        self.declare_parameter('n_robots',  5)
+        self.declare_parameter('angle_v',   0.785398)
+        self.declare_parameter('d',         1.5)
+        self.declare_parameter('beta',      2.0)
+
+        # --- Parámetros PVA (obstacle avoidance) ---
+        self.declare_parameter('d_safe',      0.85)
+        self.declare_parameter('d_influence', 3.0)
+        self.declare_parameter('n_rays_used', 0)
+
+        # --- Lectura de parámetros ---
         self.consensus_type = self.get_parameter('consensus_type').value
-        forward_only = self.get_parameter('forward_only').value
-        k1          = self.get_parameter('k1').value
-        k2          = self.get_parameter('k2').value
-        vmax        = self.get_parameter('vmax').value
-        wmax        = self.get_parameter('wmax').value
-        d_safe      = self.get_parameter('d_safe').value
-        d_influence = self.get_parameter('d_influence').value
-        n_rays_used = int(self.get_parameter('n_rays_used').value) or None
+        k1   = self.get_parameter('k1').value
+        k2   = self.get_parameter('k2').value
+        vmax = self.get_parameter('vmax').value
+        wmax = self.get_parameter('wmax').value
 
+        # --- Selección de algoritmo de consenso ---
         if self.consensus_type == 'prom_err':
             self.consensus = ConsensusPromErr()
+
         elif self.consensus_type == 'lider':
             self.leader_id = self.get_parameter('leader_id').value
             self.k_leader  = self.get_parameter('k_leader').value
             self.consensus = ConsensusLeader()
+
         elif self.consensus_type == 'formacion':
-            self.leader_id      = self.get_parameter('leader_id').value
-            self.n_robots       = self.get_parameter('n_robots').value
-            self.angle_v        = self.get_parameter('angle_v').value
-            self.d              = self.get_parameter('d').value
-            self.n_followers    = self.n_robots - 1
-            self.beta           = self.get_parameter('beta').value
-            anchor_speed        = self.get_parameter('anchor_speed').value
+            self.n_robots    = self.get_parameter('n_robots').value
+            self.angle_v     = self.get_parameter('angle_v').value
+            self.d           = self.get_parameter('d').value
+            self.beta        = self.get_parameter('beta').value
             try:
                 self.follower_index = int(self.robot_id.replace('robot', ''))
             except ValueError:
-                self.follower_index = 1
-            self.consensus = ConsensusFormation(anchor_speed=anchor_speed)
-        elif self.consensus_type == 'formacion2':
-            self.leader_id      = self.get_parameter('leader_id').value
-            self.n_robots       = self.get_parameter('n_robots').value
-            self.arc_span       = self.get_parameter('arc_span').value
-            self.d              = self.get_parameter('d').value
-            self.n_followers    = self.n_robots - 1
-            self.beta           = self.get_parameter('beta').value
-            try:
-                self.follower_index = int(self.robot_id.replace('robot', ''))
-            except ValueError:
-                self.follower_index = 1
-            self.consensus = ConsensusFormation2()
-        elif self.consensus_type == 'formacion3':
-            self.leader_id      = self.get_parameter('leader_id').value
-            self.n_robots       = self.get_parameter('n_robots').value
-            self.angle_v        = self.get_parameter('angle_v').value
-            self.d              = self.get_parameter('d').value
-            self.n_followers    = self.n_robots - 1
-            self.beta           = self.get_parameter('beta').value
-            anchor_speed        = self.get_parameter('anchor_speed').value
-            gamma               = self.get_parameter('gamma').value
-            try:
-                self.follower_index = int(self.robot_id.replace('robot', ''))
-            except ValueError:
-                self.follower_index = 1
-            self.consensus = ConsensusFormation3(anchor_speed=anchor_speed, gamma=gamma)
-        elif self.consensus_type == 'formacion_vs':
-            self.leader_id      = self.get_parameter('leader_id').value
-            self.n_robots       = self.get_parameter('n_robots').value
-            self.angle_v        = self.get_parameter('angle_v').value
-            self.d              = self.get_parameter('d').value
-            self.beta           = self.get_parameter('beta').value
-            anchor_speed        = self.get_parameter('anchor_speed').value
-            try:
-                self.follower_index = int(self.robot_id.replace('robot', ''))
-            except ValueError:
-                self.follower_index = 1
-            self.consensus = FormacionVS(anchor_speed=anchor_speed)
-        elif self.consensus_type == 'formacion_vs_ppc':
-            self.leader_id      = self.get_parameter('leader_id').value
-            self.n_robots       = self.get_parameter('n_robots').value
-            self.angle_v        = self.get_parameter('angle_v').value
-            self.d              = self.get_parameter('d').value
-            self.beta           = self.get_parameter('beta').value
-            anchor_speed        = self.get_parameter('anchor_speed').value
-            rho_0               = self.get_parameter('rho_0').value
-            rho_inf             = self.get_parameter('rho_inf').value
-            l_rate              = self.get_parameter('l_rate').value
-            try:
-                self.follower_index = int(self.robot_id.replace('robot', ''))
-            except ValueError:
-                self.follower_index = 1
-            self.consensus = FormacionVSPPC(
-                anchor_speed=anchor_speed,
-                rho_0=rho_0, rho_inf=rho_inf, l_rate=l_rate
-            )
+                self.follower_index = 0
+            self.virtual_state = None  # (x_v, y_v, theta_v) — llega de /virtual_structure
+            self.consensus = ConsensusFormation()
+
         else:
             raise ValueError(f"consensus_type desconocido: '{self.consensus_type}'")
 
-        self.control_law = PolarControlLaw(k1=k1, k2=k2, vmax=vmax, wmax=wmax,
-                                           forward_only=forward_only)
-        self.pva         = PVA(d_safe=d_safe, d_influence=d_influence, xi=1.0,
-                               rp=0.25, v_max=vmax, w_max=wmax, n_rays_used=n_rays_used)
+        # --- Ley de control y obstacle avoidance ---
+        self.control_law = PolarControlLaw(k1=k1, k2=k2, vmax=vmax, wmax=wmax)
+        d_safe      = self.get_parameter('d_safe').value
+        d_influence = self.get_parameter('d_influence').value
+        n_rays_used = int(self.get_parameter('n_rays_used').value) or None
+        self.pva    = PVA(d_safe=d_safe, d_influence=d_influence, xi=1.0,
+                          rp=0.25, v_max=vmax, w_max=wmax, n_rays_used=n_rays_used)
 
+        # --- Estado del robot ---
         self.x         = 0.0
         self.y         = 0.0
         self.theta     = 0.0
         self.neighbors = {}
         self.ranges    = []
 
+        # --- Suscripciones ---
         self.create_subscription(Odometry,   'odom',         self.odom_callback,     10)
-        self.create_subscription(LaserScan,  'scan',         self.scan_callback,     10)
         self.create_subscription(RobotState, 'neighbors_rx', self.neighbor_callback, 10)
+        self.create_subscription(LaserScan,  'scan',         self.scan_callback,     10)
+        if self.consensus_type == 'formacion':
+            self.create_subscription(RobotState, '/virtual_structure',
+                                     self.virtual_callback, 10)
 
+        # --- Publicadores ---
         self.state_pub = self.create_publisher(RobotState,     '/robot_states_tx',   10)
         self.cmd_pub   = self.create_publisher(Twist,          'cmd_vel',            10)
         self.pva_pub   = self.create_publisher(PVAConstraints, '/pva_constraints',   10)
         self.plot_pub  = self.create_publisher(RobotState,     '/robot_states_plot', 10)
 
         self.create_timer(0.1, self.control_loop)
-
         self.get_logger().info(f"{self.robot_id} | consenso: {self.consensus_type}")
 
     # ------------------------------------------------------------------
@@ -180,45 +122,20 @@ class ConsensoNode(Node):
         state.x        = self.x
         state.y        = self.y
         state.theta    = self.theta
-        self.state_pub.publish(state)
-        self.plot_pub.publish(state)
-
-    def scan_callback(self, msg):
-        self.ranges = list(msg.ranges)
+        self.state_pub.publish(state)   # hacia AIRE
+        self.plot_pub.publish(state)    # hacia plotter
 
     def neighbor_callback(self, msg):
         self.neighbors[msg.robot_id] = (msg.x, msg.y, msg.theta, self.get_clock().now())
 
-    # ------------------------------------------------------------------
-    # Pipeline: ley de control → PVA → publicar
-    # ------------------------------------------------------------------
+    def scan_callback(self, msg):
+        self.ranges = list(msg.ranges)
 
-    def _apply_pipeline(self, a, alpha):
-        v_ref, w_ref      = self.control_law.compute(a, alpha)
-        v, w, constraints = self.pva.apply(v_ref, w_ref, self.ranges)
-        self._publish_pva_debug(v_ref, w_ref, v, w, constraints)
-        twist = Twist()
-        twist.linear.x  = float(v)
-        twist.angular.z = float(w)
-        self.cmd_pub.publish(twist)
-
-    def _publish_pva_debug(self, v_ref, w_ref, v, w, constraints):
-        msg = PVAConstraints()
-        msg.robot_id = self.robot_id
-        msg.a      = [float(c[0]) for c in constraints]
-        msg.b      = [float(c[1]) for c in constraints]
-        msg.c      = [float(c[2]) for c in constraints]
-        msg.v_goal = float(v_ref)
-        msg.w_goal = float(w_ref)
-        msg.v_star = float(v)
-        msg.w_star = float(w)
-        self.pva_pub.publish(msg)
-
-    def _stop(self):
-        self.cmd_pub.publish(Twist())
+    def virtual_callback(self, msg):
+        self.virtual_state = (msg.x, msg.y, msg.theta)
 
     # ------------------------------------------------------------------
-    # Control loop
+    # Pipeline: consenso → ley de control → PVA → cmd_vel
     # ------------------------------------------------------------------
 
     _NEIGHBOR_TIMEOUT = Duration(seconds=0.5)
@@ -242,26 +159,34 @@ class ConsensoNode(Node):
                                          self.robot_id, self.leader_id, self.k_leader)
         elif self.consensus_type == 'formacion':
             result = self.consensus.step(s, neighbors,
-                                         self.leader_id, self.follower_index,
-                                         self.n_followers, self.angle_v, self.d, self.beta)
-        elif self.consensus_type == 'formacion2':
-            result = self.consensus.step(s, neighbors,
-                                         self.leader_id, self.follower_index,
-                                         self.n_followers, self.arc_span, self.d, self.beta)
-        elif self.consensus_type == 'formacion3':
-            result = self.consensus.step(s, neighbors,
-                                         self.leader_id, self.follower_index,
-                                         self.n_followers, self.angle_v, self.d, self.beta)
-        elif self.consensus_type in ('formacion_vs', 'formacion_vs_ppc'):
-            result = self.consensus.step(s, neighbors,
-                                         self.leader_id, self.follower_index,
+                                         self.virtual_state, self.follower_index,
                                          self.n_robots, self.angle_v, self.d, self.beta)
 
         if result is None:
-            self._stop()
+            self.cmd_pub.publish(Twist())
             return
 
-        self._apply_pipeline(*result)
+        a, alpha         = result
+        v_ref, w_ref     = self.control_law.compute(a, alpha)
+        v, w, constrs    = self.pva.apply(v_ref, w_ref, self.ranges)
+        self._pub_pva_debug(v_ref, w_ref, v, w, constrs)
+
+        twist = Twist()
+        twist.linear.x  = float(v)
+        twist.angular.z = float(w)
+        self.cmd_pub.publish(twist)
+
+    def _pub_pva_debug(self, v_ref, w_ref, v, w, constraints):
+        msg = PVAConstraints()
+        msg.robot_id = self.robot_id
+        msg.a      = [float(c[0]) for c in constraints]
+        msg.b      = [float(c[1]) for c in constraints]
+        msg.c      = [float(c[2]) for c in constraints]
+        msg.v_goal = float(v_ref)
+        msg.w_goal = float(w_ref)
+        msg.v_star = float(v)
+        msg.w_star = float(w)
+        self.pva_pub.publish(msg)
 
 
 def main(args=None):

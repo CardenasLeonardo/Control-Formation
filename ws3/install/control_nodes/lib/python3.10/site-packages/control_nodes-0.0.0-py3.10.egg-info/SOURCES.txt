@@ -13,15 +13,10 @@ control_nodes/consenso_node.py
 control_nodes/navigate_individual_pva.py
 control_nodes/navigate_waypoints_pva.py
 control_nodes/algorithms/__init__.py
-control_nodes/algorithms/ancla_fija.py
 control_nodes/algorithms/consensus_formation.py
-control_nodes/algorithms/consensus_formation_2.py
-control_nodes/algorithms/consensus_formation_3.py
 control_nodes/algorithms/consensus_lider.py
 control_nodes/algorithms/consensus_prom_err.py
 control_nodes/algorithms/control_law.py
-control_nodes/algorithms/formacion_vs.py
-control_nodes/algorithms/formacion_vs_ppc.py
 control_nodes/algorithms/pva.py
 resource/control_nodes
 test/test_copyright.py
