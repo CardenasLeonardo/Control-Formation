@@ -282,10 +282,22 @@ class StatesPlotterV2(Node):
         if not data_snapshot:
             return
 
+        self._save_raw(data_snapshot)
+
         if self.trajectory_only:
             self._save_trajectory_only(data_snapshot)
         else:
             self._save_triple(data_snapshot)
+
+    def _save_raw(self, data_snapshot):
+        """Datos crudos de la corrida para post-procesamiento (npz)."""
+        arrays = {'labels': np.array(sorted(data_snapshot.keys()))}
+        for robot, d in data_snapshot.items():
+            for k in ('t', 'x', 'y', 'theta'):
+                arrays[f'{robot}_{k}'] = np.array(d[k], dtype=float)
+        path = os.path.join(self.save_dir, 'datos.npz')
+        np.savez(path, **arrays)
+        self.get_logger().info(f"Datos crudos guardados: {path}")
 
     def _save_trajectory_only(self, data_snapshot):
 

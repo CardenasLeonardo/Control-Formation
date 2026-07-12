@@ -1,0 +1,148 @@
+\section{Control de Formaciones en Sistemas Holonómicos}
+\subsection{Estrategia adaptativa de Koulong y Pakniyat}
+Armel et al.~\cite{koulong2024distributed} ponderan el error de sincronización $e_i$ en $r_i$; la ley de control compensa la dinámica estimada por la red neuronal y resta la repulsión de los potenciales:
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\fontfamily{ptm}\selectfont\scriptsize,
+  >={Stealth[length=2mm]},
+  block/.style={draw, minimum width=1.3cm, minimum height=1.3cm, align=center, inner sep=2pt},
+]
+  \node[block] (L)  {Líder};
+  \node[block, right=1.7cm of L] (S)  {Sincroni-\\zación};
+  \node[block, right=1.7cm of S] (E)  {Estabilidad};
+  \node[block, right=2.2cm of E] (CL) {Ley de\\Control};
+
+  \node[align=center, above=0.7cm of S]  (NB) {Vecindad};
+  \node[align=center, above=0.7cm of CL] (NN) {Red Neuronal};
+  \node[align=center, below=0.7cm of CL] (PF) {Potenciales};
+
+  \draw[->] (L) -- node[above]{$x_0$} node[below]{$[x_0^1,\dots,x_0^n]$} (S);
+  \draw[->] (S) -- node[above]{$e_i$} node[below]{$[e_i^1,\dots,e_i^n]$} (E);
+  \draw[->] (E) -- node[above]{$r_i$} node[below]{$[\lambda_1 e_i^1{+}\dots{+}e_i^n]$} (CL);
+  \draw[->] (NB) -- node[right]{$x_j$} (S);
+  \draw[->] (NN) -- node[right]{$\hat{f}_i,\hat{f}_0,\hat{w}_i$} (CL);
+  \draw[->] (PF) -- node[right]{$u_i^c,\,u_i^0$} (CL);
+
+  \coordinate (uEnd) at ($(CL.east)+(1.6,0)$);
+  \draw[->] (CL.east) -- node[above]{$u_i$} node[below]{$[u_i^d{-}u_i^c{-}u_i^0]$} (uEnd);
+\end{tikzpicture}
+\end{center}
+\begin{center}
+\footnotesize Figura 3: Arquitectura de control adaptativo de Armel et al.
+\end{center}
+
+\section{Control de Formaciones en Sistemas Holonómicos}
+\subsection{Error de sincronización de Koulong y Pakniyat}
+Punto de partida, tomado de Armel et al.~\cite{koulong2024distributed}.
+\begin{equation*}
+    e_i =
+    \underbrace{-\nu_1 \sum_{j \in \mathcal{N}_i} a_{ij}\big[(\mathbf{x}_i-\boldsymbol{\psi}_i)-(\mathbf{x}_j-\boldsymbol{\psi}_j)\big]}_{\text{\footnotesize Consenso relativo entre vecinos}}
+    \;\;
+    \underbrace{-\nu_2\, b_i^0\big[(\mathbf{x}_i-\boldsymbol{\psi}_i)-(\mathbf{x}_0-\boldsymbol{\psi}_0)\big]}_{\text{\footnotesize Acoplamiento a la referencia}}
+\end{equation*}
+
+{\footnotesize
+\noindent
+\begin{tabular}{l@{\ }l@{\qquad}l@{\ }l}
+$e_i$ & error de sincronización & $\mathcal{N}_i$ & vecinos del agente $i$ \\
+$\mathbf{x}_i,\mathbf{x}_j$ & posición de $i$ y $j$ & $a_{ij}$ & peso de comunicación $i$--$j$ \\
+$\mathbf{x}_0$ & posición de la referencia & $b_i^0$ & $1$ si $i$ percibe la referencia \\
+$\boldsymbol{\psi}_i,\boldsymbol{\psi}_j,\boldsymbol{\psi}_0$ & desplazamiento en la formación & $\nu_1,\nu_2$ & ganancias consenso/acoplamiento \\
+\end{tabular}
+}
+
+\section{Generador de Trayectorias para la Estructura Virtual}
+
+Siwek~\cite{siwek2024consensus} organiza el control en dos capas: capa maestra (trayectoria y configuración del grupo) y capa de seguimiento, replicada en cada robot.
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\fontfamily{ptm}\selectfont\scriptsize,
+  >={Stealth[length=2mm]},
+  block/.style={draw, minimum width=1.3cm, minimum height=1.3cm, align=center, inner sep=2pt},
+]
+  \node[block] (GT) {Generador de\\Trayectorias};
+  \node[block, right=1.5cm of GT] (CG) {Configuración\\del Grupo};
+  \node[block, right=1.8cm of CG] (CI) {Control\\Individual};
+  \node[block, right=1.5cm of CI] (R)  {Robot $i$};
+
+  \draw[->] (GT) -- node[above]{$q_d$} node[below]{$[x_d,y_d,\theta_d]$} (CG);
+  \draw[->, line width=1pt] (CG) -- node[above]{$r_i^d$} node[below]{$[x_i^d,y_i^d]$} (CI);
+  \draw[->] (CI) -- node[above]{$u_i$} node[below]{$[v,\omega]$} (R);
+
+  \draw[dashed] ($(GT.north west)+(-0.2,0.2)$) rectangle ($(CG.south east)+(0.2,-0.2)$);
+  \node at ($(GT.north)!0.5!(CG.north)+(0,0.45)$) {\itshape Capa maestra};
+  \draw[dashed] ($(CI.north west)+(-0.2,0.2)$) rectangle ($(R.south east)+(0.2,-0.2)$);
+  \node at ($(CI.north)!0.5!(R.north)+(0,0.45)$) {\itshape Capa de seguimiento};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\footnotesize Misma filosofía que este proyecto: la referencia se genera desde la estructura virtual y cada robot la ejecuta con su propio control.
+\end{center}
+
+\section{Formaciones Basadas en Estructura Virtual}
+
+Zhen y colaboradores~\cite{zhen2022formation} conciben la formación como un cuerpo rígido virtual al que los vehículos se adhieren, en lugar de perseguir a un líder físico:
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\fontfamily{ptm}\selectfont\scriptsize,
+  >={Stealth[length=2mm]},
+  block/.style={draw, minimum width=1.3cm, minimum height=1.3cm, align=center, inner sep=2pt},
+  taken/.style={draw, line width=1pt, minimum width=1.3cm, minimum height=1.3cm, align=center, inner sep=2pt},
+]
+  \node[block] (P)  {Referencia\\Formación};
+  \node[taken, right=1.1cm of P] (EV) {Estructura\\Virtual};
+  \node[block, right=1.7cm of EV] (CS) {Control de\\Seguimiento};
+
+  \node[align=center, above=0.7cm of EV] (CP) {Campo Potencial};
+
+  \draw[->] (P)  -- node[above]{$\mathbf{p}_r$} node[below]{$[\mathbf{p}_r,\mathbf{u}_r]$} (EV);
+  \draw[->, line width=1pt] (EV) -- node[above, pos=0.65]{$\mathbf{p}_{r_i}$} node[below, pos=0.65]{$[\mathbf{p}_{r_i},\mathbf{u}_{r_i}]$} (CS);
+  \draw[->] (CP) -- node[right]{$F_i$} (EV);
+
+  \draw[dashed] ($(P.north west)+(-0.2,0.2)$) rectangle ($(EV.south east)+(0.2,-0.2)$);
+
+  \coordinate (uEnd) at ($(CS.east)+(0.8,0)$);
+  \draw[->] (CS.east) -- node[above]{$\tau$} node[below]{$[\tau]$} (uEnd);
+\end{tikzpicture}
+\end{center}
+\begin{center}
+\footnotesize Formación multi-AUV de Zhen et al.: este proyecto retoma solo la estructura virtual
+\end{center}
+
+\section{Formaciones Basadas en Estructura Virtual}
+
+La estructura virtual asigna a cada vehículo su posición deseada girando con $R(\theta)$ y escalando con $L$ su lugar $\mathbf{r}_i$ dentro del cuerpo rígido:
+\begin{equation*}
+    \mathbf{p}_{r_i} = \mathbf{p}_r + R(\theta)\,L\,\mathbf{r}_i
+\end{equation*}
+
+{\footnotesize
+\noindent
+\begin{tabular}{l@{\ }l@{\qquad}l@{\ }l}
+$\mathbf{p}_{r_i}$ & posición deseada del agente $i$ & $R(\theta)$ & rotación de la formación \\
+$\mathbf{p}_r$ & punto de referencia de la estructura & $L$ & factor de escala de la formación \\
+$\mathbf{r}_i$ & posición de $i$ respecto a $\mathbf{p}_r$ & & \\
+\end{tabular}
+}
+
+\section{Formalización del Consenso y Mantenimiento de Formación}
+
+Romero y colaboradores~\cite{romero2024global} formalizan cuándo hay consenso y cuándo se mantiene la formación. Cada robot corrige su posición con su desplazamiento: $\bar{z}_i := z_i - \delta_i$.
+
+\begin{equation*}
+    \underbrace{\lim_{t\to\infty} \bar{z}_i(t) = z_c, \quad \lim_{t\to\infty} \theta_i(t) = \theta_c}_{\text{\footnotesize Consenso alcanzado}}
+    \qquad
+    \underbrace{\lim_{t\to\infty} \big[z_i(t) - z_j(t)\big] = \delta_i - \delta_j}_{\text{\footnotesize Formación mantenida}}
+\end{equation*}
+
+{\footnotesize
+\noindent
+\begin{tabular}{l@{\ }l@{\qquad}l@{\ }l}
+$z_i,\bar{z}_i$ & posición real y corregida de $i$ & $\delta_i$ & desplazamiento de $i$ en la formación \\
+$z_c$ & baricentro del grupo & $\theta_c$ & orientación común de acuerdo \\
+\end{tabular}
+}

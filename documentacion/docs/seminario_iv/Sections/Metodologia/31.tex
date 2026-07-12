@@ -1,0 +1,39 @@
+\section{Consenso de robots diferenciales}
+\twocolumn\raggedright
+\subsection{Protocolo de consenso}
+Caso base, consenso promedio de errores:
+\begin{equation*}
+    \mathbf{q}_e^i =
+    \begin{bmatrix} x_e^i \\ y_e^i \end{bmatrix}
+    =
+    \frac{1}{|\mathcal{N}_i|}
+    \sum_{j \in \mathcal{N}_i}
+    \begin{bmatrix} x_j - x_i \\ y_j - y_i \end{bmatrix}
+\end{equation*}
+
+\textbf{Error de coordenadas polares}
+
+\setlength{\overfullrule}{0pt}
+{\small
+\begin{equation*}
+    \mathbf{z}_i = \begin{bmatrix} a_i & \alpha_i \end{bmatrix}^T
+\end{equation*}
+\begin{align*}
+    a_i &= \|\mathbf{q}_e^i\| \\
+    \alpha_i &= \operatorname{atan2}(e_y, e_x) - \theta_i
+\end{align*}
+\begin{equation*}
+    \mathbf{u}_i(\mathbf{z}_i) =
+    \begin{bmatrix}
+        k_1\, a_i \cos\alpha_i \\
+        k_2\,\alpha_i + k_1 \sin\alpha_i \cos\alpha_i
+    \end{bmatrix}
+\end{equation*}
+}
+\setlength{\overfullrule}{1mm}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Pics/trayectoria.pdf}
+    \caption{Promedio de las posiciones iniciales}
+    \label{fig:consenso_diferencial}
+\end{figure}

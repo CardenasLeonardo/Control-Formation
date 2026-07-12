@@ -1,0 +1,25 @@
+running egg_info
+writing ../../build/simulador/simulador.egg-info/PKG-INFO
+writing dependency_links to ../../build/simulador/simulador.egg-info/dependency_links.txt
+writing entry points to ../../build/simulador/simulador.egg-info/entry_points.txt
+writing requirements to ../../build/simulador/simulador.egg-info/requires.txt
+writing top-level names to ../../build/simulador/simulador.egg-info/top_level.txt
+reading manifest file '../../build/simulador/simulador.egg-info/SOURCES.txt'
+writing manifest file '../../build/simulador/simulador.egg-info/SOURCES.txt'
+running build
+running build_py
+copying simulador/AIRE.py -> /home/calafaker/Control-Formation/ws3/build/simulador/build/lib/simulador
+running install
+running install_lib
+copying /home/calafaker/Control-Formation/ws3/build/simulador/build/lib/simulador/AIRE.py -> /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador
+byte-compiling /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador/AIRE.py to AIRE.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/simulador/simulador.egg-info to /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador-0.0.0-py3.10.egg-info
+running install_scripts
+Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+Installing pva_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+Installing states_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+writing list of installed files to '/home/calafaker/Control-Formation/ws3/build/simulador/install.log'

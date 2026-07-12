@@ -21,16 +21,48 @@ namespace msg
 namespace builder
 {
 
+class Init_PVAConstraints_search_dir
+{
+public:
+  explicit Init_PVAConstraints_search_dir(::multi_robot_interfaces::msg::PVAConstraints & msg)
+  : msg_(msg)
+  {}
+  ::multi_robot_interfaces::msg::PVAConstraints search_dir(::multi_robot_interfaces::msg::PVAConstraints::_search_dir_type arg)
+  {
+    msg_.search_dir = std::move(arg);
+    return std::move(msg_);
+  }
+
+private:
+  ::multi_robot_interfaces::msg::PVAConstraints msg_;
+};
+
+class Init_PVAConstraints_mode
+{
+public:
+  explicit Init_PVAConstraints_mode(::multi_robot_interfaces::msg::PVAConstraints & msg)
+  : msg_(msg)
+  {}
+  Init_PVAConstraints_search_dir mode(::multi_robot_interfaces::msg::PVAConstraints::_mode_type arg)
+  {
+    msg_.mode = std::move(arg);
+    return Init_PVAConstraints_search_dir(msg_);
+  }
+
+private:
+  ::multi_robot_interfaces::msg::PVAConstraints msg_;
+};
+
 class Init_PVAConstraints_w_star
 {
 public:
   explicit Init_PVAConstraints_w_star(::multi_robot_interfaces::msg::PVAConstraints & msg)
   : msg_(msg)
   {}
-  ::multi_robot_interfaces::msg::PVAConstraints w_star(::multi_robot_interfaces::msg::PVAConstraints::_w_star_type arg)
+  Init_PVAConstraints_mode w_star(::multi_robot_interfaces::msg::PVAConstraints::_w_star_type arg)
   {
     msg_.w_star = std::move(arg);
-    return std::move(msg_);
+    return Init_PVAConstraints_mode(msg_);
   }
 
 private:

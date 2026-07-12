@@ -54,6 +54,10 @@ cdr_serialize(
   cdr << ros_message.v_star;
   // Member: w_star
   cdr << ros_message.w_star;
+  // Member: mode
+  cdr << ros_message.mode;
+  // Member: search_dir
+  cdr << ros_message.search_dir;
   return true;
 }
 
@@ -92,6 +96,12 @@ cdr_deserialize(
 
   // Member: w_star
   cdr >> ros_message.w_star;
+
+  // Member: mode
+  cdr >> ros_message.mode;
+
+  // Member: search_dir
+  cdr >> ros_message.search_dir;
 
   return true;
 }
@@ -164,6 +174,18 @@ get_serialized_size(
   // Member: w_star
   {
     size_t item_size = sizeof(ros_message.w_star);
+    current_alignment += item_size +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
+  }
+  // Member: mode
+  {
+    size_t item_size = sizeof(ros_message.mode);
+    current_alignment += item_size +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
+  }
+  // Member: search_dir
+  {
+    size_t item_size = sizeof(ros_message.search_dir);
     current_alignment += item_size +
       eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
   }
@@ -279,6 +301,24 @@ max_serialized_size_PVAConstraints(
       eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint64_t));
   }
 
+  // Member: mode
+  {
+    size_t array_size = 1;
+
+    last_member_size = array_size * sizeof(uint32_t);
+    current_alignment += array_size * sizeof(uint32_t) +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint32_t));
+  }
+
+  // Member: search_dir
+  {
+    size_t array_size = 1;
+
+    last_member_size = array_size * sizeof(uint32_t);
+    current_alignment += array_size * sizeof(uint32_t) +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint32_t));
+  }
+
   size_t ret_val = current_alignment - initial_alignment;
   if (is_plain) {
     // All members are plain, and type is not empty.
@@ -287,7 +327,7 @@ max_serialized_size_PVAConstraints(
     using DataType = multi_robot_interfaces::msg::PVAConstraints;
     is_plain =
       (
-      offsetof(DataType, w_star) +
+      offsetof(DataType, search_dir) +
       last_member_size
       ) == ret_val;
   }

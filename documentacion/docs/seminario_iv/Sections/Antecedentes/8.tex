@@ -1,0 +1,20 @@
+\section{Evasión de Colisiones}
+\setlength{\columnseprule}{0pt}
+\onecolumn
+\subsection{Funciones de Potencial}
+Khatib~\cite{Khatib1986} propuso un campo potencial repulsivo que rodea cada obstáculo, generando una fuerza que aleja al robot cuando se aproxima.
+\begin{equation*}
+    U_{\text{rep}}(\mathbf{x}) =
+    \begin{cases}
+        \dfrac{1}{2}\,\eta\left(\dfrac{1}{\rho(\mathbf{x})}-\dfrac{1}{\rho_0}\right)^{\!2}, & \rho(\mathbf{x})\leq\rho_0 \\[6pt]
+        0, & \rho(\mathbf{x})>\rho_0
+    \end{cases}
+\end{equation*}
+{\footnotesize
+\noindent
+\begin{tabular}{l@{\ }l@{\qquad}l@{\ }l}
+$\rho(\mathbf{x})$ & distancia al obstáculo & $\rho_0$ & radio de influencia \\
+$\eta$ & ganancia de repulsión & $F_{\text{rep}}$ & $-\nabla U_{\text{rep}}(\mathbf{x})$, fuerza de evasión \\
+\end{tabular}
+}
+

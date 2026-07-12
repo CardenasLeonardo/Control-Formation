@@ -1,0 +1,8 @@
+[0.000000] (-) TimerEvent: {}
+[0.000165] (-) JobUnselected: {'identifier': 'articubot_one'}
+[0.000246] (-) JobUnselected: {'identifier': 'control_nodes'}
+[0.000258] (-) JobUnselected: {'identifier': 'multi_robot_interfaces'}
+[0.000285] (simulador) JobQueued: {'identifier': 'simulador', 'dependencies': OrderedDict([('multi_robot_interfaces', '/home/calafaker/Control-Formation/install/multi_robot_interfaces')])}
+[0.000315] (simulador) JobStarted: {'identifier': 'simulador'}
+[0.008174] (simulador) JobEnded: {'identifier': 'simulador', 'rc': 1}
+[0.018504] (-) EventReactorShutdown: {}

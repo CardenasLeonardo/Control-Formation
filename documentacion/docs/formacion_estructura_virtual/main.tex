@@ -1,0 +1,53 @@
+\documentclass{antclass}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{pgfgantt}
+\usetikzlibrary{positioning, arrows.meta, calc, babel}
+% \showtrue  -> animaciones reales (\animategraphics), para Okular / entrega final
+% \showfalse -> cuadro estático de cada animación, para previsualizar en pdf.js (VS Code)
+\newif\ifshow\showfalse
+
+\makeatletter
+\renewenvironment{thebibliography}[1]
+  {
+    \chapter{Referencias}
+    \justifying\normalsize
+    \list{\@biblabel{\@arabic\c@enumiv}}%
+         {\settowidth\labelwidth{\@biblabel{#1}}%
+          \leftmargin\labelwidth
+          \advance\leftmargin\labelsep
+          \usecounter{enumiv}}
+    \sloppy\clubpenalty4000\widowpenalty4000
+    \sfcode`\.=\@m
+  }
+  {\endlist}
+\makeatother
+\begin{document}
+\input{Sections/0_Titulo}
+% Cada N.tex genera la diapositiva N del PDF. Números sin archivo:
+% 1 título, 2/9/26 portadas de capítulo, 11/14/16/18/21 desbordes de figura del N anterior.
+\chapter{Trabajo Previo}
+\input{Sections/3}
+\input{Sections/4}
+\input{Sections/5}
+\input{Sections/6}
+\input{Sections/7}
+\input{Sections/8}
+\chapter{Metodología}
+\input{Sections/10}
+\input{Sections/12}
+\input{Sections/13}
+\input{Sections/15}
+\input{Sections/17}
+\input{Sections/19}
+\input{Sections/20}
+\input{Sections/22}
+\input{Sections/23}
+\input{Sections/24}
+\input{Sections/25}
+%\chapter{Diseño de Experimentación}
+%\input{Sections/27}
+%\input{Sections/28}
+\section{Referencias}
+\bibliographystyle{ieeetr}
+\bibliography{referencias}
+\end{document}

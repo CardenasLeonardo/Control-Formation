@@ -43,6 +43,8 @@ struct PVAConstraints_
       this->w_goal = 0.0;
       this->v_star = 0.0;
       this->w_star = 0.0;
+      this->mode = 0l;
+      this->search_dir = 0l;
     }
   }
 
@@ -57,6 +59,8 @@ struct PVAConstraints_
       this->w_goal = 0.0;
       this->v_star = 0.0;
       this->w_star = 0.0;
+      this->mode = 0l;
+      this->search_dir = 0l;
     }
   }
 
@@ -85,6 +89,12 @@ struct PVAConstraints_
   using _w_star_type =
     double;
   _w_star_type w_star;
+  using _mode_type =
+    int32_t;
+  _mode_type mode;
+  using _search_dir_type =
+    int32_t;
+  _search_dir_type search_dir;
 
   // setters for named parameter idiom
   Type & set__robot_id(
@@ -133,6 +143,18 @@ struct PVAConstraints_
     const double & _arg)
   {
     this->w_star = _arg;
+    return *this;
+  }
+  Type & set__mode(
+    const int32_t & _arg)
+  {
+    this->mode = _arg;
+    return *this;
+  }
+  Type & set__search_dir(
+    const int32_t & _arg)
+  {
+    this->search_dir = _arg;
     return *this;
   }
 
@@ -200,6 +222,12 @@ struct PVAConstraints_
       return false;
     }
     if (this->w_star != other.w_star) {
+      return false;
+    }
+    if (this->mode != other.mode) {
+      return false;
+    }
+    if (this->search_dir != other.search_dir) {
       return false;
     }
     return true;

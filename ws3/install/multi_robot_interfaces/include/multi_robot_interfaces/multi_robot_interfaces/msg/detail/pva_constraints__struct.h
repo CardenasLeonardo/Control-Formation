@@ -36,6 +36,8 @@ typedef struct multi_robot_interfaces__msg__PVAConstraints
   double w_goal;
   double v_star;
   double w_star;
+  int32_t mode;
+  int32_t search_dir;
 } multi_robot_interfaces__msg__PVAConstraints;
 
 // Struct for a sequence of multi_robot_interfaces__msg__PVAConstraints.

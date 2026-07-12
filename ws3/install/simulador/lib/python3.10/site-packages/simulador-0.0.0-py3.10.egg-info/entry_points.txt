@@ -1,5 +1,7 @@
 [console_scripts]
 aire = simulador.AIRE:main
+camera_zoom = simulador.camera_zoom:main
+gif_recorder = simulador.gif_recorder:main
 pva_plotter = simulador.pva_plotter:main
 sphere_demo = simulador.sphere_demo:main
 states_plotter_v2 = simulador.states_plotter_v2:main

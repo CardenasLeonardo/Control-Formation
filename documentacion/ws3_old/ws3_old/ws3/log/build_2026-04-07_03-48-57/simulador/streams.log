@@ -1,0 +1,27 @@
+[0.673s] Invoking command in '/home/calafaker/Control-Formation/ws3/src/simulador': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/simulador build --build-base /home/calafaker/Control-Formation/ws3/build/simulador/build install --record /home/calafaker/Control-Formation/ws3/build/simulador/install.log --single-version-externally-managed install_data
+[0.831s] running egg_info
+[0.831s] writing ../../build/simulador/simulador.egg-info/PKG-INFO
+[0.832s] writing dependency_links to ../../build/simulador/simulador.egg-info/dependency_links.txt
+[0.832s] writing entry points to ../../build/simulador/simulador.egg-info/entry_points.txt
+[0.832s] writing requirements to ../../build/simulador/simulador.egg-info/requires.txt
+[0.832s] writing top-level names to ../../build/simulador/simulador.egg-info/top_level.txt
+[0.833s] reading manifest file '../../build/simulador/simulador.egg-info/SOURCES.txt'
+[0.834s] writing manifest file '../../build/simulador/simulador.egg-info/SOURCES.txt'
+[0.834s] running build
+[0.834s] running build_py
+[0.834s] copying simulador/states_plotter_v2.py -> /home/calafaker/Control-Formation/ws3/build/simulador/build/lib/simulador
+[0.835s] running install
+[0.835s] running install_lib
+[0.836s] copying /home/calafaker/Control-Formation/ws3/build/simulador/build/lib/simulador/states_plotter_v2.py -> /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador
+[0.837s] byte-compiling /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador/states_plotter_v2.py to states_plotter_v2.cpython-310.pyc
+[0.839s] running install_data
+[0.839s] running install_egg_info
+[0.841s] removing '/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador-0.0.0-py3.10.egg-info' (and everything under it)
+[0.841s] Copying ../../build/simulador/simulador.egg-info to /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador-0.0.0-py3.10.egg-info
+[0.843s] running install_scripts
+[0.857s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.857s] Installing pva_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.857s] Installing states_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.857s] Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.858s] writing list of installed files to '/home/calafaker/Control-Formation/ws3/build/simulador/install.log'
+[0.876s] Invoked command in '/home/calafaker/Control-Formation/ws3/src/simulador' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/simulador build --build-base /home/calafaker/Control-Formation/ws3/build/simulador/build install --record /home/calafaker/Control-Formation/ws3/build/simulador/install.log --single-version-externally-managed install_data

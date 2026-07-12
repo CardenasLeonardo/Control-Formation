@@ -2,8 +2,12 @@ import os
 import math
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction, OpaqueFunction
+from launch.actions import (
+    DeclareLaunchArgument, IncludeLaunchDescription,
+    OpaqueFunction, TimerAction
+)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
@@ -39,6 +43,13 @@ T_AIRE        = T_START + N_ROBOTS * T_ROBOT_STEP + 1.0   # 11.5 s
 T_CONTROL     = T_AIRE + 1.0                               # 12.5 s
 START_DELAY   = T_CONTROL - T_START + 2.0                 # 11.5 s — sphere espera esto
 
+# Grabación de GIF (cámara cenital) — se detiene sola al llegar a la última
+# meta de WAYPOINTS (robot0), no por tiempo fijo
+RECORD_GIF    = True
+CAMERA_HEIGHT = 16.0
+GIF_FPS       = 10.0
+STOP_DELAY    = 2.0    # s de margen tras alcanzar la última meta
+
 
 # ------------------------------------------------------------------
 # Cálculo de posiciones iniciales en V
@@ -70,12 +81,51 @@ def _v_positions(n, cx, cy, theta, angle_v, d):
 
 def launch_setup(context, *args, **kwargs):
 
+    save_dir = LaunchConfiguration('save_dir').perform(context)
+
     articubot_pkg = get_package_share_directory('articubot_one')
     rsp_launch    = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
+    camera_sdf    = os.path.join(
+        get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
+    )
 
     robot_pos = _v_positions(N_ROBOTS, ROBOT_X, ROBOT_Y, THETA_0, ANGLE_V, D)
 
     actions = []
+
+    if RECORD_GIF:
+        actions.append(TimerAction(period=T_START, actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-file', camera_sdf,
+                    '-entity', 'overhead_camera',
+                    '-x', str(SPHERE_X), '-y', str(SPHERE_Y), '-z', str(CAMERA_HEIGHT),
+                    '-P', '1.5708',
+                ],
+                output='screen'
+            )
+        ]))
+
+        actions.append(TimerAction(period=T_AIRE, actions=[
+            Node(
+                package='simulador',
+                executable='gif_recorder',
+                name='gif_recorder',
+                parameters=[{
+                    'save_dir':    save_dir,
+                    'gif_name':    'esferas.gif',
+                    'fps':         GIF_FPS,
+                    'stop_mode':   'goal',
+                    'goal_topic':  '/robot0/final_goal_reached',
+                    'stop_delay':  STOP_DELAY,
+                    't_final':     300.0,
+                    'auto_shutdown': True,
+                }],
+                output='screen'
+            )
+        ]))
 
     # --- Spawn de cada robot (staggered) ---
     for i in range(N_ROBOTS):
@@ -172,6 +222,10 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+
+        DeclareLaunchArgument('save_dir',
+            default_value='figuras/esferas',
+            description='Directorio donde se guardan gifs/ y frames/'),
 
         # --- Gazebo con plugin de estado ---
         IncludeLaunchDescription(

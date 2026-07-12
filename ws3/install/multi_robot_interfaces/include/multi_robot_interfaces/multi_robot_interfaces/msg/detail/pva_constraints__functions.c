@@ -49,6 +49,8 @@ multi_robot_interfaces__msg__PVAConstraints__init(multi_robot_interfaces__msg__P
   // w_goal
   // v_star
   // w_star
+  // mode
+  // search_dir
   return true;
 }
 
@@ -70,6 +72,8 @@ multi_robot_interfaces__msg__PVAConstraints__fini(multi_robot_interfaces__msg__P
   // w_goal
   // v_star
   // w_star
+  // mode
+  // search_dir
 }
 
 bool
@@ -118,6 +122,14 @@ multi_robot_interfaces__msg__PVAConstraints__are_equal(const multi_robot_interfa
   if (lhs->w_star != rhs->w_star) {
     return false;
   }
+  // mode
+  if (lhs->mode != rhs->mode) {
+    return false;
+  }
+  // search_dir
+  if (lhs->search_dir != rhs->search_dir) {
+    return false;
+  }
   return true;
 }
 
@@ -161,6 +173,10 @@ multi_robot_interfaces__msg__PVAConstraints__copy(
   output->v_star = input->v_star;
   // w_star
   output->w_star = input->w_star;
+  // mode
+  output->mode = input->mode;
+  // search_dir
+  output->search_dir = input->search_dir;
   return true;
 }
 

@@ -293,6 +293,24 @@ bool multi_robot_interfaces__msg__pva_constraints__convert_from_py(PyObject * _p
     ros_message->w_star = PyFloat_AS_DOUBLE(field);
     Py_DECREF(field);
   }
+  {  // mode
+    PyObject * field = PyObject_GetAttrString(_pymsg, "mode");
+    if (!field) {
+      return false;
+    }
+    assert(PyLong_Check(field));
+    ros_message->mode = (int32_t)PyLong_AsLong(field);
+    Py_DECREF(field);
+  }
+  {  // search_dir
+    PyObject * field = PyObject_GetAttrString(_pymsg, "search_dir");
+    if (!field) {
+      return false;
+    }
+    assert(PyLong_Check(field));
+    ros_message->search_dir = (int32_t)PyLong_AsLong(field);
+    Py_DECREF(field);
+  }
 
   return true;
 }
@@ -541,6 +559,28 @@ PyObject * multi_robot_interfaces__msg__pva_constraints__convert_to_py(void * ra
     field = PyFloat_FromDouble(ros_message->w_star);
     {
       int rc = PyObject_SetAttrString(_pymessage, "w_star", field);
+      Py_DECREF(field);
+      if (rc) {
+        return NULL;
+      }
+    }
+  }
+  {  // mode
+    PyObject * field = NULL;
+    field = PyLong_FromLong(ros_message->mode);
+    {
+      int rc = PyObject_SetAttrString(_pymessage, "mode", field);
+      Py_DECREF(field);
+      if (rc) {
+        return NULL;
+      }
+    }
+  }
+  {  // search_dir
+    PyObject * field = NULL;
+    field = PyLong_FromLong(ros_message->search_dir);
+    {
+      int rc = PyObject_SetAttrString(_pymessage, "search_dir", field);
       Py_DECREF(field);
       if (rc) {
         return NULL;

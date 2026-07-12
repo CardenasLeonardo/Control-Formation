@@ -1,0 +1,33 @@
+\section{Control de Formaciones en Sistemas No Holonómicos}
+\onecolumn
+\subsection{Consenso con mantenimiento de formación}
+
+El consenso abre la estrategia y combina el acuerdo entre vecinos con la atracción al ancla virtual $\mathbf{x}_0$, dentro del mismo pipeline de control de la formación:
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\fontfamily{ptm}\selectfont\scriptsize,
+  >={Stealth[length=2mm]},
+  block/.style={draw, minimum width=1.3cm, minimum height=1.3cm, align=center, inner sep=2pt},
+]
+  \node[block] (C)  {Consenso};
+  \node[block, right=1.1cm of C]  (CL) {Ley de\\Control};
+  \node[block, right=1.1cm of CL] (F)  {PVA};
+
+  \node[align=center, above=0.7cm of C] (NB) {Vecindad};
+  \node[align=center, above=0.7cm of F] (LI) {LiDAR};
+
+  \coordinate (xin) at ($(C.west)+(-1.0,0)$);
+  \draw[->] (xin) -- node[above]{$\mathbf{x}_0$} node[below]{$[x,y]$} (C);
+  \draw[->] (C)  -- node[above]{$z$} node[below]{$[a,\alpha]$} (CL);
+  \draw[->] (CL) -- node[above]{$u_{ref}$} node[below]{$[v,\omega]$} (F);
+  \draw[->] (NB) -- (C);
+  \draw[->] (LI) -- (F);
+
+  \coordinate (uEnd) at ($(F.east)+(0.8,0)$);
+  \draw[->] (F.east) -- node[above]{$u^*$} node[below]{$[v,\omega]$} (uEnd);
+\end{tikzpicture}
+\end{center}
+
+
+

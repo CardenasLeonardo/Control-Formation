@@ -2,8 +2,12 @@ import os
 import math
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction, OpaqueFunction
+from launch.actions import (
+    DeclareLaunchArgument, IncludeLaunchDescription,
+    OpaqueFunction, TimerAction
+)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
@@ -27,9 +31,30 @@ ROBOT_OFFSET = 2.5
 ROBOT_X = VS_X - math.cos(THETA_0) * ROBOT_OFFSET   # 3.0
 ROBOT_Y = VS_Y - math.sin(THETA_0) * ROBOT_OFFSET   # -2.5
 
-# waypoints[0] es la posición inicial del centroide; la curva pasa por todos ellos
-WAYPOINTS = [3.0, 0.0,   3.0, 4.0,   0.0, 7.0,  -4.0, 5.0,
-             -4.0, 0.0,  -1.0, -3.0,  3.0, 0.0]
+# waypoints[0] es la posición inicial del centroide; la curva pasa por todos ellos.
+# Ruta: cuadrado con esquinas redondeadas (Catmull-Rom suaviza cada esquina al
+# tener dos puntos cercanos alrededor de ella; los tramos entre esquinas quedan
+# prácticamente rectos). El cuadrado se arma de modo que:
+#   - el borde derecho (x = SQ_RIGHT) pasa por (VS_X, VS_Y), el inicio real
+#   - la esquina inferior derecha coincide con (ROBOT_X, ROBOT_Y), el spawn de
+#     los robots, así el GIF cierra el ciclo exactamente donde arrancaron
+SQ_RIGHT  = VS_X                 # 3.0
+SQ_BOTTOM = ROBOT_Y              # -2.5  (== esquina inferior derecha)
+SQ_LEFT   = SQ_RIGHT  - 7.0      # -4.0
+SQ_TOP    = SQ_BOTTOM + 7.0      # 4.5
+CORNER_R  = 1.3                  # radio de recorte de cada esquina
+
+WAYPOINTS = [
+    VS_X, VS_Y,                                    # inicio: sobre el borde derecho
+    SQ_RIGHT,            SQ_TOP - CORNER_R,         # llega a la esquina sup. derecha
+    SQ_RIGHT - CORNER_R, SQ_TOP,                    # sale de la esquina sup. derecha
+    SQ_LEFT + CORNER_R,  SQ_TOP,                    # llega a la esquina sup. izquierda
+    SQ_LEFT,             SQ_TOP - CORNER_R,         # sale de la esquina sup. izquierda
+    SQ_LEFT,             SQ_BOTTOM + CORNER_R,       # llega a la esquina inf. izquierda
+    SQ_LEFT + CORNER_R,  SQ_BOTTOM,                 # sale de la esquina inf. izquierda
+    SQ_RIGHT - CORNER_R, SQ_BOTTOM,                 # llega a la esquina inf. derecha...
+    ROBOT_X, ROBOT_Y,                               # ...y termina justo en ella
+]
 
 # Timing
 T_START      = 3.0
@@ -37,6 +62,15 @@ T_ROBOT_STEP = 1.5
 T_AIRE       = T_START + N_ROBOTS * T_ROBOT_STEP + 1.0   # 11.5 s
 T_CONTROL    = T_AIRE + 1.0                               # 12.5 s
 START_DELAY  = T_CONTROL - T_START + 2.0                 # 11.5 s
+
+# Grabación de GIF (cámara cenital) — se detiene sola al completar la
+# trayectoria de la estructura virtual, no por tiempo fijo
+RECORD_GIF    = True
+CAMERA_HEIGHT = 9.0     # antes 16.0: más cerca, robots se ven más grandes
+CAMERA_X      = (SQ_RIGHT + SQ_LEFT) / 2.0    # centro del cuadrado de la ruta
+CAMERA_Y      = (SQ_TOP + SQ_BOTTOM) / 2.0
+GIF_FPS       = 10.0
+STOP_DELAY    = 2.0
 
 
 # ------------------------------------------------------------------
@@ -68,12 +102,51 @@ def _v_positions(n, cx, cy, theta, angle_v, d):
 
 def launch_setup(context, *args, **kwargs):
 
+    save_dir = LaunchConfiguration('save_dir').perform(context)
+
     articubot_pkg = get_package_share_directory('articubot_one')
     rsp_launch    = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
+    camera_sdf    = os.path.join(
+        get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
+    )
 
     robot_pos = _v_positions(N_ROBOTS, ROBOT_X, ROBOT_Y, THETA_0, ANGLE_V, D)
 
     actions = []
+
+    if RECORD_GIF:
+        actions.append(TimerAction(period=T_START, actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-file', camera_sdf,
+                    '-entity', 'overhead_camera',
+                    '-x', str(CAMERA_X), '-y', str(CAMERA_Y), '-z', str(CAMERA_HEIGHT),
+                    '-P', '1.5708',
+                ],
+                output='screen'
+            )
+        ]))
+
+        actions.append(TimerAction(period=T_AIRE, actions=[
+            Node(
+                package='simulador',
+                executable='gif_recorder',
+                name='gif_recorder',
+                parameters=[{
+                    'save_dir':      save_dir,
+                    'gif_name':      'vs_formacion.gif',
+                    'fps':           GIF_FPS,
+                    'stop_mode':     'goal',
+                    'goal_topic':    '/final_goal_reached',
+                    'stop_delay':    STOP_DELAY,
+                    't_final':       300.0,
+                    'auto_shutdown': True,
+                }],
+                output='screen'
+            )
+        ]))
 
     # --- Spawn staggered de cada robot ---
     for i in range(N_ROBOTS):
@@ -156,6 +229,10 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+
+        DeclareLaunchArgument('save_dir',
+            default_value='figuras/vs_formacion',
+            description='Directorio donde se guardan gifs/ y frames/'),
 
         # --- Gazebo con plugin de estado ---
         IncludeLaunchDescription(

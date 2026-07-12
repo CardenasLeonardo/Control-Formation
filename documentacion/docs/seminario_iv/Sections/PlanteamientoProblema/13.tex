@@ -1,0 +1,15 @@
+\section{Estrategia de control de formaciones}
+\setlength{\columnseprule}{0pt}
+\onecolumn
+
+Se busca encontrar una ley de control $\mathbf{u}_i$ para cada agente $i \in \mathcal{S}$ tal que el grupo adopte y preserve una formación deseada conforme navega en el entorno:
+\begin{equation*}
+    \lim_{t\to\infty} \|\mathbf{p}_i(t) - \mathbf{p}_{i,d}(t)\| = 0,
+    \quad \forall\, i \in \mathcal{S}
+\end{equation*}
+\begin{figure}[H]
+    \centering
+\includegraphics[width=0.4\linewidth]{Pics/extension.pdf}
+    \caption{Flota de robots convergiendo a formación}
+    \label{fig:extension}
+\end{figure}

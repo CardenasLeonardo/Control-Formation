@@ -1,0 +1,25 @@
+\section{Integración de la no holonomía}
+\setlength{\columnseprule}{0pt}
+\twocolumn
+\subsection{Error de coordenadas polares}
+Error de la meta con respecto al estado actual \cite{ramirez2001control}:
+\begin{equation*}
+    \mathbf{z}(t) = \begin{bmatrix} a \\ \alpha \end{bmatrix}
+\end{equation*}
+\subsection{Ley de control}
+\vspace{-0.5cm}
+\begin{equation*}
+    \mathbf{u} =
+    \begin{bmatrix} v \\ \omega \end{bmatrix} =
+    \begin{bmatrix}
+        k_1\, a \cos\alpha \\
+        k_2\,\alpha + k_1 \sin\alpha \cos\alpha
+    \end{bmatrix}
+\end{equation*}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{Pics/trajectory_individual.pdf}
+    \caption{Navegación autónoma de un robot diferencial}
+    \label{fig:trayectoria_individual}
+\end{figure}

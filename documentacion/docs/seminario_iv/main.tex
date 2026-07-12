@@ -1,0 +1,80 @@
+\documentclass{antclass}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{pgfgantt}
+\usepackage{multicol}
+\usetikzlibrary{positioning, arrows.meta, calc, babel}
+\newif\ifshow\showtrue
+
+\makeatletter
+\renewenvironment{thebibliography}[1]
+  {
+    \chapter{Referencias}
+    \justifying\normalsize
+    \list{\@biblabel{\@arabic\c@enumiv}}%
+         {\settowidth\labelwidth{\@biblabel{#1}}%
+          \leftmargin\labelwidth
+          \advance\leftmargin\labelsep
+          \usecounter{enumiv}}
+    \sloppy\clubpenalty4000\widowpenalty4000
+    \sfcode`\.=\@m
+  }
+  {\endlist}
+\makeatother
+\begin{document}
+\input{Sections/0_Titulo}
+
+\input{Sections/Indice/indice}
+
+\chapter{Planteamiento del Problema}
+\input{Sections/PlanteamientoProblema/11}
+\input{Sections/PlanteamientoProblema/12}
+\input{Sections/PlanteamientoProblema/13}
+
+\chapter{Antecedentes}
+\input{Sections/Antecedentes/3}
+\input{Sections/Antecedentes/4}
+\input{Sections/Antecedentes/5}
+\input{Sections/Antecedentes/6}
+\input{Sections/Antecedentes/7}
+%\input{Sections/Antecedentes/11}
+\input{Sections/Antecedentes/8}
+\input{Sections/Antecedentes/9}
+
+
+
+
+\chapter{Preguntas de Investigación}
+\input{Sections/PreguntasInvestigacion/15}
+
+\chapter{Hipótesis}
+\input{Sections/Hipotesis/17}
+
+\chapter{Objetivos}
+
+\input{Sections/Objetivos/19}
+
+\chapter{Metodología}
+\input{Sections/Metodologia/21}
+
+
+\input{Sections/Metodologia/27}
+\input{Sections/Metodologia/28}
+\input{Sections/Metodologia/29}
+\input{Sections/Metodologia/30}
+\input{Sections/Metodologia/31}
+\input{Sections/Metodologia/33}
+\input{Sections/Metodologia/34}
+\input{Sections/Metodologia/35}
+\input{Sections/Metodologia/36}
+\input{Sections/Metodologia/37}
+\input{Sections/Metodologia/38}
+\input{Sections/Metodologia/39}
+\chapter{Diseño de Experimentación}
+
+\chapter{Cronograma}
+\chapter{Cronograma Cierre}
+
+\section{Referencias}
+\bibliographystyle{ieeetr}
+\bibliography{referencias}
+\end{document}

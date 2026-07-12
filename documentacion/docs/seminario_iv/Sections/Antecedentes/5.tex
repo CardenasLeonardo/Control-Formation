@@ -1,0 +1,22 @@
+\section{Formación con Seguimiento de Líder}
+\setlength{\columnseprule}{0pt}
+\onecolumn
+\subsection{Error de sincronización}
+El agente $i$ ajusta su estado ponderando ambas contribuciones ponderando el consenso relativo entre vecinos y el acoplamiento a una referencia común.
+
+\begin{equation*}
+    e_i =
+    \underbrace{-\nu_1 \sum_{j \in \mathcal{N}_i} a_{ij}\big[(\mathbf{x}_i-\boldsymbol{\psi}_i)-(\mathbf{x}_j-\boldsymbol{\psi}_j)\big]}_{\text{\footnotesize Consenso relativo entre vecinos}}
+    \;\;
+    \underbrace{-\nu_2\, b_i^0\big[(\mathbf{x}_i-\boldsymbol{\psi}_i)-(\mathbf{x}_0-\boldsymbol{\psi}_0)\big]}_{\text{\footnotesize Acoplamiento a la referencia}}
+\end{equation*}
+
+{\footnotesize
+\noindent
+\begin{tabular}{l@{\ }l@{\qquad}l@{\ }l}
+$e_i$ & error de sincronización & $\mathcal{N}_i$ & vecinos del agente $i$ \\
+$\mathbf{x}_i,\mathbf{x}_j$ & posición de $i$ y $j$ & $a_{ij}$ & peso de comunicación $i$--$j$ \\
+$\mathbf{x}_0$ & posición de la referencia & $b_i^0$ & $1$ si $i$ percibe la referencia \\
+$\boldsymbol{\psi}_i,\boldsymbol{\psi}_j,\boldsymbol{\psi}_0$ & desplazamiento en la formación & $\nu_1,\nu_2$ & ganancias consenso/acoplamiento \\
+\end{tabular}
+}

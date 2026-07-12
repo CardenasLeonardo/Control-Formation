@@ -1,0 +1,18 @@
+\section{Control de Formaciones en Sistemas No Holonómicos}
+\onecolumn
+\subsection{Efecto Látigo y Noción de Líder Físico}
+Error de formación sobre errores relativos, con atracción a un líder físico:
+\begin{equation*}
+    \mathbf{e}_i =
+    \underbrace{-\sum_{j \in \mathcal{N}_i} a_{ij}\big[(\mathbf{x}_i-\mathbf{r}_i)-(\mathbf{x}_j-\mathbf{r}_j)\big]}_{\text{\footnotesize Consenso entre vecinos}}
+    \;\;
+    \underbrace{-\,\beta\, b_i^0\big[(\mathbf{x}_i-\mathbf{r}_i)-\mathbf{x}_0\big]}_{\text{\footnotesize Atracción al ancla virtual}}
+\end{equation*}
+
+Como cada seguidor persigue una posición referida al líder, un giro brusco de este se propaga en cadena y se amplifica hacia los extremos de la formación: el efecto látigo.
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{/home/calafaker/Control-Formation/documentacion/figuras/personales/formacion_v_gazebo.pdf}
+    \caption{Formación en V con líder físico en Gazebo: trayectorias y evolución del error de formación de los seguidores en cada giro del líder}
+    \label{fig:consensus_results}
+\end{figure*}

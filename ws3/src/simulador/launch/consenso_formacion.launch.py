@@ -6,6 +6,7 @@ from launch.actions import (
     DeclareLaunchArgument, IncludeLaunchDescription,
     OpaqueFunction, TimerAction
 )
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -54,6 +55,9 @@ def launch_setup(context, *args, **kwargs):
     waypoints_str = LaunchConfiguration('waypoints').perform(context)
     t_final       = float(LaunchConfiguration('t_final').perform(context))
     save_dir      = LaunchConfiguration('save_dir').perform(context)
+    record_gif    = LaunchConfiguration('record_gif').perform(context).lower() == 'true'
+    camera_height = float(LaunchConfiguration('camera_height').perform(context))
+    gif_fps       = float(LaunchConfiguration('gif_fps').perform(context))
     waypoints     = [float(v) for v in waypoints_str.split(',')]
 
     init_pos = compute_initial_positions(n, leader_id, angle_v, d)
@@ -63,12 +67,30 @@ def launch_setup(context, *args, **kwargs):
         get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py'
     )
     rsp_launch = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
+    camera_sdf = os.path.join(
+        get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
+    )
 
     actions = []
 
     actions.append(
         IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
     )
+
+    if record_gif:
+        actions.append(TimerAction(period=2.0, actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-file', camera_sdf,
+                    '-entity', 'overhead_camera',
+                    '-x', '0', '-y', '0', '-z', str(camera_height),
+                    '-P', '1.5708',
+                ],
+                output='screen'
+            )
+        ]))
 
     # Staggered: robot i arranca en t = 3 + i*1.5 s
     for i in range(n):
@@ -101,8 +123,8 @@ def launch_setup(context, *args, **kwargs):
                 namespace=ns,
                 parameters=[{
                     'waypoints': waypoints,
-                    'vmax': 0.5,
-                    'wmax': 0.6,
+                    'vmax': 0.25,
+                    'wmax': 0.5,
                 }],
                 output='screen'
             )
@@ -123,6 +145,10 @@ def launch_setup(context, *args, **kwargs):
                     'k2':             1.5,
                     'vmax':           0.8,
                     'wmax':           0.8,
+                    # PVA solo como saturación (sin evasión por LiDAR),
+                    # como en el nodo de formación original
+                    'd_safe':         0.0,
+                    'd_influence':    0.0,
                 }],
                 output='screen'
             )
@@ -157,6 +183,22 @@ def launch_setup(context, *args, **kwargs):
             output='screen'
         )
     ]))
+
+    if record_gif:
+        actions.append(TimerAction(period=late_delay, actions=[
+            Node(
+                package='simulador',
+                executable='gif_recorder',
+                name='gif_recorder',
+                parameters=[{
+                    'save_dir':  save_dir,
+                    't_final':   t_final,
+                    'fps':       gif_fps,
+                    'gif_name':  'formacion.gif',
+                }],
+                output='screen'
+            )
+        ]))
 
     # actions.append(TimerAction(period=late_delay, actions=[
     #     Node(
@@ -201,5 +243,14 @@ def generate_launch_description():
         DeclareLaunchArgument('save_dir',
             default_value='figuras/formacion',
             description='Directorio donde se guardan las figuras'),
+        DeclareLaunchArgument('record_gif',
+            default_value='true',
+            description='Si es true, spawnea la cámara cenital y graba un GIF de la simulación'),
+        DeclareLaunchArgument('camera_height',
+            default_value='15.0',
+            description='Altura de la cámara cenital (m)'),
+        DeclareLaunchArgument('gif_fps',
+            default_value='10.0',
+            description='Fotogramas por segundo del GIF grabado'),
         OpaqueFunction(function=launch_setup)
     ])

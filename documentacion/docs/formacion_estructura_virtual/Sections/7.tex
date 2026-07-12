@@ -1,0 +1,15 @@
+\section{Formaciones Basadas en Estructura Virtual}
+
+La estructura virtual asigna a cada vehículo su posición deseada girando con $R(\theta)$ y escalando con $L$ su lugar $\mathbf{r}_i$ dentro del cuerpo rígido:
+\begin{equation*}
+    \mathbf{p}_{r_i} = \mathbf{p}_r + R(\theta)\,L\,\mathbf{r}_i
+\end{equation*}
+
+{\footnotesize
+\noindent
+\begin{tabular}{l@{\ }l@{\qquad}l@{\ }l}
+$\mathbf{p}_{r_i}$ & posición deseada del agente $i$ & $R(\theta)$ & rotación de la formación \\
+$\mathbf{p}_r$ & punto de referencia de la estructura & $L$ & factor de escala de la formación \\
+$\mathbf{r}_i$ & posición de $i$ respecto a $\mathbf{p}_r$ & & \\
+\end{tabular}
+}

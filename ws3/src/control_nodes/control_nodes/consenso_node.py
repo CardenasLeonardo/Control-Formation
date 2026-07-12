@@ -63,6 +63,7 @@ class ConsensoNode(Node):
             self.angle_v     = self.get_parameter('angle_v').value
             self.d           = self.get_parameter('d').value
             self.beta        = self.get_parameter('beta').value
+            self.leader_id   = self.get_parameter('leader_id').value
             try:
                 self.follower_index = int(self.robot_id.replace('robot', ''))
             except ValueError:
@@ -158,8 +159,16 @@ class ConsensoNode(Node):
             result = self.consensus.step(s, neighbors,
                                          self.robot_id, self.leader_id, self.k_leader)
         elif self.consensus_type == 'formacion':
+            # Sin estructura virtual publicada, el líder físico (vía AIRE) es
+            # el ancla; se excluye de la suma relativa porque su atracción ya
+            # entra ponderada por beta.
+            virtual = self.virtual_state
+            if virtual is None and self.leader_id in neighbors:
+                virtual   = neighbors[self.leader_id]
+                neighbors = {r: p for r, p in neighbors.items()
+                             if r != self.leader_id}
             result = self.consensus.step(s, neighbors,
-                                         self.virtual_state, self.follower_index,
+                                         virtual, self.follower_index,
                                          self.n_robots, self.angle_v, self.d, self.beta)
 
         if result is None:
@@ -168,7 +177,7 @@ class ConsensoNode(Node):
 
         a, alpha         = result
         v_ref, w_ref     = self.control_law.compute(a, alpha)
-        v, w, constrs    = self.pva.apply(v_ref, w_ref, self.ranges)
+        v, w, constrs, *_ = self.pva.apply(v_ref, w_ref, self.ranges)
         self._pub_pva_debug(v_ref, w_ref, v, w, constrs)
 
         twist = Twist()

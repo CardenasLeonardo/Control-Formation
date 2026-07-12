@@ -21,6 +21,10 @@ module multi_robot_interfaces {
       double v_star;
 
       double w_star;
+
+      int32 mode;
+
+      int32 search_dir;
     };
   };
 };

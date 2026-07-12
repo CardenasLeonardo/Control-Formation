@@ -70,6 +70,8 @@ class PVAConstraints(metaclass=Metaclass_PVAConstraints):
         '_w_goal',
         '_v_star',
         '_w_star',
+        '_mode',
+        '_search_dir',
     ]
 
     _fields_and_field_types = {
@@ -81,6 +83,8 @@ class PVAConstraints(metaclass=Metaclass_PVAConstraints):
         'w_goal': 'double',
         'v_star': 'double',
         'w_star': 'double',
+        'mode': 'int32',
+        'search_dir': 'int32',
     }
 
     SLOT_TYPES = (
@@ -92,6 +96,8 @@ class PVAConstraints(metaclass=Metaclass_PVAConstraints):
         rosidl_parser.definition.BasicType('double'),  # noqa: E501
         rosidl_parser.definition.BasicType('double'),  # noqa: E501
         rosidl_parser.definition.BasicType('double'),  # noqa: E501
+        rosidl_parser.definition.BasicType('int32'),  # noqa: E501
+        rosidl_parser.definition.BasicType('int32'),  # noqa: E501
     )
 
     def __init__(self, **kwargs):
@@ -106,6 +112,8 @@ class PVAConstraints(metaclass=Metaclass_PVAConstraints):
         self.w_goal = kwargs.get('w_goal', float())
         self.v_star = kwargs.get('v_star', float())
         self.w_star = kwargs.get('w_star', float())
+        self.mode = kwargs.get('mode', int())
+        self.search_dir = kwargs.get('search_dir', int())
 
     def __repr__(self):
         typename = self.__class__.__module__.split('.')
@@ -151,6 +159,10 @@ class PVAConstraints(metaclass=Metaclass_PVAConstraints):
         if self.v_star != other.v_star:
             return False
         if self.w_star != other.w_star:
+            return False
+        if self.mode != other.mode:
+            return False
+        if self.search_dir != other.search_dir:
             return False
         return True
 
@@ -315,3 +327,33 @@ class PVAConstraints(metaclass=Metaclass_PVAConstraints):
             assert not (value < -1.7976931348623157e+308 or value > 1.7976931348623157e+308) or math.isinf(value), \
                 "The 'w_star' field must be a double in [-1.7976931348623157e+308, 1.7976931348623157e+308]"
         self._w_star = value
+
+    @builtins.property
+    def mode(self):
+        """Message field 'mode'."""
+        return self._mode
+
+    @mode.setter
+    def mode(self, value):
+        if __debug__:
+            assert \
+                isinstance(value, int), \
+                "The 'mode' field must be of type 'int'"
+            assert value >= -2147483648 and value < 2147483648, \
+                "The 'mode' field must be an integer in [-2147483648, 2147483647]"
+        self._mode = value
+
+    @builtins.property
+    def search_dir(self):
+        """Message field 'search_dir'."""
+        return self._search_dir
+
+    @search_dir.setter
+    def search_dir(self, value):
+        if __debug__:
+            assert \
+                isinstance(value, int), \
+                "The 'search_dir' field must be of type 'int'"
+            assert value >= -2147483648 and value < 2147483648, \
+                "The 'search_dir' field must be an integer in [-2147483648, 2147483647]"
+        self._search_dir = value

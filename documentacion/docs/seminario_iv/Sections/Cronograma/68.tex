@@ -1,0 +1,43 @@
+\section{Cronograma general}
+\setlength{\columnseprule}{0pt}
+\onecolumn
+\vspace{-0.3cm}
+\subsection{Visión general de las fases}
+\begin{flushleft}
+\resizebox{\textwidth}{!}{%
+\begin{ganttchart}[
+    x unit=0.9cm, y unit title=0.5cm, y unit chart=0.85cm,
+    vgrid={*1{dotted}}, hgrid,
+    title height=1, title label font=\bfseries\small,
+    bar/.style={fill=colorH},
+    bar incomplete/.style={fill=colorH!25},
+    group/.append style={fill=gray!50, draw=gray!50},
+    progress label text={},
+    bar height=0.7,
+    bar top shift=0.15,
+    group right shift=0.15, group top shift=0.15, group height=.7,
+    bar label font=\large,
+    group label font=\large,
+    bar label node/.append style={anchor=east, align=left, text width=9cm},
+    group label node/.append style={anchor=east, align=left, text width=9cm},
+    bar inline label node/.append style={font=\normalsize\bfseries\color{white}}]{1}{14}
+  \gantttitle{2025}{6}
+  \gantttitle{2026}{8}\\
+  \gantttitle{Jul}{1}\gantttitle{Ago}{1}\gantttitle{Sep}{1}
+  \gantttitle{Oct}{1}\gantttitle{Nov}{1}\gantttitle{Dic}{1}
+  \gantttitle{Ene}{1}\gantttitle{Feb}{1}\gantttitle{Mar}{1}
+  \gantttitle{Abr}{1}\gantttitle{May}{1}\gantttitle{Jun}{1}
+  \gantttitle{Jul}{1}\gantttitle{Ago}{1}\\
+  \ganttbar[progress=100,inline=false]{F1. Consenso SoA}{1}{2}
+  \ganttbar[progress=100,inline=true]{\textbf{100\%}}{1}{2}\\
+  \ganttbar[progress=100,inline=false]{F2. PVA agente individual}{3}{4}
+  \ganttbar[progress=100,inline=true]{\textbf{100\%}}{3}{4}\\
+  \ganttbar[progress=100,inline=false]{F3. PVA Multirobot}{4}{6}
+  \ganttbar[progress=100,inline=true]{\textbf{100\%}}{4}{6}\\
+  \ganttbar[progress=65,inline=false]{F4. Integración PVA-Consenso}{7}{11}
+  \ganttbar[progress=65,inline=true]{\textbf{65\%}}{7}{11}\\
+  \ganttbar[progress=0,inline=false]{F5. Análisis y documentación}{11}{14}
+  \ganttbar[progress=0,inline=true]{\textbf{0\%}}{11}{14}\\
+\end{ganttchart}
+}
+\end{flushleft}

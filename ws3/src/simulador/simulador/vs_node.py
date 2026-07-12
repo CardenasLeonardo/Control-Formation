@@ -3,6 +3,7 @@ import rclpy
 from rclpy.node import Node
 from gazebo_msgs.srv import SpawnEntity, SetEntityState
 from multi_robot_interfaces.msg import RobotState
+from std_msgs.msg import Bool
 
 from simulador.vs_trayectoria import TrayectoriaVS
 
@@ -95,15 +96,17 @@ class VirtualStructureNode(Node):
             v_max     = self.get_parameter('v_max').value,
         )
 
-        self._spawned      = False
-        self._ticks_waited = 0
+        self._spawned        = False
+        self._ticks_waited   = 0
+        self._done_published = False
 
         # --- Clientes Gazebo ---
         self.spawn_cli = self.create_client(SpawnEntity,    '/spawn_entity')
         self.move_cli  = self.create_client(SetEntityState, '/gazebo/set_entity_state')
 
         # --- Publicador de la estructura virtual ---
-        self.vs_pub = self.create_publisher(RobotState, '/virtual_structure', 10)
+        self.vs_pub   = self.create_publisher(RobotState, '/virtual_structure', 10)
+        self.done_pub = self.create_publisher(Bool, 'final_goal_reached', 10)
 
         self.create_timer(self.DT, self.tick)
         self.get_logger().info(
@@ -173,6 +176,11 @@ class VirtualStructureNode(Node):
         self.tray.step(self.DT)
         self._publish_state()
         self._move_spheres()
+
+        if self.tray.done and not self._done_published:
+            self._done_published = True
+            self.done_pub.publish(Bool(data=True))
+            self.get_logger().info('Trayectoria de la estructura virtual completada')
 
 
 def main(args=None):

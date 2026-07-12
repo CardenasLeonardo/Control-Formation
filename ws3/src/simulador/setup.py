@@ -37,6 +37,8 @@ setup(
             'pva_plotter        = simulador.pva_plotter:main',
             'sphere_demo        = simulador.sphere_demo:main',
             'vs_node            = simulador.vs_node:main',
+            'gif_recorder       = simulador.gif_recorder:main',
+            'camera_zoom        = simulador.camera_zoom:main',
         ],
     },
 )

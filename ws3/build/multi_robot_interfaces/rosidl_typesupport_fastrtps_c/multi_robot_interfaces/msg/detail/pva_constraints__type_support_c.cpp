@@ -111,6 +111,16 @@ static bool _PVAConstraints__cdr_serialize(
     cdr << ros_message->w_star;
   }
 
+  // Field name: mode
+  {
+    cdr << ros_message->mode;
+  }
+
+  // Field name: search_dir
+  {
+    cdr << ros_message->search_dir;
+  }
+
   return true;
 }
 
@@ -207,6 +217,16 @@ static bool _PVAConstraints__cdr_deserialize(
     cdr >> ros_message->w_star;
   }
 
+  // Field name: mode
+  {
+    cdr >> ros_message->mode;
+  }
+
+  // Field name: search_dir
+  {
+    cdr >> ros_message->search_dir;
+  }
+
   return true;
 }  // NOLINT(readability/fn_size)
 
@@ -282,6 +302,18 @@ size_t get_serialized_size_multi_robot_interfaces__msg__PVAConstraints(
   // field.name w_star
   {
     size_t item_size = sizeof(ros_message->w_star);
+    current_alignment += item_size +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
+  }
+  // field.name mode
+  {
+    size_t item_size = sizeof(ros_message->mode);
+    current_alignment += item_size +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
+  }
+  // field.name search_dir
+  {
+    size_t item_size = sizeof(ros_message->search_dir);
     current_alignment += item_size +
       eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
   }
@@ -394,6 +426,22 @@ size_t max_serialized_size_multi_robot_interfaces__msg__PVAConstraints(
     current_alignment += array_size * sizeof(uint64_t) +
       eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint64_t));
   }
+  // member: mode
+  {
+    size_t array_size = 1;
+
+    last_member_size = array_size * sizeof(uint32_t);
+    current_alignment += array_size * sizeof(uint32_t) +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint32_t));
+  }
+  // member: search_dir
+  {
+    size_t array_size = 1;
+
+    last_member_size = array_size * sizeof(uint32_t);
+    current_alignment += array_size * sizeof(uint32_t) +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint32_t));
+  }
 
   size_t ret_val = current_alignment - initial_alignment;
   if (is_plain) {
@@ -403,7 +451,7 @@ size_t max_serialized_size_multi_robot_interfaces__msg__PVAConstraints(
     using DataType = multi_robot_interfaces__msg__PVAConstraints;
     is_plain =
       (
-      offsetof(DataType, w_star) +
+      offsetof(DataType, search_dir) +
       last_member_size
       ) == ret_val;
   }

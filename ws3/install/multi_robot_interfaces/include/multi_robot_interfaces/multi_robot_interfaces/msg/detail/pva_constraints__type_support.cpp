@@ -172,7 +172,7 @@ void resize_function__PVAConstraints__c(void * untyped_member, size_t size)
   member->resize(size);
 }
 
-static const ::rosidl_typesupport_introspection_cpp::MessageMember PVAConstraints_message_member_array[8] = {
+static const ::rosidl_typesupport_introspection_cpp::MessageMember PVAConstraints_message_member_array[10] = {
   {
     "robot_id",  // name
     ::rosidl_typesupport_introspection_cpp::ROS_TYPE_STRING,  // type
@@ -308,13 +308,47 @@ static const ::rosidl_typesupport_introspection_cpp::MessageMember PVAConstraint
     nullptr,  // fetch(index, &value) function pointer
     nullptr,  // assign(index, value) function pointer
     nullptr  // resize(index) function pointer
+  },
+  {
+    "mode",  // name
+    ::rosidl_typesupport_introspection_cpp::ROS_TYPE_INT32,  // type
+    0,  // upper bound of string
+    nullptr,  // members of sub message
+    false,  // is array
+    0,  // array size
+    false,  // is upper bound
+    offsetof(multi_robot_interfaces::msg::PVAConstraints, mode),  // bytes offset in struct
+    nullptr,  // default value
+    nullptr,  // size() function pointer
+    nullptr,  // get_const(index) function pointer
+    nullptr,  // get(index) function pointer
+    nullptr,  // fetch(index, &value) function pointer
+    nullptr,  // assign(index, value) function pointer
+    nullptr  // resize(index) function pointer
+  },
+  {
+    "search_dir",  // name
+    ::rosidl_typesupport_introspection_cpp::ROS_TYPE_INT32,  // type
+    0,  // upper bound of string
+    nullptr,  // members of sub message
+    false,  // is array
+    0,  // array size
+    false,  // is upper bound
+    offsetof(multi_robot_interfaces::msg::PVAConstraints, search_dir),  // bytes offset in struct
+    nullptr,  // default value
+    nullptr,  // size() function pointer
+    nullptr,  // get_const(index) function pointer
+    nullptr,  // get(index) function pointer
+    nullptr,  // fetch(index, &value) function pointer
+    nullptr,  // assign(index, value) function pointer
+    nullptr  // resize(index) function pointer
   }
 };
 
 static const ::rosidl_typesupport_introspection_cpp::MessageMembers PVAConstraints_message_members = {
   "multi_robot_interfaces::msg",  // message namespace
   "PVAConstraints",  // message name
-  8,  // number of fields
+  10,  // number of fields
   sizeof(multi_robot_interfaces::msg::PVAConstraints),
   PVAConstraints_message_member_array,  // message members
   PVAConstraints_init_function,  // function to initialize message memory (memory has to be allocated)

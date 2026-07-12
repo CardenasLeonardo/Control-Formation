@@ -4,6 +4,7 @@ from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Bool
 
 from multi_robot_interfaces.msg import RobotState
 from multi_robot_interfaces.msg import PVAConstraints
@@ -12,6 +13,7 @@ from control_nodes.algorithms.control_law import NavControlador
 from control_nodes.algorithms.pva import PVA
 
 import math
+import numpy as np
 
 
 class NavigateWaypoints(Node):
@@ -81,8 +83,9 @@ class NavigateWaypoints(Node):
         self.y = 0.0
         self.theta = 0.0
 
-        self.ranges = []
+        self.ranges      = []
         self.constraints = []
+        self.vertices    = np.empty((0, 2))
 
         # --------------------------------------------------
         # SUBSCRIBERS
@@ -127,6 +130,12 @@ class NavigateWaypoints(Node):
         self.pva_pub = self.create_publisher(
             PVAConstraints,
             '/pva_constraints',
+            10
+        )
+
+        self.goal_reached_pub = self.create_publisher(
+            Bool,
+            'final_goal_reached',
             10
         )
 
@@ -183,6 +192,9 @@ class NavigateWaypoints(Node):
 
     def next_waypoint(self):
 
+        if self.wp_index == len(self.waypoints) - 1:
+            self.goal_reached_pub.publish(Bool(data=True))
+
         self.wp_index = (self.wp_index + 1) % len(self.waypoints)
         self.goal_x, self.goal_y = self.waypoints[self.wp_index]
 
@@ -218,15 +230,13 @@ class NavigateWaypoints(Node):
         v_goal = max(-self.vmax, min(self.vmax, v_goal))
         w_goal = max(-self.wmax, min(self.wmax, w_goal))
 
-        # a y alpha para error
-        a     = self.controller.a
-        alpha = self.controller.alpha
-
         # --------------------------------------------------
         # PVA
         # --------------------------------------------------
 
-        v_safe, w_safe, self.constraints = self.pva.apply(v_goal, w_goal, self.ranges)
+        v_safe, w_safe, self.constraints, self.vertices, mode, search_dir = self.pva.apply(
+            v_goal, w_goal, self.ranges, a=self.controller.a
+        )
 
         # --------------------------------------------------
         # PUBLICAR PVA
@@ -243,8 +253,10 @@ class NavigateWaypoints(Node):
         pva_msg.v_goal = float(v_goal)
         pva_msg.w_goal = float(w_goal)
 
-        pva_msg.v_star = float(v_safe)
-        pva_msg.w_star = float(w_safe)
+        pva_msg.v_star     = float(v_safe)
+        pva_msg.w_star     = float(w_safe)
+        pva_msg.mode       = int(mode)
+        pva_msg.search_dir = int(search_dir)
 
         self.pva_pub.publish(pva_msg)
 

@@ -1,0 +1,1 @@
+/home/calafaker/Control-Formation/ws3/src/simulador/launch/consenso_formacion.launch.py
