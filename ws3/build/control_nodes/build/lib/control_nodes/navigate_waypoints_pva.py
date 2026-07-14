@@ -32,6 +32,7 @@ class NavigateWaypoints(Node):
         self.declare_parameter('vmax',     1.0)
         self.declare_parameter('wmax',     1.0)
         self.declare_parameter('n_rays_used', 0)
+        self.declare_parameter('loop',     True)
 
         vmax        = float(self.get_parameter('vmax').value)
         wmax        = float(self.get_parameter('wmax').value)

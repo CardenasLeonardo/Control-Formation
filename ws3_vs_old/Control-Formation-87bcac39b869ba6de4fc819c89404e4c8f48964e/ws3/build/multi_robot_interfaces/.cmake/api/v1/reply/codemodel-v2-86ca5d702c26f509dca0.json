@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-f20def2a5e3dc70d9fa2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "multi_robot_interfaces__py",
+					"jsonFile" : "directory-multi_robot_interfaces__py-d39760708c1f07328a2d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/multi_robot_interfaces__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "multi_robot_interfaces",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_multi_robot_interfaces_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_multi_robot_interfaces_egg-7b93eaa3e6326765f0e0.json",
+					"name" : "ament_cmake_python_build_multi_robot_interfaces_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_multi_robot_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_multi_robot_interfaces-acdefab333d1bc347a89.json",
+					"name" : "ament_cmake_python_copy_multi_robot_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces-078f49b97d0f79ca63f8.json",
+					"name" : "multi_robot_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__cpp-0364f7748133d580305e.json",
+					"name" : "multi_robot_interfaces__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "multi_robot_interfaces__py::@a3d71b923032bdb7c364",
+					"jsonFile" : "target-multi_robot_interfaces__py-ee5dd843e5788ab33b43.json",
+					"name" : "multi_robot_interfaces__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_generator_c-5341711a3f51a374140d.json",
+					"name" : "multi_robot_interfaces__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_generator_py-97b1a190fd669b670612.json",
+					"name" : "multi_robot_interfaces__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_c-5ebf616a5f247befbb50.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_c__pyext-f47c538fed82c370e4d3.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_cpp-1db0432c5fe8a675ea5b.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_fastrtps_c-05ece7b034b06cf9b562.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_fastrtps_c__pyext-52c9d231b38a77c97b31.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_fastrtps_cpp-dd27dc53a8235e91e7e4.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_introspection_c-2a7360118f9b39a4ca80.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_introspection_c__pyext-de23cb3a1c93f57cde11.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces__rosidl_typesupport_introspection_cpp-d8db55d87ce14c7a41ee.json",
+					"name" : "multi_robot_interfaces__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multi_robot_interfaces_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multi_robot_interfaces_uninstall-09ac13b2d08ea6664765.json",
+					"name" : "multi_robot_interfaces_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-aff7117d873dc1ce8370.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces",
+		"source" : "/home/calafaker/Control-Formation/ws3/src/multi_robot_interfaces"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

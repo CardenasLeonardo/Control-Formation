@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "multi_robot_interfaces__py",
+		"source" : "/home/calafaker/Control-Formation/ws3/build/multi_robot_interfaces/multi_robot_interfaces__py"
+	}
+}

@@ -1,0 +1,33 @@
+\section{Sistemas Distribuidos}
+
+Un sistema distribuido es un conjunto de procesos independientes que cooperan para realizar una tarea común, comunicándose exclusivamente mediante intercambio de mensajes~\cite{tanenbaum2007distributed}. La palabra clave es \textit{exclusivamente}: los procesos no comparten memoria, no comparten relojes, y no asumen nada sobre el estado interno del otro. Toda la coordinación ocurre a través de mensajes.
+
+Un robot moderno encaja perfectamente en esta definición. Un proceso lee el LiDAR a 10~Hz, otro ejecuta el algoritmo de control a 20~Hz, otro publica odometría calculada desde encoders, otro recibe comandos de velocidad, otro visualiza el estado en RViz. Cada proceso puede estar en la misma computadora o en máquinas distintas conectadas por red. Cada uno tiene su propio ciclo de vida: puede arrancar, reiniciarse, o fallar sin que los demás se detengan.
+
+\subsection{El modelo publicador-suscriptor}
+
+El patrón de comunicación central en ROS~2 es el modelo publicador-suscriptor (pub-sub). Los procesos publican mensajes en canales nombrados llamados tópicos; otros procesos se suscriben a esos tópicos para recibirlos. El publicador no sabe quién lo escucha: no conoce la dirección, el número, ni siquiera la existencia de los suscriptores. El suscriptor tampoco sabe quién publica.
+
+Este desacoplamiento tiene consecuencias concretas. Agregar un nodo que registre todos los comandos de velocidad no requiere modificar ningún nodo existente: simplemente se suscribe a \texttt{/cmd\_vel}. Reemplazar el nodo que calcula odometría por uno mejor no afecta a los consumidores del tópico: mientras el tipo de mensaje sea el mismo, la transición es transparente~\cite{quigley2009ros}.
+
+El desacoplamiento también facilita la depuración. Con herramientas como \texttt{ros2 topic echo} es posible interceptar cualquier tópico en tiempo real sin modificar ningún nodo del sistema. El sistema no sabe que alguien está escuchando.
+
+\subsection{Patrones adicionales de comunicación}
+
+Además del pub-sub, ROS~2 ofrece dos patrones complementarios:
+
+\textbf{Solicitud-respuesta (servicios).} Cuando un proceso necesita una respuesta garantizada a una consulta, usa servicios. El cliente envía una solicitud y bloquea hasta recibir una respuesta del servidor. Es adecuado para operaciones cortas y discretas: activar un sensor, consultar el estado de un sistema, configurar un parámetro en tiempo de ejecución. La semántica es síncrona: el cliente espera.
+
+\textbf{Acciones.} Para operaciones largas que requieren retroalimentación progresiva, ROS~2 provee acciones. El cliente envía un \textit{goal} (objetivo) y recibe periódicamente mensajes de \textit{feedback} mientras la operación progresa, hasta que llega el \textit{result} final. El cliente puede cancelar el goal en cualquier momento. Es el patrón correcto para navegación autónoma, manipulación, o cualquier tarea cuyo tiempo de ejecución sea variable.
+
+\subsection{Serialización y fronteras de proceso}
+
+Una consecuencia fundamental de la distribución es que los datos deben cruzar fronteras de proceso. Dentro de un proceso, los objetos viven en memoria y pueden pasarse por referencia. Entre procesos distintos (o entre máquinas), eso es imposible: los datos deben convertirse a un formato transmisible (serialización), enviarse por la red o el bus del sistema, y reconstruirse al otro lado (deserialización).
+
+En ROS~2, la serialización de mensajes sigue el formato definido por el estándar DDS-XTYPES. El usuario define los tipos de mensajes en archivos \texttt{.msg} con una sintaxis propia; la cadena de compilación de ROS~2 genera automáticamente el código Python y C++ de serialización correspondiente. Esta separación entre la definición del tipo y su implementación es lo que permite que nodos en Python y nodos en C++ se comuniquen sin problemas: ambos usan la misma representación en el cable.
+
+\subsection{Ausencia de reloj global}
+
+Una consecuencia menos obvia de la distribución es la ausencia de un reloj global compartido. Dos procesos en la misma máquina comparten el reloj del sistema operativo, pero dos procesos en máquinas distintas tienen relojes que pueden diferir por milisegundos o más. Cuando se fusionan datos de sensores de distintas fuentes, los timestamps deben ser consistentes para que la fusión tenga sentido físico.
+
+En este trabajo el problema no surge de forma crítica, porque cada robot opera con su propio lazo de control periódico sin necesidad de fusionar flujos de sensores heterogéneos con timestamps de máquinas distintas. Sin embargo, tan pronto como se integren sensores adicionales o se requiera sincronización entre robots, ROS~2 provee herramientas específicas: el paquete \texttt{message\_filters} ofrece políticas de sincronización por timestamp (\texttt{TimeSynchronizer}, \texttt{ApproximateTimeSynchronizer}) que permiten alinear mensajes de distintas fuentes antes de procesarlos~\cite{ros2docs}.

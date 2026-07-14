@@ -25,10 +25,11 @@ POSES_8 = [
 
 def launch_setup(context, *args, **kwargs):
     # Leer parámetros del launch #
-    n       = int(LaunchConfiguration('n_robots').perform(context))           # número de robots activos
-    R       = float(LaunchConfiguration('neighbor_radius').perform(context))  # radio de percepción AIRE (m)
-    t_final = float(LaunchConfiguration('t_final').perform(context))          # duración de la simulación (s)
-    poses   = POSES_8[:n]                                                     # recortar poses a los n robots usados
+    n        = int(LaunchConfiguration('n_robots').perform(context))           # número de robots activos
+    R        = float(LaunchConfiguration('neighbor_radius').perform(context))  # radio de percepción AIRE (m)
+    t_final  = float(LaunchConfiguration('t_final').perform(context))          # duración de la simulación (s)
+    save_dir = LaunchConfiguration('save_dir').perform(context)                # carpeta de destino de figuras
+    poses    = POSES_8[:n]                                                     # recortar poses a los n robots usados
 
     # Rutas de paquetes y archivos de launch #
     articubot_pkg = get_package_share_directory('articubot_one')              # path del paquete articubot_one
@@ -55,7 +56,7 @@ def launch_setup(context, *args, **kwargs):
             PythonLaunchDescriptionSource(rsp_launch),
             launch_arguments={
                 'namespace':    ns,
-                'use_sim_time': 'false'
+                'use_sim_time': 'true'
             }.items()
         )
 
@@ -79,6 +80,7 @@ def launch_setup(context, *args, **kwargs):
             name='consenso',
             namespace=ns,
             parameters=[{
+                'use_sim_time':    True,                         # sincronizar con Gazebo
                 'consensus_type': 'prom_err',                   # tipo: consenso por promedio de errores
                 'k1':             0.8,                          # ganancia lineal
                 'k2':             1.0,                          # ganancia angular
@@ -101,7 +103,8 @@ def launch_setup(context, *args, **kwargs):
                 package='simulador',
                 executable='aire',
                 name='aire',
-                parameters=[{'neighbor_radius': R}],             # publica vecindades dentro del radio R
+                parameters=[{'neighbor_radius': R,               # publica vecindades dentro del radio R
+                             'use_sim_time': True}],             # sincronizar con Gazebo
                 output='screen'
             )
         ])
@@ -114,9 +117,10 @@ def launch_setup(context, *args, **kwargs):
                 executable='states_plotter_v2',
                 name='states_plotter_v2',
                 parameters=[{
-                    'save_dir':          'figuras/consenso_prom', # carpeta de destino de las figuras
+                    'save_dir':          save_dir, # carpeta de destino de las figuras
                     't_final':           t_final,                 # cierra y guarda al llegar a t_final
                     'n_robots_expected': n,                       # espera a tener datos de n robots
+                    'use_sim_time':      True,                    # sincronizar con Gazebo
                 }],
                 output='screen'
             )
@@ -130,8 +134,9 @@ def launch_setup(context, *args, **kwargs):
                 executable='pva_plotter',
                 name='pva_plotter',
                 parameters=[{
-                    'save_dir': 'figuras/consenso_prom',          # carpeta de destino
+                    'save_dir': save_dir,          # carpeta de destino
                     't_final':  t_final,                          # cierra al llegar a t_final
+                    'use_sim_time': True,                         # sincronizar con Gazebo
                 }],
                 output='screen'
             )
@@ -158,6 +163,11 @@ def generate_launch_description():
             't_final',
             default_value='60.0',
             description='Duración de la simulación en segundos'
+        ),
+        DeclareLaunchArgument(
+            'save_dir',
+            default_value='figuras/consenso_prom',
+            description='Directorio donde guardar figuras (relativo al cwd)'
         ),
         OpaqueFunction(function=launch_setup)
     ])

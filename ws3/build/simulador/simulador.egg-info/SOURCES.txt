@@ -16,6 +16,7 @@ launch/demo_pva.launch.py
 launch/demo_pva_gap.launch.py
 launch/full_pva_demo.launch.py
 launch/vs_formacion.launch.py
+launch/vs_formacion_noble.launch.py
 models/box_obstacle.sdf
 models/obstacle_cylinder.sdf
 models/overhead_camera.sdf

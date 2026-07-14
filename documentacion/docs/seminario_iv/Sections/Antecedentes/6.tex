@@ -2,7 +2,8 @@
 
 Siwek~\cite{siwek2024consensus} organiza el control en una capa maestra encargada de calcular la trayectoria y configuración del grupo y una capa de seguimiento, replicada en cada robot.
 
-\begin{center}
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[
   font=\fontfamily{ptm}\selectfont\scriptsize,
   >={Stealth[length=2mm]},
@@ -22,8 +23,5 @@ Siwek~\cite{siwek2024consensus} organiza el control en una capa maestra encargad
   \draw[dashed] ($(CI.north west)+(-0.2,0.2)$) rectangle ($(R.south east)+(0.2,-0.2)$);
   \node at ($(CI.north)!0.5!(R.north)+(0,0.45)$) {\itshape Capa de seguimiento};
 \end{tikzpicture}
-\end{center}
-
-\begin{center}
-\footnotesize Arquitectura con generador de trayectorias para estructura virtual de Siwek.
-\end{center}
+\caption{Arquitectura con generador de trayectorias para estructura virtual de Siwek.}
+\end{figure}

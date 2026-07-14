@@ -134,6 +134,7 @@ class ConsensoNode(Node):
 
     def virtual_callback(self, msg):
         self.virtual_state = (msg.x, msg.y, msg.theta)
+        self.get_logger().info(f"VS recibida: x={msg.x:.2f} y={msg.y:.2f} th={msg.theta:.2f}")
 
     # ------------------------------------------------------------------
     # Pipeline: consenso → ley de control → PVA → cmd_vel
@@ -159,14 +160,15 @@ class ConsensoNode(Node):
             result = self.consensus.step(s, neighbors,
                                          self.robot_id, self.leader_id, self.k_leader)
         elif self.consensus_type == 'formacion':
-            # Sin estructura virtual publicada, el líder físico (vía AIRE) es
-            # el ancla; se excluye de la suma relativa porque su atracción ya
-            # entra ponderada por beta.
             virtual = self.virtual_state
-            if virtual is None and self.leader_id in neighbors:
-                virtual   = neighbors[self.leader_id]
-                neighbors = {r: p for r, p in neighbors.items()
-                             if r != self.leader_id}
+            if virtual is None:
+                self.get_logger().warn(f"VS no recibida — usando líder {self.leader_id} como fallback")
+                if self.leader_id in neighbors:
+                    virtual   = neighbors[self.leader_id]
+                    neighbors = {r: p for r, p in neighbors.items()
+                                 if r != self.leader_id}
+            else:
+                self.get_logger().info(f"Usando VS: ({virtual[0]:.2f}, {virtual[1]:.2f}, {virtual[2]:.2f})")
             result = self.consensus.step(s, neighbors,
                                          virtual, self.follower_index,
                                          self.n_robots, self.angle_v, self.d, self.beta)

@@ -2,7 +2,8 @@
 %\subsection{Formulación de error mediante consenso}
 Armel et al.~\cite{koulong2024distributed} proponen un error de sincronización $e_i$ que retroalimenta una la ley de control junto con la dinámica estimada por una red neuronal y la repulsión de campos potenciales.
 
-\begin{center}
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[
   font=\fontfamily{ptm}\selectfont\scriptsize,
   >={Stealth[length=2mm]},
@@ -27,7 +28,5 @@ Armel et al.~\cite{koulong2024distributed} proponen un error de sincronización 
   \coordinate (uEnd) at ($(CL.east)+(1.6,0)$);
   \draw[->] (CL.east) -- node[above]{$u_i$} node[below]{$[u_i^d{-}u_i^c{-}u_i^0]$} (uEnd);
 \end{tikzpicture}
-\end{center}
-\begin{center}
-\footnotesize Arquitectura de control adaptativo de Armel et al.
-\end{center}
+\caption{Arquitectura de control adaptativo de Armel et al.}
+\end{figure}

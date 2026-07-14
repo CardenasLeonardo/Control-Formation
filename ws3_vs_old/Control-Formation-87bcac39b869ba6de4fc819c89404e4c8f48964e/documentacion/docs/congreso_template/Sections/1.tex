@@ -1,0 +1,10 @@
+\subsection{Consensus-Based Formation Control}
+
+Consensus as a formal framework for the coordination of mobile agents was established through the study of convergence under nearest-neighbor interaction rules, without the need for a centralizing agent~\cite{jadbabaie2003coordination}. This work laid the theoretical foundations for convergence analysis in multi-agent systems under dynamic communication topologies. The continuous-time consensus protocol for agent $i$ is expressed as:
+
+\begin{equation}
+    \dot{x}_i = \sum_{j \in \mathcal{N}_i} \left( x_j - x_i \right)
+    \label{eq:consenso}
+\end{equation}
+
+\noindent where $x_i \in \mathbb{R}^n$ represents the state of agent $i$ and $\mathcal{N}_i$ denotes the set of neighbors with which agent $i$ maintains active communication. Under this protocol, all agents converge asymptotically to a common state when the communication topology is sufficiently connected, as each agent continuously reduces its disagreement with respect to its local neighborhood. Consensus was subsequently extended to second-order dynamics, incorporating both position and velocity as consensus variables~\cite{ren2006consensus}. Furthermore, it has been shown to constitute a unifying framework encompassing behavior-based, virtual structure, and leader-follower approaches as particular cases~\cite{ren2006consensus}, motivating the development of increasingly enriched protocols capable of addressing scenarios of greater complexity.

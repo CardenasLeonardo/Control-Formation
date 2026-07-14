@@ -1,0 +1,71 @@
+\relax 
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introducción}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Estructura básica de un launch file}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}LaunchDescription y acciones}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}DeclareLaunchArgument y LaunchConfiguration}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}OpaqueFunction: lógica Python en el launch}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Por qué existe}{1}{}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{lst:estructura_minima}{{1}{2}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Estructura mínima de un launch file.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}El patrón perform(context)}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Firma de la función}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Composición jerárquica con IncludeLaunchDescription}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}El problema de la monolítica}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Anatomía de IncludeLaunchDescription}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Pasando argumentos al launch hijo}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}spawn\_entity.py como nodo auxiliar}{2}{}\protected@file@percent }
+\newlabel{lst:opaque_patron}{{2}{3}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Patrón OpaqueFunction con perform(context).}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Coordinación temporal con TimerAction}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Por qué hay que escalonar el arranque}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Anatomía de TimerAction}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}El esquema de retardos en consenso\_prom}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Los nodos tardíos}{3}{}\protected@file@percent }
+\newlabel{lst:include_gazebo}{{3}{4}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}Inclusión de gazebo.launch.py desde el launch padre.}{4}{}\protected@file@percent }
+\newlabel{lst:include_rsp}{{4}{4}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}Inclusión de rsp.launch.py con argumentos.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}El patrón namespace para sistemas multi-robot}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}El problema del nombre único}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Asignación de namespace en el launch file}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Namespace en IncludeLaunchDescription}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Verificación desde la terminal}{4}{}\protected@file@percent }
+\newlabel{lst:spawn_node}{{5}{5}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}Spawn de un modelo de robot en Gazebo.}{5}{}\protected@file@percent }
+\newlabel{lst:timer_basico}{{6}{5}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}Estructura básica de TimerAction.}{5}{}\protected@file@percent }
+\newlabel{lst:esquema_delays}{{7}{5}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}Esquema de retardos escalonados para $n$ robots.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Análisis de consenso\_prom.launch.py}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Visión general}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Argumentos declarados}{5}{}\protected@file@percent }
+\newlabel{lst:late_delay}{{8}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}Retardo para nodos que dependen de todos los robots.}{6}{}\protected@file@percent }
+\newlabel{lst:ns_node}{{9}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {9}Asignación de namespace a un nodo desde el launch file.}{6}{}\protected@file@percent }
+\newlabel{lst:ns_rsp}{{10}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10}Namespace propagado al launch de descripción del robot.}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Poses iniciales predefinidas}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}Secuencia de lanzamiento}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-E}}Parámetros del nodo de control}{6}{}\protected@file@percent }
+\newlabel{lst:ns_inspect}{{11}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {11}Inspección de nodos y tópicos con namespaces.}{7}{}\protected@file@percent }
+\newlabel{lst:consenso_args}{{12}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {12}Argumentos de consenso\_prom.launch.py.}{7}{}\protected@file@percent }
+\newlabel{lst:consenso_launch_cmd}{{13}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {13}Lanzamiento del experimento con argumentos personalizados.}{7}{}\protected@file@percent }
+\newlabel{lst:timeline}{{14}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {14}Línea de tiempo de arranque para n\_robots=3.}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusiones}{7}{}\protected@file@percent }
+\newlabel{lst:consenso_params}{{15}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {15}Parámetros del nodo de consenso en el launch file.}{8}{}\protected@file@percent }
+\newlabel{lst:consenso_part1}{{16}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {16}consenso\_prom.launch.py -- Parte 1: imports y poses iniciales.}{8}{}\protected@file@percent }
+\newlabel{lst:consenso_part2}{{17}{9}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {17}consenso\_prom.launch.py -- Parte 2: construccion dinamica de acciones.}{9}{}\protected@file@percent }
+\newlabel{lst:consenso_part3}{{18}{10}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {18}consenso\_prom.launch.py -- Parte 3: timers, nodos tardios y punto de entrada.}{10}{}\protected@file@percent }
+\bibstyle{IEEEtran}
+\bibdata{References}
+\gdef \@abspage@last{10}

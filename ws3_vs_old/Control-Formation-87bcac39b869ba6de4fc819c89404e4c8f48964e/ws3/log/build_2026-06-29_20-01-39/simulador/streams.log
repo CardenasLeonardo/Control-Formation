@@ -1,0 +1,25 @@
+[0.704s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/simulador': AMENT_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces LD_LIBRARY_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data --force
+[0.872s] running develop
+[0.970s] running egg_info
+[0.970s] writing simulador.egg-info/PKG-INFO
+[0.970s] writing dependency_links to simulador.egg-info/dependency_links.txt
+[0.971s] writing entry points to simulador.egg-info/entry_points.txt
+[0.971s] writing requirements to simulador.egg-info/requires.txt
+[0.971s] writing top-level names to simulador.egg-info/top_level.txt
+[0.972s] reading manifest file 'simulador.egg-info/SOURCES.txt'
+[0.973s] writing manifest file 'simulador.egg-info/SOURCES.txt'
+[0.974s] running build_ext
+[0.974s] Creating /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador.egg-link (link to .)
+[0.974s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.975s] Installing pva_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.975s] Installing sphere_demo script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.975s] Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.975s] 
+[0.975s] Installed /home/calafaker/Control-Formation/ws3/build/simulador
+[0.976s] running symlink_data
+[0.976s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/resource/simulador -> /home/calafaker/Control-Formation/ws3/install/simulador/share/ament_index/resource_index/packages
+[0.976s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/package.xml -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador
+[0.977s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/consenso_lider.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.977s] symbolically linking /home/calafaker/Control-Formation/ws3/build/simulador/launch/consenso_prom.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.977s] error: [Errno 2] No such file or directory: '/home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch/demo_esferas.launch.py'
+[0.996s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/simulador' returned '1': AMENT_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces LD_LIBRARY_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data --force

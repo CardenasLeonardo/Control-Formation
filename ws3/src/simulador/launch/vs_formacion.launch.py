@@ -53,7 +53,7 @@ WAYPOINTS = [
     SQ_LEFT,             SQ_BOTTOM + CORNER_R,       # llega a la esquina inf. izquierda
     SQ_LEFT + CORNER_R,  SQ_BOTTOM,                 # sale de la esquina inf. izquierda
     SQ_RIGHT - CORNER_R, SQ_BOTTOM,                 # llega a la esquina inf. derecha...
-    ROBOT_X, ROBOT_Y,                               # ...y termina justo en ella
+    ROBOT_X, ROBOT_Y-2,                               # ...y termina justo en ella
 ]
 
 # Timing
@@ -71,6 +71,10 @@ CAMERA_X      = (SQ_RIGHT + SQ_LEFT) / 2.0    # centro del cuadrado de la ruta
 CAMERA_Y      = (SQ_TOP + SQ_BOTTOM) / 2.0
 GIF_FPS       = 10.0
 STOP_DELAY    = 2.0
+
+# Cierre de las gráficas (states_plotter_v2): margen generoso sobre el tiempo
+# estimado para recorrer toda la trayectoria a v_max=0.25 m/s.
+T_FINAL = 150.0
 
 
 # ------------------------------------------------------------------
@@ -182,6 +186,24 @@ def launch_setup(context, *args, **kwargs):
             executable='aire',
             name='aire',
             parameters=[{'neighbor_radius': 15.0}],
+            output='screen'
+        )
+    ]))
+
+    # --- Gráficas: trayectoria + error de formación vs offset ideal ---
+    actions.append(TimerAction(period=T_AIRE, actions=[
+        Node(
+            package='simulador',
+            executable='states_plotter_v2',
+            name='states_plotter_v2',
+            parameters=[{
+                'save_dir':                   save_dir,
+                't_final':                    T_FINAL,
+                'n_robots_expected':          N_ROBOTS,
+                'error_vs_virtual_structure': True,
+                'formation_angle_v':          ANGLE_V,
+                'formation_d':                D,
+            }],
             output='screen'
         )
     ]))

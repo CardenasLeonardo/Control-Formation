@@ -1,0 +1,18 @@
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Estructura básica de TimerAction.},
+    label={lst:timer_basico}]
+from launch.actions import TimerAction
+
+actions.append(
+    TimerAction(period=3.0, actions=[
+        Node(
+            package='gazebo_ros',
+            executable='spawn_entity.py',
+            ...
+        )
+    ])
+)
+\end{lstlisting}
+\end{figure*}

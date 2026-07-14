@@ -1,0 +1,28 @@
+[0.745s] Invoking command in '/home/calafaker/Control-Formation/ws3/src/simulador': AMENT_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces LD_LIBRARY_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/simulador build --build-base /home/calafaker/Control-Formation/ws3/build/simulador/build install --record /home/calafaker/Control-Formation/ws3/build/simulador/install.log --single-version-externally-managed install_data
+[0.895s] running egg_info
+[0.896s] writing ../../build/simulador/simulador.egg-info/PKG-INFO
+[0.896s] writing dependency_links to ../../build/simulador/simulador.egg-info/dependency_links.txt
+[0.896s] writing entry points to ../../build/simulador/simulador.egg-info/entry_points.txt
+[0.896s] writing requirements to ../../build/simulador/simulador.egg-info/requires.txt
+[0.896s] writing top-level names to ../../build/simulador/simulador.egg-info/top_level.txt
+[0.898s] reading manifest file '../../build/simulador/simulador.egg-info/SOURCES.txt'
+[0.899s] writing manifest file '../../build/simulador/simulador.egg-info/SOURCES.txt'
+[0.899s] running build
+[0.899s] running build_py
+[0.899s] copying simulador/sphere_demo.py -> /home/calafaker/Control-Formation/ws3/build/simulador/build/lib/simulador
+[0.901s] running install
+[0.901s] running install_lib
+[0.901s] copying /home/calafaker/Control-Formation/ws3/build/simulador/build/lib/simulador/sphere_demo.py -> /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador
+[0.902s] byte-compiling /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador/sphere_demo.py to sphere_demo.cpython-310.pyc
+[0.903s] running install_data
+[0.903s] copying launch/demo_esferas.launch.py -> /home/calafaker/Control-Formation/ws3/install/simulador/share/simulador/launch
+[0.903s] running install_egg_info
+[0.905s] removing '/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador-0.0.0-py3.10.egg-info' (and everything under it)
+[0.905s] Copying ../../build/simulador/simulador.egg-info to /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador-0.0.0-py3.10.egg-info
+[0.906s] running install_scripts
+[0.920s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.920s] Installing pva_plotter script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.921s] Installing sphere_demo script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.921s] Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.921s] writing list of installed files to '/home/calafaker/Control-Formation/ws3/build/simulador/install.log'
+[0.937s] Invoked command in '/home/calafaker/Control-Formation/ws3/src/simulador' returned '0': AMENT_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces LD_LIBRARY_PATH=/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:/home/calafaker/Control-Formation/ws3/install/multi_robot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/simulador build --build-base /home/calafaker/Control-Formation/ws3/build/simulador/build install --record /home/calafaker/Control-Formation/ws3/build/simulador/install.log --single-version-externally-managed install_data

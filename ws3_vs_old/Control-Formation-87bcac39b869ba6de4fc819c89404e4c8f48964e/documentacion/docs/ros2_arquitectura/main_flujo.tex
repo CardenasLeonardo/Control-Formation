@@ -1,0 +1,88 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{caption}
+\captionsetup[lstlisting]{skip=10pt}
+\renewcommand{\lstlistingname}{Terminal}
+
+\lstdefinestyle{bash}{
+  language=bash,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color[gray]{0.95},
+  frame=single,
+  rulecolor=\color[gray]{0.7},
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  xleftmargin=1.5em,
+  framexleftmargin=1.5em,
+  keywordstyle=\color[rgb]{0.0,0.4,0.7}\bfseries,
+  commentstyle=\color[rgb]{0.3,0.5,0.3}\itshape,
+  stringstyle=\color[rgb]{0.6,0.1,0.1},
+}
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color[gray]{0.95},
+  frame=single,
+  rulecolor=\color[gray]{0.7},
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  xleftmargin=1.5em,
+  framexleftmargin=1.5em,
+  keywordstyle=\color[rgb]{0.0,0.4,0.7}\bfseries,
+  commentstyle=\color[rgb]{0.3,0.5,0.3}\itshape,
+  stringstyle=\color[rgb]{0.6,0.1,0.1},
+  morekeywords={self, True, False, None},
+}
+
+\graphicspath{{Pics/}}
+
+\lstset{
+  aboveskip=\baselineskip,
+  belowskip=0.5\baselineskip,
+  literate=
+    {á}{{\'{a}}}1 {é}{{\'{e}}}1 {í}{{\'\i}}1 {ó}{{\'{o}}}1 {ú}{{\'{u}}}1
+    {Á}{{\'{A}}}1 {É}{{\'{E}}}1 {Í}{{\'{I}}}1 {Ó}{{\'{O}}}1 {Ú}{{\'{U}}}1
+    {ñ}{{\~{n}}}1 {Ñ}{{\~{N}}}1
+}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{ROS~2\\
+Flujo de Ejecución: Terminal a Módulo}
+
+\input{Sections/Authors}
+\maketitle
+
+\input{Sections/Abstract}
+\begin{IEEEkeywords}
+ROS~2, launch files, nodos, variables de entorno, DDS, parámetros
+\end{IEEEkeywords}
+
+% -- El flujo Terminal a Modulo -----------------------------------
+\input{Sections/entorno}
+\input{Sections/ejecutable}
+\input{Sections/launch_file}
+\input{Sections/arranque}
+\input{Sections/nodo_modulo}
+\input{Sections/runtime}
+\input{Sections/resumen}
+
+
+\end{document}

@@ -26,6 +26,27 @@ plt.rcParams.update({
 COLORS = plt.cm.tab10.colors
 
 
+def _compute_offset(follower_index, n_robots, theta_v, angle_v, d):
+    """Offset (rx, ry) del robot `follower_index` dentro de la V, para el
+    heading `theta_v` de la estructura virtual. Misma fórmula que
+    vs_node._compute_offsets / consensus_formation._compute_offsets."""
+    if follower_index == 0:
+        return (0.0, 0.0)
+
+    n_followers = n_robots - 1
+    n_left      = n_followers // 2
+
+    def rot(theta, vx, vy):
+        c, s = math.cos(theta), math.sin(theta)
+        return c * vx - s * vy, s * vx + c * vy
+
+    if follower_index <= n_left:
+        return rot(theta_v + angle_v, -follower_index * d, 0.0)
+    else:
+        k = follower_index - n_left
+        return rot(theta_v - angle_v, -k * d, 0.0)
+
+
 class StatesPlotterV2(Node):
 
     def __init__(self):
@@ -41,6 +62,9 @@ class StatesPlotterV2(Node):
         self.declare_parameter('t_final',           30.0)
         self.declare_parameter('n_robots_expected', 0)
         self.declare_parameter('trajectory_only',   False)
+        # Trayectoria + error euclidiano respecto al offset individual dentro
+        # de la V (requiere /virtual_structure, publicado por vs_node)
+        self.declare_parameter('error_vs_virtual_structure', False)
         # Parámetros de snapshots de formación
         self.declare_parameter('formation_snapshots',  False)
         self.declare_parameter('snap_interval_s',      15.0)
@@ -55,6 +79,7 @@ class StatesPlotterV2(Node):
         self.t_final               = float(self.get_parameter('t_final').value)
         self.n_robots_expected     = int(self.get_parameter('n_robots_expected').value)
         self.trajectory_only       = bool(self.get_parameter('trajectory_only').value)
+        self.error_vs_virtual_structure = bool(self.get_parameter('error_vs_virtual_structure').value)
         self.formation_snapshots   = bool(self.get_parameter('formation_snapshots').value)
         self.snap_interval_s       = float(self.get_parameter('snap_interval_s').value)
         self.formation_leader_id   = str(self.get_parameter('formation_leader_id').value)
@@ -72,6 +97,11 @@ class StatesPlotterV2(Node):
         # Snapshots de formación
         self.snapshots        = []   # lista de {t, robots: {rid: (x,y,theta)}}
         self.last_snap_t      = None
+
+        # Serie temporal de la estructura virtual (para el error vs offset ideal)
+        self.vs_data = {'t': [], 'x': [], 'y': [], 'theta': []}
+        if self.error_vs_virtual_structure:
+            self.create_subscription(RobotState, '/virtual_structure', self._vs_cb, 100)
 
         # Suscripción directa a odom de cada robot (tasa máxima de Gazebo)
         if self.n_robots_expected > 0:
@@ -141,6 +171,17 @@ class StatesPlotterV2(Node):
             self.data[robot]["x"].append(msg.x)
             self.data[robot]["y"].append(msg.y)
             self.data[robot]["theta"].append(msg.theta)
+
+    # -------------------------------------------------
+
+    def _vs_cb(self, msg):
+        """Serie temporal del centroide de la estructura virtual."""
+        t = time.time() - self.start_time
+        with self._lock:
+            self.vs_data['t'].append(t)
+            self.vs_data['x'].append(msg.x)
+            self.vs_data['y'].append(msg.y)
+            self.vs_data['theta'].append(msg.theta)
 
     # -------------------------------------------------
 
@@ -284,7 +325,9 @@ class StatesPlotterV2(Node):
 
         self._save_raw(data_snapshot)
 
-        if self.trajectory_only:
+        if self.error_vs_virtual_structure:
+            self._save_trajectory_and_error(data_snapshot)
+        elif self.trajectory_only:
             self._save_trajectory_only(data_snapshot)
         else:
             self._save_triple(data_snapshot)
@@ -334,6 +377,113 @@ class StatesPlotterV2(Node):
         path = os.path.join(self.save_dir, "trajectory.pdf")
         fig.savefig(path, bbox_inches="tight")
         self.get_logger().info(f"Trayectoria guardada: {path}")
+
+    def _save_trajectory_and_error(self, data_snapshot):
+        """Dos gráficas: trayectorias (idéntica a _save_triple) y error
+        euclidiano de cada robot respecto a su offset ideal dentro de la V,
+        interpolando la pose de la estructura virtual en cada instante."""
+
+        with self._lock:
+            vs_t     = np.array(self.vs_data['t'],     dtype=float)
+            vs_x     = np.array(self.vs_data['x'],     dtype=float)
+            vs_y     = np.array(self.vs_data['y'],     dtype=float)
+            vs_theta = np.array(self.vs_data['theta'], dtype=float)
+
+        if len(vs_t) >= 2:
+            sort_vs = np.argsort(vs_t)
+            vs_t, vs_x, vs_y, vs_theta = (
+                vs_t[sort_vs], vs_x[sort_vs], vs_y[sort_vs], vs_theta[sort_vs])
+            _, uniq_vs = np.unique(vs_t, return_index=True)
+            vs_t, vs_x, vs_y, vs_theta = (
+                vs_t[uniq_vs], vs_x[uniq_vs], vs_y[uniq_vs], vs_theta[uniq_vs])
+            have_vs = True
+        else:
+            have_vs = False
+            self.get_logger().warn(
+                "error_vs_virtual_structure=True pero no se recibió /virtual_structure "
+                "— se omite la gráfica de error"
+            )
+
+        fig = Figure(figsize=(11, 5.2))
+        FigureCanvasAgg(fig)
+        axes = fig.subplots(1, 2)
+
+        for i, (robot, d) in enumerate(sorted(data_snapshot.items())):
+            c = COLORS[i % len(COLORS)]
+
+            sort_idx = np.argsort(d["t"])
+            x     = np.array(d["x"],     dtype=float)[sort_idx]
+            y     = np.array(d["y"],     dtype=float)[sort_idx]
+            t     = np.array(d["t"],     dtype=float)[sort_idx]
+            theta = np.array(d["theta"], dtype=float)[sort_idx]
+
+            _, uniq = np.unique(t, return_index=True)
+            x, y, t, theta = x[uniq], y[uniq], t[uniq], theta[uniq]
+
+            axes[0].plot(x, y, color=c, label=robot, linewidth=1.8, zorder=2)
+            axes[0].scatter(x[0], y[0], s=90, facecolors='white',
+                            edgecolors=c, linewidths=2, zorder=4)
+            axes[0].scatter(x[-1], y[-1], color=c, marker='*',
+                            s=220, zorder=5, edgecolors='black', linewidths=0.5)
+            self._draw_triangles(axes[0], x, y, theta, c)
+
+            if have_vs:
+                try:
+                    follower_index = int(robot.replace('robot', ''))
+                except ValueError:
+                    follower_index = 0
+
+                vs_x_i  = np.interp(t, vs_t, vs_x)
+                vs_y_i  = np.interp(t, vs_t, vs_y)
+                vs_th_i = np.interp(t, vs_t, vs_theta)
+
+                ox = np.empty_like(vs_th_i)
+                oy = np.empty_like(vs_th_i)
+                for j, th in enumerate(vs_th_i):
+                    ox[j], oy[j] = _compute_offset(
+                        follower_index, self.n_robots_expected, th,
+                        self.formation_angle_v, self.formation_d)
+
+                error = np.hypot(x - (vs_x_i + ox), y - (vs_y_i + oy))
+                axes[1].plot(t, error, color=c, label=robot, linewidth=1.8)
+
+        axes[0].set_title("Robot trajectories")
+        axes[0].set_xlabel("x (m)")
+        axes[0].set_ylabel("y (m)")
+        axes[0].grid(True)
+        axes[0].set_aspect('equal')
+        axes[0].legend(fontsize=13)
+
+        axes[1].set_title("Formation error evolution")
+        axes[1].set_xlabel("Time (s)")
+        axes[1].set_ylabel("Error (m)")
+        axes[1].grid(True)
+        axes[1].legend(fontsize=13)
+
+        # Snapshots de formación sobre el panel de trayectorias — idéntico a _save_triple
+        if self.formation_snapshots and self.snapshots:
+            robot_color = {r: COLORS[i % len(COLORS)]
+                           for i, r in enumerate(sorted(data_snapshot.keys()))}
+            for snap_data in self.snapshots:
+                snap   = snap_data['robots']
+                ideals = self._formation_ideals(snap)
+                for rid, (xa, ya, _) in snap.items():
+                    c = robot_color.get(rid, 'gray')
+                    axes[0].scatter(xa, ya, s=55, color=c, zorder=7, alpha=0.80)
+                    if rid in ideals:
+                        xi_pt, yi_pt = ideals[rid]
+                        axes[0].scatter(xi_pt, yi_pt, s=55,
+                                        facecolors='none', edgecolors=c,
+                                        linewidths=1.8, zorder=7, alpha=0.80)
+                        axes[0].plot([xa, xi_pt], [ya, yi_pt],
+                                     color=c, linewidth=0.9,
+                                     linestyle='--', alpha=0.45, zorder=6)
+
+        fig.tight_layout()
+
+        path = os.path.join(self.save_dir, "posiciones_finales.pdf")
+        fig.savefig(path, bbox_inches="tight")
+        self.get_logger().info(f"Trayectoria + error de formación guardados: {path}")
 
     def _save_triple(self, data_snapshot):
 

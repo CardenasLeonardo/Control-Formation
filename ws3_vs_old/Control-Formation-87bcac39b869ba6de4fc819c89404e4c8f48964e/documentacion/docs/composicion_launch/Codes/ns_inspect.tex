@@ -1,0 +1,20 @@
+{\renewcommand{\lstlistingname}{Terminal}
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=bash,
+    caption={Inspección de nodos y tópicos con namespaces.},
+    label={lst:ns_inspect}]
+# Lista todos los nodos activos
+ros2 node list
+# /robot0/consenso
+# /robot1/consenso
+# ...
+
+# Lista topicos de un robot especifico
+ros2 topic list | grep robot0
+# /robot0/cmd_vel
+# /robot0/odom
+# /robot0/scan
+\end{lstlisting}
+\end{figure*}
+}

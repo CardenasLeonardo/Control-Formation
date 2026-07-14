@@ -1,0 +1,20 @@
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Spawn de un modelo de robot en Gazebo.},
+    label={lst:spawn_node}]
+spawn_node = Node(
+    package='gazebo_ros',
+    executable='spawn_entity.py',
+    arguments=[
+        '-topic', f'/{ns}/robot_description',
+        '-entity', ns,
+        '-x', str(round(x0, 4)),
+        '-y', str(round(y0, 4)),
+        '-z', '0.1',
+        '-Y', str(round(yaw, 4)),
+    ],
+    output='screen'
+)
+\end{lstlisting}
+\end{figure*}

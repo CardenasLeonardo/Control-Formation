@@ -1,0 +1,18 @@
+{\renewcommand{\lstlistingname}{Diagrama}
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=bash,
+    caption={Línea de tiempo de arranque para n\_robots=3.},
+    label={lst:timeline}]
+t=0.0 s  -> Gazebo arranca
+t=3.0 s  -> RSP robot0 | spawn_obstacle (si aplica)
+t=3.5 s  -> spawn robot0
+t=4.5 s  -> control robot0 | RSP robot1
+t=5.0 s  -> spawn robot1
+t=6.0 s  -> control robot1 | RSP robot2
+t=6.5 s  -> spawn robot2
+t=7.5 s  -> control robot2
+t=9.5 s  -> AIRE + plotters  (3.0 + 3*1.5 + 2.0)
+\end{lstlisting}
+\end{figure*}
+}

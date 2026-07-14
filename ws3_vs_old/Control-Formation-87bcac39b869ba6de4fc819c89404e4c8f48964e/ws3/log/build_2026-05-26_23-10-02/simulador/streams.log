@@ -1,0 +1,18 @@
+[0.557s] Invoking command in '/home/calafaker/Control-Formation/ws3/build/simulador': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data
+[0.713s] running develop
+[0.808s] running egg_info
+[0.808s] writing simulador.egg-info/PKG-INFO
+[0.809s] writing dependency_links to simulador.egg-info/dependency_links.txt
+[0.809s] writing entry points to simulador.egg-info/entry_points.txt
+[0.809s] writing requirements to simulador.egg-info/requires.txt
+[0.809s] writing top-level names to simulador.egg-info/top_level.txt
+[0.810s] reading manifest file 'simulador.egg-info/SOURCES.txt'
+[0.810s] writing manifest file 'simulador.egg-info/SOURCES.txt'
+[0.811s] running build_ext
+[0.811s] Creating /home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages/simulador.egg-link (link to .)
+[0.812s] Installing aire script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.812s] Installing states_plotter_v2 script to /home/calafaker/Control-Formation/ws3/install/simulador/lib/simulador
+[0.812s] 
+[0.812s] Installed /home/calafaker/Control-Formation/ws3/build/simulador
+[0.812s] running symlink_data
+[0.829s] Invoked command in '/home/calafaker/Control-Formation/ws3/build/simulador' returned '0': PYTHONPATH=/home/calafaker/Control-Formation/ws3/build/simulador/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/calafaker/Control-Formation/ws3/install/simulador/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/calafaker/Control-Formation/ws3/build/simulador/build --no-deps symlink_data

@@ -1,0 +1,50 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {chapter}{Planteamiento del Problema}{3}{section*.1}%
+\contentsline {section}{Sistema multi-robot}{4}{section*.3}%
+\contentsline {section}{Evasión de colisiones}{5}{section*.5}%
+\contentsline {section}{Estrategia de control de formaciones}{6}{section*.7}%
+\contentsline {chapter}{Antecedentes}{7}{section*.8}%
+\contentsline {section}{Consenso en Sistemas Multi Agente}{8}{section*.9}%
+\contentsline {section}{Formación con Seguimiento de Líder}{9}{section*.11}%
+\contentsline {section}{Formación con Seguimiento de Líder}{10}{section*.12}%
+\contentsline {section}{Formación con Estructura Virtual}{11}{section*.14}%
+\contentsline {section}{Formación con Estructura Virtual}{12}{section*.16}%
+\contentsline {section}{Evasión de Colisiones}{13}{section*.17}%
+\contentsline {section}{Evasión de Colisiones}{14}{section*.18}%
+\contentsline {chapter}{Preguntas de Investigación}{15}{section*.19}%
+\contentsline {section}{Preguntas de Investigación}{16}{section*.20}%
+\contentsline {chapter}{Hipótesis}{17}{section*.21}%
+\contentsline {section}{Hipótesis}{18}{section*.22}%
+\contentsline {chapter}{Objetivos}{19}{section*.23}%
+\contentsline {section}{Objetivo General}{20}{section*.28}%
+\contentsline {chapter}{Propuesta de Solución}{21}{section*.29}%
+\contentsline {section}{Arquitectura de Control Propuesta}{22}{section*.31}%
+\contentsline {section}{Estructura Virtual}{23}{section*.32}%
+\contentsline {section}{Estructura Virtual}{24}{section*.33}%
+\contentsline {section}{Estructura Virtual}{25}{section*.34}%
+\contentsline {section}{Estructura Virtual}{26}{section*.35}%
+\contentsline {section}{Consenso}{27}{section*.36}%
+\contentsline {section}{Consenso}{28}{section*.37}%
+\contentsline {section}{Ley de Control}{29}{section*.38}%
+\contentsline {section}{Integración de la no holonomía}{30}{section*.40}%
+\contentsline {section}{Integración de la no holonomía}{31}{section*.42}%
+\contentsline {section}{Integración de la no holonomía}{32}{section*.44}%
+\contentsline {section}{Integración de la no holonomía}{33}{section*.46}%
+\contentsline {section}{Ley de Control}{34}{section*.47}%
+\contentsline {section}{Evasión de Colisiones}{35}{section*.48}%
+\contentsline {section}{Polígono de Velocidades Admisibles}{36}{section*.52}%
+\contentsline {section}{Polígono de Velocidades Admisibles}{37}{section*.56}%
+\contentsline {section}{Polígono de Velocidades Admisibles}{38}{section*.60}%
+\contentsline {chapter}{Experimentación}{39}{section*.61}%
+\contentsline {section}{Control de Formaciones en Sistemas No Holonómicos}{40}{section*.63}%
+\contentsline {section}{Control de Formaciones en Sistemas No Holonómicos}{41}{section*.64}%
+\contentsline {section}{Control de Formaciones en Sistemas No Holonómicos }{42}{section*.66}%
+\contentsline {section}{Control de Formaciones en Sistemas No Holonómicos }{43}{section*.67}%
+\contentsline {section}{PVA: Antes de Cruzar}{44}{section*.70}%
+\contentsline {section}{PVA: Durante el Cruce}{45}{section*.73}%
+\contentsline {section}{PVA: Después de Cruzar}{46}{section*.76}%
+\contentsline {chapter}{Cronograma}{47}{section*.77}%
+\contentsline {chapter}{Cronograma Cierre}{48}{section*.78}%
+\contentsline {chapter}{Referencias}{49}{section*.79}%
+\contentsline {section}{Referencias}{50}{section*.80}%
+\contentsline {section}{Referencias}{51}{section*.81}%

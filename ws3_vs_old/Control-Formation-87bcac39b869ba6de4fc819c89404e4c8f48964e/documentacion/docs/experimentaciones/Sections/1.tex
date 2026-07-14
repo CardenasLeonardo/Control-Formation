@@ -1,0 +1,25 @@
+\section{Descripción del Sistema}
+
+\subsection{Plataforma de simulación}
+
+El entorno de simulación está compuesto por robots móviles diferenciales instanciados en Gazebo Classic, gestionados mediante ROS~2 Humble. Cada robot cuenta con:
+
+\begin{itemize}
+  \item Odometría: publicada en el tópico \texttt{odom} (tipo \texttt{nav\_msgs/Odometry}).
+  \item Sensor LiDAR: lecturas de distancia publicadas en \texttt{scan} (tipo \texttt{sensor\_msgs/LaserScan}).
+  \item Actuador: velocidades de control recibidas en \texttt{cmd\_vel} (tipo \texttt{geometry\_msgs/Twist}).
+\end{itemize}
+
+\subsection{Arquitectura de nodos}
+
+Cada robot ejecuta un nodo de control independiente (\texttt{navigate\_individual\_pva}) que opera a 20~Hz. El nodo consume odometría y LiDAR, genera una velocidad de referencia con la ley de control nominal, aplica el PVA y publica la velocidad segura. Las restricciones activas del PVA se publican en \texttt{/pva\_constraints} y son visualizadas en tiempo real por el nodo \texttt{pva\_plotter}.
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{c}
+  \texttt{odom} $\rightarrow$ \textbf{navigate\_individual\_pva} $\rightarrow$ \texttt{cmd\_vel} \\[4pt]
+  \texttt{scan} $\rightarrow$ \textbf{PVA} $\rightarrow$ \texttt{/pva\_constraints}
+  \end{tabular}
+  \caption{Flujo de datos del nodo de control con PVA.}
+  \label{fig:arquitectura_nodos}
+\end{figure}

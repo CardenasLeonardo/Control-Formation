@@ -1,0 +1,19 @@
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Estructura mínima de un launch file.},
+    label={lst:estructura_minima}]
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='mi_paquete',
+            executable='mi_nodo',
+            name='mi_nodo',
+            output='screen'
+        )
+    ])
+\end{lstlisting}
+\end{figure*}

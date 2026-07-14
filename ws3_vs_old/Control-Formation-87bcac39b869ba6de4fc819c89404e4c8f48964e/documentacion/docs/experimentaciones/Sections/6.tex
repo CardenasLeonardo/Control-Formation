@@ -1,0 +1,13 @@
+\section{Discusión}
+
+Los resultados muestran que el PVA actúa correctamente en todos los robots durante la fase de máxima proximidad. Se observan dos comportamientos distintos según el robot:
+
+\begin{enumerate}
+  \item \textbf{Polígono amplio, $u^* \approx u_{\text{ref}}$}: el robot no tiene vecinos dentro del radio de influencia $d_{\text{inf}} = 3.0$~m, o éstos se encuentran a distancias que generan restricciones poco activas. La velocidad de referencia es factible y no se modifica.
+
+  \item \textbf{Polígono reducido, $u^* \neq u_{\text{ref}}$}: múltiples restricciones cortan el espacio de velocidades, empujando $u^*$ hacia velocidades menores o modificando $\omega$ para rodear al vecino. Esto es visible en los robots que atraviesan la región central del escenario.
+\end{enumerate}
+
+La solución QP converge en todos los casos gracias a la formulación convexa del polígono. El costo computacional por iteración es bajo, lo que permite mantener la frecuencia de 20~Hz incluso con 8 robots activos simultáneamente.
+
+Una limitación observada es que el PVA no garantiza evasión global cuando múltiples obstáculos encierran completamente al robot: el polígono se vacía y el algoritmo retorna la velocidad de referencia saturada. En ese caso, el robot avanza lentamente y la situación se resuelve por el movimiento de los agentes vecinos.

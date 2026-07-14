@@ -1,0 +1,17 @@
+\section{Conclusiones}
+
+Un launch file de simulación multi-robot combina cuatro patrones que trabajan en conjunto:
+
+\textbf{OpaqueFunction} permite que el número de nodos a lanzar sea variable y dependa de argumentos de la terminal. Sin él, el launch file solo puede declarar nodos de forma estática.
+
+\textbf{IncludeLaunchDescription} permite reutilizar los launch files oficiales de Gazebo y RSP sin duplicar su contenido. El launch padre construye la secuencia de alto nivel; los hijos se encargan de sus detalles.
+
+\textbf{TimerAction} resuelve las dependencias temporales entre componentes. Gazebo necesita tiempo antes de recibir spawns; el RSP necesita tiempo antes de que el spawn lea su tópico; el nodo de control necesita que el robot exista antes de intentar leer odometría.
+
+\textbf{Namespaces} permiten que múltiples instancias del mismo nodo coexistan sin interferencia. Es el único mecanismo para separar los canales de comunicación de distintos robots sin modificar el código del nodo.
+
+Los Scripts~\ref{lst:consenso_part1}--\ref{lst:consenso_part3} muestran el launch file completo del experimento dividido en sus tres bloques principales:
+
+\input{Codes/consenso_part1}
+\input{Codes/consenso_part2}
+\input{Codes/consenso_part3}

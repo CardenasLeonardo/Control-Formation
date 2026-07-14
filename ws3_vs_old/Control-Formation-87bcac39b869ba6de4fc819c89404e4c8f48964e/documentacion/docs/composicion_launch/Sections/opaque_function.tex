@@ -1,0 +1,19 @@
+\section{OpaqueFunction: lógica Python en el launch}
+
+\subsection{Por qué existe}
+
+Las sustituciones en línea de ROS~2 (como LaunchConfiguration) son mecanismos declarativos: resuelven un valor diferido en el momento del lanzamiento, pero no pueden ejecutar código Python arbitrario. Si el launch file necesita convertir tipos, hacer cálculos, o generar una lista variable de nodos, ese código no cabe en una sustitución.
+
+OpaqueFunction resuelve este límite. Es una acción que, cuando el sistema la procesa, llama a una función Python y le entrega el context\footnote{El context es el objeto que contiene el estado global de la ejecución del launch: los valores actuales de todos los argumentos ya declarados, las variables de entorno, y otras condiciones del sistema. Es el mecanismo por el que la función tiene acceso a los argumentos resueltos.}: el estado global de la ejecución con todos los argumentos ya resueltos. La función retorna una lista de acciones que el sistema agrega a la secuencia de ejecución.
+
+\subsection{El patrón perform(context)}
+
+Dentro de una OpaqueFunction, la forma de leer el valor actual de un argumento es llamar a .perform(context) sobre el objeto LaunchConfiguration correspondiente. Esto fuerza la resolución inmediata del valor y entrega un string, que el código Python puede operar como necesite. El Código~\ref{lst:opaque_patron} muestra el patrón completo:
+
+\input{Codes/opaque_patron}
+
+Este patrón es el que usa consenso\_prom.launch.py para generar dinámicamente las acciones de $n$ robots a partir del argumento n\_robots. Sin OpaqueFunction, no sería posible construir un bucle for cuya longitud depende de un argumento de la terminal.
+
+\subsection{Firma de la función}
+
+La firma def launch\_setup(context, *args, **kwargs) es obligatoria. El sistema de launch llama a la función pasando el contexto como primer argumento posicional, y puede pasar argumentos adicionales dependiendo de cómo se configure la acción. El uso de *args, **kwargs garantiza compatibilidad aunque el sistema agregue parámetros en versiones futuras.

@@ -1,0 +1,18 @@
+\begin{figure*}[t]
+\centering
+\begin{lstlisting}[style=python,
+    caption={Asignación de namespace a un nodo desde el launch file.},
+    label={lst:ns_node}]
+for i in range(n):
+    ns = f'robot{i}'   # 'robot0', 'robot1', ...
+
+    Node(
+        package='control_nodes',
+        executable='consenso_node',
+        name='consenso',
+        namespace=ns,           # <- aqui
+        parameters=[{...}],
+        output='screen'
+    )
+\end{lstlisting}
+\end{figure*}

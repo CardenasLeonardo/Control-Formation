@@ -1,0 +1,57 @@
+\section{Problem Formulation}
+The coordination of differential-drive robots in formation presents two interconnected challenges: the non-holonomic nature of each agent's kinematics, and the need to avoid inter-agent collisions during navigation. The following subsections address each of these aspects and motivate the proposed approach.
+
+\subsection{System Orders in Consensus: The Non-Holonomic Gap}
+
+Consensus protocols have been studied for first-order systems~\cite{yang2021finitetime} and extended to second-order dynamics~\cite{floresresendiz2023formation}. However, the vast majority of these developments assume holonomic agents whose control inputs can be directed arbitrarily in any direction of the state space.
+
+This assumption is inadequate for differential-drive robots, whose kinematics impose non-holonomic constraints that fundamentally limit the available directions of instantaneous motion. Overcoming this difficulty requires qualitatively different control strategies~\cite{nuno2020consensus}, and although recent works have addressed extensions with input constraints~\cite{nuno2022consensusinput} and second-order formulations~\cite{loria2021observerless}, the problem remains open within the distributed consensus framework.
+
+\subsection{Non-Holonomic Systems and Differential-Drive Robots}
+
+A non-holonomic system presents non-integrable velocity constraints~\cite{bloch2003nonholonomic}. The differential-drive robot is one of the most representative examples of this class. Its configuration is defined by $\mathbf{q} = [x\ y\ \theta]^T$, and its kinematic model is:
+
+\begin{equation}
+    \dot{\mathbf{q}} = \mathbf{J}(\mathbf{q})\mathbf{u} =
+    \begin{bmatrix}
+        \cos\theta & 0 \\
+        \sin\theta & 0 \\
+        0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        v \\ \omega
+    \end{bmatrix}
+    \label{eq:unicycle}
+\end{equation}
+
+\noindent where $v$ is the linear velocity and $\omega$ the angular velocity. The non-holonomic constraint is expressed as:
+
+\begin{equation}
+    \dot{y} - \dot{x}\tan\theta = 0
+    \label{eq:constraint}
+\end{equation}
+
+Despite their widespread industrial use, differential-drive robots are frequently treated as point particles or artificially converted into holonomic systems through an auxiliary point~\cite{desai2001modeling}.
+
+An exponential control law that directly respects these constraints was developed in~\cite{ramirez2001collision}. The error is defined in polar coordinates as $\mathbf{z} = [a\ \alpha]^T$, where:
+
+\begin{equation}
+    a = \sqrt{x_e^2 + y_e^2}, \quad \alpha = \arctan2(y_e, x_e) + \theta_e
+    \label{eq:error}
+\end{equation}
+
+The resulting control law is:
+
+\begin{equation}
+    \begin{cases}
+        v = k_1 a \cos\alpha \\
+        \omega = k_2\alpha + k_1 \sin\alpha\cos\alpha
+    \end{cases}
+    \label{eq:control_law}
+\end{equation}
+
+\noindent with $k_1, k_2 > 0$. Global exponential stability of the origin $(a=0,\ \alpha=0)$ is established via the Lyapunov function $V(\mathbf{z}) = \frac{1}{2}a^2 + \frac{1}{2}\alpha^2$~\cite{ramirez2001collision}, constituting the foundation of the proposed approach.
+
+\subsection{Collision Avoidance: Isotropic Approaches}
+
+Inter-agent collision avoidance has been addressed predominantly through artificial potential fields~\cite{khatib1986realtime}, where each agent generates an isotropic repulsive function acting on neighboring agents, treated as point particles. This strategy has been widely adopted in multi-agent formation control~\cite{li2021artificial, zhao2024improved}; however, its isotropic nature is fundamentally incompatible with differential-drive robots, whose response to neighboring agents depends critically on their current orientation~\cite{chen2023auv}. In contrast,~\cite{ramirez2001collision} introduces the Feasible Velocities Polygon (FVP), which maps each detected agent as a linear constraint on $(v, \omega)$, resulting in an inherently anisotropic representation that preserves the non-holonomic nature of the system.

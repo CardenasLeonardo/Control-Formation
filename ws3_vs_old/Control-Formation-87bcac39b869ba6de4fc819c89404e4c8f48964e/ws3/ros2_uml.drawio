@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2600" pageHeight="1800" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- PROFILE                                                 -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="pkg_border" value=""
+      style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;strokeWidth=1.5;pointerEvents=0;"
+      vertex="1" parent="1">
+      <mxGeometry x="30" y="20" width="1010" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="pkg_label" value="«profile» ROS2Profile"
+      style="text;html=1;align=center;verticalAlign=middle;fontStyle=2;fontSize=13;strokeColor=none;fillColor=#ffffff;"
+      vertex="1" parent="1">
+      <mxGeometry x="370" y="13" width="260" height="28" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="sROS2Node" value="«stereotype»&#xa;ROS2Node"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=44;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;"
+      vertex="1" parent="1">
+      <mxGeometry x="60" y="65" width="195" height="165" as="geometry"/>
+    </mxCell>
+    <mxCell id="sROS2Node_d" value="" style="line;fillColor=none;strokeColor=#d6b656;" vertex="1" parent="sROS2Node">
+      <mxGeometry x="0" y="44" width="195" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="sROS2Node_a1" value="+ namespace : String"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sROS2Node">
+      <mxGeometry x="0" y="52" width="195" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="sROS2Node_a2" value="+ nodeName : String"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sROS2Node">
+      <mxGeometry x="0" y="72" width="195" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="sSubCB" value="«stereotype»&#xa;SubscriberCallback"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=44;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;"
+      vertex="1" parent="1">
+      <mxGeometry x="285" y="65" width="215" height="165" as="geometry"/>
+    </mxCell>
+    <mxCell id="sSubCB_d" value="" style="line;fillColor=none;strokeColor=#d6b656;" vertex="1" parent="sSubCB">
+      <mxGeometry x="0" y="44" width="215" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="sSubCB_a1" value="+ topicName : String"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sSubCB">
+      <mxGeometry x="0" y="52" width="215" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="sSubCB_a2" value="+ msgType : String"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sSubCB">
+      <mxGeometry x="0" y="72" width="215" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="sTimerCB" value="«stereotype»&#xa;TimerCallback"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=44;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;"
+      vertex="1" parent="1">
+      <mxGeometry x="530" y="65" width="195" height="165" as="geometry"/>
+    </mxCell>
+    <mxCell id="sTimerCB_d" value="" style="line;fillColor=none;strokeColor=#d6b656;" vertex="1" parent="sTimerCB">
+      <mxGeometry x="0" y="44" width="195" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="sTimerCB_a1" value="+ period : Duration"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sTimerCB">
+      <mxGeometry x="0" y="52" width="195" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="sPubCB" value="«stereotype»&#xa;PublisherCallback"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=44;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;"
+      vertex="1" parent="1">
+      <mxGeometry x="755" y="65" width="215" height="165" as="geometry"/>
+    </mxCell>
+    <mxCell id="sPubCB_d" value="" style="line;fillColor=none;strokeColor=#d6b656;" vertex="1" parent="sPubCB">
+      <mxGeometry x="0" y="44" width="215" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="sPubCB_a1" value="+ topicName : String"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sPubCB">
+      <mxGeometry x="0" y="52" width="215" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="sPubCB_a2" value="+ msgType : String"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="sPubCB">
+      <mxGeometry x="0" y="72" width="215" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- PACKAGE BORDERS                                         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="pkg_cn_border" value=""
+      style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#6c8ebf;strokeWidth=1.5;pointerEvents=0;"
+      vertex="1" parent="1">
+      <mxGeometry x="30" y="278" width="980" height="560" as="geometry"/>
+    </mxCell>
+    <mxCell id="pkg_cn_label" value="«package» control_nodes"
+      style="text;html=1;align=left;verticalAlign=middle;fontStyle=2;fontSize=11;strokeColor=none;fillColor=#ffffff;"
+      vertex="1" parent="1">
+      <mxGeometry x="45" y="271" width="230" height="24" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="pkg_sim_border" value=""
+      style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#9673a6;strokeWidth=1.5;pointerEvents=0;"
+      vertex="1" parent="1">
+      <mxGeometry x="1020" y="278" width="860" height="465" as="geometry"/>
+    </mxCell>
+    <mxCell id="pkg_sim_label" value="«package» simulador"
+      style="text;html=1;align=left;verticalAlign=middle;fontStyle=2;fontSize=11;strokeColor=none;fillColor=#ffffff;"
+      vertex="1" parent="1">
+      <mxGeometry x="1035" y="271" width="210" height="24" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- NavigateWaypoints                                       -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="NW" value="&lt;font style=&quot;font-size:10px;&quot;&gt;«ROS2Node»&lt;/font&gt;&lt;br&gt;&lt;b&gt;NavigateWaypoints&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#1a5276;&quot;&gt;{namespace=/robot_lider}&lt;/font&gt;"
+      style="swimlane;html=1;fontStyle=0;align=center;startSize=60;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="50" y="310" width="420" height="420" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_d1" value="" style="line;fillColor=none;strokeColor=#6c8ebf;" vertex="1" parent="NW">
+      <mxGeometry x="0" y="60" width="420" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_a1" value="- x, y, theta : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="68" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_a2" value="- ranges : list"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="88" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_a3" value="- waypoints : list"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="108" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_a4" value="- wp_index : int"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="128" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_d2" value="" style="line;fillColor=none;strokeColor=#6c8ebf;" vertex="1" parent="NW">
+      <mxGeometry x="0" y="152" width="420" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_sl" value="«SubscriberCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="160" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_m1" value="+ odom_callback(msg : Odometry)  {topicName=odom}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="180" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_m2" value="+ scan_callback(msg : LaserScan)  {topicName=scan}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="200" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_d3" value="" style="line;fillColor=none;strokeColor=#6c8ebf;" vertex="1" parent="NW">
+      <mxGeometry x="0" y="224" width="420" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_tl" value="«TimerCallback» {period=0.05s}"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="232" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_m3" value="+ control_loop()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="252" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_d4" value="" style="line;fillColor=none;strokeColor=#6c8ebf;" vertex="1" parent="NW">
+      <mxGeometry x="0" y="276" width="420" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_pl" value="«PublisherCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="284" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_pub1" value="+ /robot_states_tx  [RobotState]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="304" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_pub2" value="+ /robot_states_plot  [RobotState]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="324" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_pub3" value="+ cmd_vel  [Twist]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="344" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_pub4" value="+ /pva_constraints  [PVAConstraints]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="364" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_d5" value="" style="line;fillColor=none;strokeColor=#6c8ebf;" vertex="1" parent="NW">
+      <mxGeometry x="0" y="388" width="420" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NW_p1" value="- next_waypoint()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="NW">
+      <mxGeometry x="0" y="396" width="420" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ConsensoNode                                            -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="CN" value="&lt;font style=&quot;font-size:10px;&quot;&gt;«ROS2Node»&lt;/font&gt;&lt;br&gt;&lt;b&gt;ConsensoNode&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#1e5631;&quot;&gt;{namespace=/robot_X,  param:consensus_type}&lt;/font&gt;"
+      style="swimlane;html=1;fontStyle=0;align=center;startSize=60;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="490" y="310" width="480" height="520" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_d1" value="" style="line;fillColor=none;strokeColor=#82b366;" vertex="1" parent="CN">
+      <mxGeometry x="0" y="60" width="480" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_a1" value="- x, y, theta : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="68" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_a2" value="- ranges : list"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="88" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_a3" value="- neighbors : dict"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="108" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_a4" value="- consensus_type : str"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="128" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_d2" value="" style="line;fillColor=none;strokeColor=#82b366;" vertex="1" parent="CN">
+      <mxGeometry x="0" y="152" width="480" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_sl" value="«SubscriberCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="160" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_m1" value="+ odom_callback(msg : Odometry)  {topicName=odom}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="180" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_m2" value="+ scan_callback(msg : LaserScan)  {topicName=scan}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="200" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_m3" value="+ neighbor_callback(msg : RobotState)  {topicName=neighbors_rx}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="220" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_d3" value="" style="line;fillColor=none;strokeColor=#82b366;" vertex="1" parent="CN">
+      <mxGeometry x="0" y="244" width="480" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_tl" value="«TimerCallback» {period=0.1s}"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="252" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_m4" value="+ control_loop()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="272" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_d4" value="" style="line;fillColor=none;strokeColor=#82b366;" vertex="1" parent="CN">
+      <mxGeometry x="0" y="296" width="480" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_pl" value="«PublisherCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="304" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_pub1" value="+ /robot_states_tx  [RobotState]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="324" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_pub2" value="+ /robot_states_plot  [RobotState]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="344" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_pub3" value="+ cmd_vel  [Twist]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="364" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_pub4" value="+ /pva_constraints  [PVAConstraints]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="384" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_d5" value="" style="line;fillColor=none;strokeColor=#82b366;" vertex="1" parent="CN">
+      <mxGeometry x="0" y="408" width="480" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_p1" value="- _apply_pipeline(a : float, alpha : float)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="416" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_p2" value="- _loop_prom_err()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="436" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_p3" value="- _loop_lider()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="456" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_p4" value="- _loop_formacion()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="476" width="480" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CN_p5" value="- _stop()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="CN">
+      <mxGeometry x="0" y="496" width="480" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- AIRE                                                    -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="AIRE" value="&lt;font style=&quot;font-size:10px;&quot;&gt;«ROS2Node»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Aire&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#7d5a2a;&quot;&gt;{namespace=/}&lt;/font&gt;"
+      style="swimlane;html=1;fontStyle=0;align=center;startSize=60;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="1040" y="310" width="400" height="255" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_d1" value="" style="line;fillColor=none;strokeColor=#d79b00;" vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="60" width="400" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_a1" value="- states : dict  {robot_id → (x, y, θ)}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="68" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_a2" value="- R : float  {param: neighbor_radius}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="88" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_d2" value="" style="line;fillColor=none;strokeColor=#d79b00;" vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="112" width="400" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_sl" value="«SubscriberCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="120" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_m1" value="+ state_callback(msg : RobotState)  {topicName=/robot_states_tx}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="140" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_d3" value="" style="line;fillColor=none;strokeColor=#d79b00;" vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="164" width="400" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_pl" value="«PublisherCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="172" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_pub1" value="+ /robotN/neighbors_rx  [RobotState]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="192" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_d4" value="" style="line;fillColor=none;strokeColor=#d79b00;" vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="216" width="400" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="AIRE_p1" value="- get_publisher(robot_id : str) : Publisher"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="AIRE">
+      <mxGeometry x="0" y="224" width="400" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- StatesPlotterV2                                         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="SP" value="&lt;font style=&quot;font-size:10px;&quot;&gt;«ROS2Node»&lt;/font&gt;&lt;br&gt;&lt;b&gt;StatesPlotterV2&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#4a235a;&quot;&gt;{namespace=/}&lt;/font&gt;"
+      style="swimlane;html=1;fontStyle=0;align=center;startSize=60;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="1460" y="310" width="380" height="240" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_d1" value="" style="line;fillColor=none;strokeColor=#9673a6;" vertex="1" parent="SP">
+      <mxGeometry x="0" y="60" width="380" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_a1" value="- save_dir : str"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="68" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_a2" value="- t_final : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="88" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_a3" value="- n_robots_expected : int"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="108" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_d2" value="" style="line;fillColor=none;strokeColor=#9673a6;" vertex="1" parent="SP">
+      <mxGeometry x="0" y="132" width="380" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_sl" value="«SubscriberCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="140" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_m1" value="+ state_callback(msg : RobotState)  {topicName=/robot_states_plot}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="160" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_d3" value="" style="line;fillColor=none;strokeColor=#9673a6;" vertex="1" parent="SP">
+      <mxGeometry x="0" y="184" width="380" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_tl" value="«TimerCallback» {period=1.0s}"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="192" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="SP_m2" value="+ check_and_save()"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="SP">
+      <mxGeometry x="0" y="212" width="380" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- PvaPlotter                                              -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="PP" value="&lt;font style=&quot;font-size:10px;&quot;&gt;«ROS2Node»&lt;/font&gt;&lt;br&gt;&lt;b&gt;PvaPlotter&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#7b241c;&quot;&gt;{namespace=/}&lt;/font&gt;"
+      style="swimlane;html=1;fontStyle=0;align=center;startSize=60;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="1460" y="575" width="380" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="PP_d1" value="" style="line;fillColor=none;strokeColor=#b85450;" vertex="1" parent="PP">
+      <mxGeometry x="0" y="60" width="380" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="PP_a1" value="- save_dir : str"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=11;"
+      vertex="1" parent="PP">
+      <mxGeometry x="0" y="68" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PP_d2" value="" style="line;fillColor=none;strokeColor=#b85450;" vertex="1" parent="PP">
+      <mxGeometry x="0" y="92" width="380" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="PP_sl" value="«SubscriberCallback»"
+      style="text;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;"
+      vertex="1" parent="PP">
+      <mxGeometry x="0" y="100" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PP_m1" value="+ pva_callback(msg : PVAConstraints)  {topicName=/pva_constraints}"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;"
+      vertex="1" parent="PP">
+      <mxGeometry x="0" y="120" width="380" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ALGORITHMS PACKAGE                                      -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="pkg_alg_border" value=""
+      style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;strokeWidth=1.5;pointerEvents=0;"
+      vertex="1" parent="1">
+      <mxGeometry x="30" y="855" width="2200" height="365" as="geometry"/>
+    </mxCell>
+    <mxCell id="pkg_alg_label" value="«package» control_nodes.algorithms"
+      style="text;html=1;align=left;verticalAlign=middle;fontStyle=2;fontSize=11;strokeColor=none;fillColor=#ffffff;"
+      vertex="1" parent="1">
+      <mxGeometry x="45" y="848" width="300" height="24" as="geometry"/>
+    </mxCell>
+
+    <!-- «interface» Consensus -->
+    <mxCell id="IConsensus" value="&lt;i&gt;«interface»&lt;/i&gt;&lt;br&gt;&lt;b&gt;Consensus&lt;/b&gt;"
+      style="swimlane;html=1;fontStyle=0;align=center;startSize=44;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="470" y="885" width="300" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="IConsensus_d" value="" style="line;fillColor=none;strokeColor=#d6b656;" vertex="1" parent="IConsensus">
+      <mxGeometry x="0" y="44" width="300" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="IConsensus_m1" value="{abstract} compute(state, neighbors, ...) → (a, α)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=6;fontSize=10;fontStyle=2;"
+      vertex="1" parent="IConsensus">
+      <mxGeometry x="0" y="52" width="300" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ConsensusPromErr -->
+    <mxCell id="CPE" value="ConsensusPromErr"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="100" y="1020" width="300" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="CPE_d" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="CPE">
+      <mxGeometry x="0" y="32" width="300" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CPE_m1" value="+ compute(state, neighbors) → (a, α)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="CPE">
+      <mxGeometry x="0" y="40" width="300" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ConsensusLeader -->
+    <mxCell id="CL" value="ConsensusLeader"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="450" y="1020" width="340" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="CL_d1" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="CL">
+      <mxGeometry x="0" y="32" width="340" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CL_a1" value="+ k_leader : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="CL">
+      <mxGeometry x="0" y="40" width="340" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CL_d2" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="CL">
+      <mxGeometry x="0" y="64" width="340" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CL_m1" value="+ compute(state, neighbors, leader_state) → (a, α)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="CL">
+      <mxGeometry x="0" y="72" width="340" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ConsensusFormation -->
+    <mxCell id="CF" value="ConsensusFormation"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="840" y="1020" width="390" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="CF_d1" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="CF">
+      <mxGeometry x="0" y="32" width="390" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CF_a1" value="+ beta : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="CF">
+      <mxGeometry x="0" y="40" width="390" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CF_d2" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="CF">
+      <mxGeometry x="0" y="64" width="390" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="CF_m1" value="+ compute(state, neighbors, leader_state, offset, neigh_offsets) → (a, α)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;"
+      vertex="1" parent="CF">
+      <mxGeometry x="0" y="72" width="390" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="CF_m2" value="«utility» compute_offsets(n, theta_L, angle_v, d) → dict"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=10;fontStyle=2;"
+      vertex="1" parent="CF">
+      <mxGeometry x="0" y="96" width="390" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- PolarControlLaw -->
+    <mxCell id="PCL" value="PolarControlLaw"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="1310" y="885" width="280" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_d1" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="PCL">
+      <mxGeometry x="0" y="32" width="280" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_1" value="+ k1 : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PCL">
+      <mxGeometry x="0" y="40" width="280" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_2" value="+ k2 : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PCL">
+      <mxGeometry x="0" y="60" width="280" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_3" value="+ vmax : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PCL">
+      <mxGeometry x="0" y="80" width="280" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_4" value="+ wmax : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PCL">
+      <mxGeometry x="0" y="100" width="280" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_d2" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="PCL">
+      <mxGeometry x="0" y="124" width="280" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="PCL_m1" value="+ compute(a, α) → (v_ref, w_ref)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PCL">
+      <mxGeometry x="0" y="132" width="280" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- PVA -->
+    <mxCell id="PVA" value="PVA"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="1640" y="885" width="300" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_d1" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="PVA">
+      <mxGeometry x="0" y="32" width="300" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_1" value="+ d_safe : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PVA">
+      <mxGeometry x="0" y="40" width="300" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_2" value="+ d_influence : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PVA">
+      <mxGeometry x="0" y="60" width="300" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_3" value="+ v_max : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PVA">
+      <mxGeometry x="0" y="80" width="300" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_4" value="+ w_max : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PVA">
+      <mxGeometry x="0" y="100" width="300" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_d2" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="PVA">
+      <mxGeometry x="0" y="124" width="300" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_m1" value="+ build_constraints(ranges) → list[(A,B,C)]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PVA">
+      <mxGeometry x="0" y="132" width="300" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="PVA_m2" value="+ solve_qp(v_ref, w_ref, constraints) → [v*, w*]"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="PVA">
+      <mxGeometry x="0" y="152" width="300" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- NavControlador -->
+    <mxCell id="NavCtrl" value="NavControlador"
+      style="swimlane;html=1;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;"
+      vertex="1" parent="1">
+      <mxGeometry x="1990" y="885" width="220" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="NavCtrl_d1" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="NavCtrl">
+      <mxGeometry x="0" y="32" width="220" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NavCtrl_a1" value="+ x, y, theta : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="NavCtrl">
+      <mxGeometry x="0" y="40" width="220" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NavCtrl_a2" value="+ vmax, wmax : float"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="NavCtrl">
+      <mxGeometry x="0" y="60" width="220" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="NavCtrl_d2" value="" style="line;fillColor=none;strokeColor=#666666;" vertex="1" parent="NavCtrl">
+      <mxGeometry x="0" y="84" width="220" height="8" as="geometry"/>
+    </mxCell>
+    <mxCell id="NavCtrl_m1" value="+ ley_control(xr, yr) → (v, w)"
+      style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=5;fontSize=11;"
+      vertex="1" parent="NavCtrl">
+      <mxGeometry x="0" y="92" width="220" height="20" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- REALIZATION ARROWS  (subclases → interface Consensus)  -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <mxCell id="real_CPE" value=""
+      style="endArrow=block;endFill=0;dashed=1;strokeWidth=1.5;strokeColor=#666666;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.15;entryY=1;entryDx=0;entryDy=0;"
+      edge="1" source="CPE" target="IConsensus" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="real_CL" value=""
+      style="endArrow=block;endFill=0;dashed=1;strokeWidth=1.5;strokeColor=#666666;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;"
+      edge="1" source="CL" target="IConsensus" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="real_CF" value=""
+      style="endArrow=block;endFill=0;dashed=1;strokeWidth=1.5;strokeColor=#666666;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.85;entryY=1;entryDx=0;entryDy=0;"
+      edge="1" source="CF" target="IConsensus" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- COMPOSITION ARROWS  (◆ en el dueño)                    -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- NW ◆── NavControlador -->
+    <mxCell id="comp_NW_Nav" value=""
+      style="endArrow=none;startArrow=diamond;startFill=1;startSize=12;strokeColor=#6c8ebf;strokeWidth=1.5;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;"
+      edge="1" source="NW" target="NavCtrl" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <!-- NW ◆── PVA -->
+    <mxCell id="comp_NW_PVA" value=""
+      style="endArrow=none;startArrow=diamond;startFill=1;startSize=12;strokeColor=#6c8ebf;strokeWidth=1.5;exitX=0.55;exitY=1;exitDx=0;exitDy=0;entryX=0.2;entryY=0;entryDx=0;entryDy=0;"
+      edge="1" source="NW" target="PVA" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <!-- CN ◆── Consensus (interface) -->
+    <mxCell id="comp_CN_IC" value=""
+      style="endArrow=none;startArrow=diamond;startFill=1;startSize=12;strokeColor=#82b366;strokeWidth=1.5;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;"
+      edge="1" source="CN" target="IConsensus" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <!-- CN ◆── PolarControlLaw -->
+    <mxCell id="comp_CN_PCL" value=""
+      style="endArrow=none;startArrow=diamond;startFill=1;startSize=12;strokeColor=#82b366;strokeWidth=1.5;exitX=0.65;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;"
+      edge="1" source="CN" target="PCL" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <!-- CN ◆── PVA -->
+    <mxCell id="comp_CN_PVA" value=""
+      style="endArrow=none;startArrow=diamond;startFill=1;startSize=12;strokeColor=#82b366;strokeWidth=1.5;exitX=0.8;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;"
+      edge="1" source="CN" target="PVA" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TOPIC ARROWS  (dashed, entre nodos)                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- NW → AIRE  via /robot_states_tx -->
+    <mxCell id="top_NW_AIRE" value="/robot_states_tx"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#555555;fontSize=9;align=center;verticalAlign=bottom;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;"
+      edge="1" source="NW" target="AIRE" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- CN → AIRE  via /robot_states_tx -->
+    <mxCell id="top_CN_AIRE" value="/robot_states_tx"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#555555;fontSize=9;align=center;verticalAlign=bottom;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;"
+      edge="1" source="CN" target="AIRE" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- AIRE → CN  via /robotN/neighbors_rx -->
+    <mxCell id="top_AIRE_CN" value="/robotN/neighbors_rx"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#d79b00;fontSize=9;align=center;verticalAlign=top;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;"
+      edge="1" source="AIRE" target="CN" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- NW → StatesPlotterV2  via /robot_states_plot -->
+    <mxCell id="top_NW_SP" value="/robot_states_plot"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#9673a6;fontSize=9;align=center;verticalAlign=bottom;exitX=1;exitY=0.15;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;"
+      edge="1" source="NW" target="SP" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1430" y="373"/>
+          <mxPoint x="1430" y="403"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- CN → StatesPlotterV2  via /robot_states_plot -->
+    <mxCell id="top_CN_SP" value="/robot_states_plot"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#9673a6;fontSize=9;align=center;verticalAlign=bottom;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;"
+      edge="1" source="CN" target="SP" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- NW → PvaPlotter  via /pva_constraints -->
+    <mxCell id="top_NW_PP" value="/pva_constraints"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#b85450;fontSize=9;align=center;verticalAlign=bottom;exitX=1;exitY=0.1;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;"
+      edge="1" source="NW" target="PP" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1430" y="353"/>
+          <mxPoint x="1430" y="620"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- CN → PvaPlotter  via /pva_constraints -->
+    <mxCell id="top_CN_PP" value="/pva_constraints"
+      style="rounded=0;dashed=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#b85450;fontSize=9;align=center;verticalAlign=bottom;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;"
+      edge="1" source="CN" target="PP" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

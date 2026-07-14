@@ -1,0 +1,122 @@
+\section{Arquitectura de Nodos ROS~2}
+
+El nodo es la unidad básica de cómputo en ROS~2. Es un proceso con identidad propia en la red (un nombre único), uno o más canales de comunicación (tópicos, servicios, acciones), y un conjunto de parámetros configurables~\cite{ros2humble}. La imagen conceptual de un sistema ROS~2 en funcionamiento es un grafo: los nodos son los vértices y los tópicos son las aristas que los conectan. Herramientas como \texttt{rqt\_graph} permiten visualizar este grafo en tiempo real.
+
+Un nodo no es necesariamente un proceso del sistema operativo. ROS~2 soporta \textit{composición}: varios nodos pueden ejecutarse dentro del mismo proceso para reducir la latencia de comunicación entre ellos (comunicación por memoria compartida en lugar de red). Sin embargo, en el modelo más común y en este trabajo, cada nodo es un proceso independiente.
+
+\subsection{Tópicos}
+
+Un tópico es un canal de comunicación asíncrono con nombre y tipo de mensaje fijo. Implementa el patrón pub-sub: cualquier nodo puede publicar en él y cualquier nodo puede suscribirse. El tipo de mensaje define la estructura de los datos que viajan por el canal y debe coincidir entre publicador y suscriptor. Si no coincide, DDS rechaza la conexión.
+
+Los tipos de mensajes se definen en archivos \texttt{.msg} dentro de paquetes ROS~2. El tipo \texttt{geometry\_msgs/msg/Twist}, por ejemplo, contiene dos vectores 3D que representan velocidad lineal y angular. El tipo \texttt{sensor\_msgs/msg/LaserScan} contiene un array de distancias con metadatos de ángulo y frecuencia. La cadena de compilación de ROS~2 genera automáticamente las clases Python y C++ correspondientes.
+
+Los nombres de tópicos son jerárquicos y pueden calificarse con un namespace. El tópico \texttt{cmd\_vel} dentro del namespace \texttt{/robot0} se convierte en el tópico completo \texttt{/robot0/cmd\_vel}. El namespace es la herramienta que permite que múltiples robots ejecuten el mismo código sin conflictos: cada uno opera dentro de su propio espacio de nombres.
+
+La Terminal~\ref{lst:topic_cli} muestra los comandos de inspección de tópicos más usados en la práctica:
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=bash, caption={Herramientas de línea de comandos para inspección de tópicos.}, label={lst:topic_cli}]
+ros2 topic list                  # lista todos los topicos activos
+ros2 topic echo /robot0/cmd_vel  # imprime mensajes en tiempo real
+ros2 topic hz /robot0/odom       # mide la frecuencia de publicacion
+ros2 topic info /robot0/scan     # muestra tipo, publicadores y suscriptores
+ros2 topic bw /robot0/scan       # mide el ancho de banda consumido
+\end{lstlisting}
+\end{figure}
+
+\subsection{Servicios y acciones}
+
+Cuando el patrón pub-sub no es suficiente, ROS~2 ofrece dos patrones adicionales con semántica de respuesta.
+
+\textbf{Servicios.} Un servicio implementa el patrón solicitud-respuesta síncrono. El cliente envía una solicitud con datos y bloquea hasta recibir la respuesta del servidor. Es apropiado para operaciones cortas y discretas: consultar el estado de un componente, activar o desactivar un sensor, o configurar un parámetro en tiempo de ejecución. La limitación es que el cliente se bloquea durante la espera, lo que puede ser problemático en nodos con lazos de control de tiempo real. En esos casos se usan clientes asíncronos con futures.
+
+Los tipos de servicio se definen en archivos \texttt{.srv} con dos secciones separadas por \texttt{---}: la definición de la solicitud y la definición de la respuesta.
+
+\textbf{Acciones.} Las acciones resuelven el caso donde la operación es larga, su duración es variable, y el cliente necesita retroalimentación progresiva. El cliente envía un goal y recibe periódicamente mensajes de feedback hasta que llega el result final. El cliente puede cancelar el goal en cualquier momento. Es el patrón correcto para navegación autónoma, manipulación de objetos, o cualquier comportamiento cuyo tiempo de ejecución dependa del estado del mundo.
+
+Los tipos de acción se definen en archivos \texttt{.action} con tres secciones: goal, result, y feedback.
+
+La Terminal~\ref{lst:service_cli} muestra comandos de inspección de servicios desde la terminal:
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=bash, caption={Inspección de servicios desde la terminal.}, label={lst:service_cli}]
+ros2 service list
+ros2 service type /set_bool
+ros2 service call /set_bool std_srvs/srv/SetBool "{data: true}"
+\end{lstlisting}
+\end{figure}
+
+\subsection{Parámetros}
+
+Los parámetros son valores de configuración asociados a un nodo. Permiten modificar el comportamiento del nodo sin recompilarlo ni modificar su código. Cada nodo mantiene su propio Parameter Server: una base de datos en memoria que almacena los parámetros con su nombre, tipo, y valor actual.
+
+Los parámetros tienen tipo estático: se declara el tipo al declararlos mediante el valor por defecto, y el Parameter Server solo acepta valores del mismo tipo. Los tipos soportados son \texttt{bool}, \texttt{int}, \texttt{double}, \texttt{string}, y arrays de cada uno de ellos.
+
+Los parámetros pueden pasarse de tres formas. Desde la línea de comandos con el flag \texttt{-p}. Desde un archivo YAML con el flag \texttt{--params-file}. O modificarse en tiempo de ejecución mediante la CLI o desde otro nodo programáticamente. La Terminal~\ref{lst:params_cli_bash} muestra los primeros dos casos:
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=bash, caption={Paso de parámetros desde la línea de comandos y desde archivo YAML.}, label={lst:params_cli_bash}]
+ros2 run simulador pva_node --ros-args -p vmax:=1.2
+ros2 run simulador pva_node --ros-args --params-file config.yaml
+\end{lstlisting}
+\end{figure}
+
+El archivo YAML sigue una convención jerárquica fija donde el nombre del nodo es la clave raíz bajo \texttt{ros\_\_parameters}:
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=bash, caption={Estructura de un archivo de parámetros YAML.}, label={lst:params_yaml}]
+pva_node:
+  ros__parameters:
+    vmax: 1.2
+    wmax: 1.0
+    n_rays_used: 5
+    d_safe: 0.3
+\end{lstlisting}
+\end{figure}
+
+En código Python, el flujo es siempre: primero declarar, luego leer. Llamar a \texttt{get\_parameter} antes de \texttt{declare\_parameter} produce un error:
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=python, caption={Declaración y lectura de parámetros en rclpy.}, label={lst:params_py}]
+# Declarar (registra el nombre, tipo, y valor por defecto)
+self.declare_parameter('vmax', 0.5)      # float
+self.declare_parameter('n_rays_used', 0) # int
+
+# Leer (consulta el Parameter Server, ya resuelto)
+vmax        = self.get_parameter('vmax').value         # float
+n_rays_used = self.get_parameter('n_rays_used').value  # int
+\end{lstlisting}
+\end{figure}
+
+\subsection{Nodos de ciclo de vida}
+
+ROS~2 introduce el concepto de nodos de ciclo de vida (lifecycle nodes) como una extensión del nodo estándar. Un lifecycle node expone explícitamente una máquina de estados con transiciones bien definidas: \textit{Unconfigured} $\to$ \textit{Inactive} $\to$ \textit{Active} $\to$ \textit{Finalized}. Las transiciones son controladas desde fuera del nodo mediante un servicio especial.
+
+Este modelo es útil en sistemas donde el orden de inicialización de los componentes importa: un nodo de control no debe activarse hasta que el nodo de percepción esté listo. Con lifecycle nodes esto es explícito y controlable, en lugar de depender de tiempos de espera o verificaciones manuales.
+
+\subsection{Herramientas de línea de comandos}
+
+La CLI de ROS~2 es la principal herramienta de inspección y depuración de un sistema en tiempo de ejecución. La Terminal~\ref{lst:ros2_cli_full} reúne los subcomandos más utilizados:
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[style=bash, caption={Comandos fundamentales de la CLI de ROS~2.}, label={lst:ros2_cli_full}]
+ros2 node list                  # nodos activos con su namespace
+ros2 node info /robot0/consenso # topicos, servicios y parametros de un nodo
+ros2 topic list                 # topicos activos
+ros2 topic echo /robot0/odom    # ver mensajes en tiempo real
+ros2 topic hz /robot0/scan      # frecuencia de publicacion
+ros2 service list               # servicios disponibles
+ros2 param list /robot0/consenso          # parametros del nodo
+ros2 param get /robot0/consenso vmax      # valor de un parametro
+ros2 param set /robot0/consenso vmax 0.8  # cambiar en tiempo real
+ros2 run rqt_graph rqt_graph    # grafo visual del sistema
+\end{lstlisting}
+\end{figure}
+
+El comando \texttt{ros2 param set} es especialmente útil durante la puesta a punto de algoritmos: permite ajustar ganancias o límites sin reiniciar el nodo, siempre que el nodo tenga registrado un callback de cambio de parámetro (\texttt{add\_on\_set\_parameters\_callback}).
