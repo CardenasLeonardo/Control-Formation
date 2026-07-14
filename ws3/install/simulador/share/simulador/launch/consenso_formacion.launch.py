@@ -13,11 +13,16 @@ from launch_ros.actions import Node
 
 from ament_index_python.packages import get_package_share_directory
 
+# Posición de spawn del líder — inicio y cierre de la trayectoria por defecto
+LEADER_X = 0.0
+LEADER_Y = 0.0
+
 
 def compute_initial_positions(n, leader_id, angle_v, d):
     """
     Posiciones iniciales en formación V con theta_leader=0 (líder mirando al este).
-    Líder en (0, 0). Seguidores en sus anclas virtuales: r_i = R(θ_L ± angle_v) * [-k*d, 0].
+    Líder en (LEADER_X, LEADER_Y). Seguidores en sus anclas virtuales:
+    r_i = R(θ_L ± angle_v) * [-k*d, 0].
     """
 
     n_followers = n - 1
@@ -29,17 +34,17 @@ def compute_initial_positions(n, leader_id, angle_v, d):
         return c * vx - s * vy, s * vx + c * vy
 
     leader_num = int(leader_id.replace('robot', ''))
-    positions  = {leader_num: (0.0, 0.0)}
+    positions  = {leader_num: (LEADER_X, LEADER_Y)}
 
     idx = 1
     for k in range(1, n_left + 1):
         rx, ry = rot(angle_v, -k * d, 0.0)
-        positions[idx] = (round(rx, 4), round(ry, 4))
+        positions[idx] = (round(LEADER_X + rx, 4), round(LEADER_Y + ry, 4))
         idx += 1
 
     for k in range(1, n_right + 1):
         rx, ry = rot(-angle_v, -k * d, 0.0)
-        positions[idx] = (round(rx, 4), round(ry, 4))
+        positions[idx] = (round(LEADER_X + rx, 4), round(LEADER_Y + ry, 4))
         idx += 1
 
     return positions
@@ -67,14 +72,27 @@ def launch_setup(context, *args, **kwargs):
         get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py'
     )
     rsp_launch = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
+    world_path = os.path.join(                                  # mundo con piso transparente
+        get_package_share_directory('simulador'), 'worlds', 'demo.world'
+    )
     camera_sdf = os.path.join(
         get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
     )
 
+    # Encuadre de cámara: bounding box de las posiciones de spawn + la ruta del líder
+    wp_pairs = [(waypoints[i], waypoints[i + 1]) for i in range(0, len(waypoints), 2)]
+    all_x = [p[0] for p in init_pos.values()] + [p[0] for p in wp_pairs]
+    all_y = [p[1] for p in init_pos.values()] + [p[1] for p in wp_pairs]
+    camera_x = (max(all_x) + min(all_x)) / 2.0
+    camera_y = (max(all_y) + min(all_y)) / 2.0
+
     actions = []
 
     actions.append(
-        IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(gazebo_launch),
+            launch_arguments={'world': world_path}.items()
+        )
     )
 
     if record_gif:
@@ -85,7 +103,7 @@ def launch_setup(context, *args, **kwargs):
                 arguments=[
                     '-file', camera_sdf,
                     '-entity', 'overhead_camera',
-                    '-x', '0', '-y', '0', '-z', str(camera_height),
+                    '-x', str(camera_x), '-y', str(camera_y), '-z', str(camera_height),
                     '-P', '1.5708',
                 ],
                 output='screen'
@@ -177,8 +195,20 @@ def launch_setup(context, *args, **kwargs):
             name='states_plotter_v2',
             parameters=[{
                 'save_dir':          save_dir,
-                't_final':           t_final,
+                't_final':           t_final,   # respaldo de seguridad
                 'n_robots_expected': n,
+                # Líder físico real (navigate_waypoints_pva) + offset de V:
+                # el ideal de cada robot es la pose del líder más su offset,
+                # misma fórmula que usa consenso_node (ConsensusFormation).
+                'error_reference':      'leader_robot',
+                'formation_leader_id':  leader_id,
+                'formation_angle_v':    angle_v,
+                'formation_d':          d,
+                # Guarda al completar el loop (antes de que gif_recorder mate
+                # este proceso con su auto_shutdown/pkill al terminar antes).
+                'stop_mode':    'goal',
+                'goal_topic':   f'/{leader_id}/final_goal_reached',
+                'stop_delay':   1.0,
             }],
             output='screen'
         )
@@ -191,10 +221,17 @@ def launch_setup(context, *args, **kwargs):
                 executable='gif_recorder',
                 name='gif_recorder',
                 parameters=[{
-                    'save_dir':  save_dir,
-                    't_final':   t_final,
-                    'fps':       gif_fps,
-                    'gif_name':  'formacion.gif',
+                    'save_dir':      save_dir,
+                    't_final':       t_final,   # respaldo de seguridad
+                    'fps':           gif_fps,
+                    'gif_name':      'formacion.gif',
+                    # Cierra al completar el loop (navigate_waypoints_pva
+                    # publica esto al llegar al último waypoint), no por
+                    # tiempo fijo — mismo criterio que vs_formacion*.
+                    'stop_mode':     'goal',
+                    'goal_topic':    f'/{leader_id}/final_goal_reached',
+                    'stop_delay':    2.0,
+                    'auto_shutdown': True,
                 }],
                 output='screen'
             )
@@ -235,8 +272,11 @@ def generate_launch_description():
             default_value='1.0',
             description='Separación entre robots en el brazo de la V (m)'),
         DeclareLaunchArgument('waypoints',
-            default_value='6.0,0.0,6.0,5.0,10.0,8.0,10.0,3.0,6.0,3.0,3.0,6.0,0.0,6.0,0.0,1.0,4.0,-2.0,8.0,-2.0',
-            description='Waypoints del líder: x0,y0,x1,y1,...'),
+            # Loop simple (cuadrado 5x5 m) que cierra exactamente en el spawn
+            # del líder (LEADER_X, LEADER_Y) = (0.0, 0.0) — mismo criterio de
+            # inicio/cierre que vs_formacion / vs_formacion_noble.
+            default_value='0.0,0.0, 5.0,0.0, 5.0,5.0, 0.0,5.0, 0.0,0.0',
+            description='Waypoints del líder: x0,y0,x1,y1,... (navegación punto a punto, no spline)'),
         DeclareLaunchArgument('t_final',
             default_value='120.0',
             description='Duración de la simulación (s)'),
@@ -247,8 +287,8 @@ def generate_launch_description():
             default_value='true',
             description='Si es true, spawnea la cámara cenital y graba un GIF de la simulación'),
         DeclareLaunchArgument('camera_height',
-            default_value='15.0',
-            description='Altura de la cámara cenital (m)'),
+            default_value='9.0',
+            description='Altura de la cámara cenital (m) — estándar del proyecto'),
         DeclareLaunchArgument('gif_fps',
             default_value='10.0',
             description='Fotogramas por segundo del GIF grabado'),

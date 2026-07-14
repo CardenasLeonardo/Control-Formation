@@ -12,6 +12,12 @@ from launch_ros.actions import Node
 
 from ament_index_python.packages import get_package_share_directory
 
+# Grabación de GIF (cámara cenital) — se detiene sola al llegar a t_final
+# (ConsensusLeader no tiene señal de "meta alcanzada" propia).
+RECORD_GIF    = True
+CAMERA_HEIGHT = 9.0   # estándar del proyecto — "más cerca, robots se ven más grandes"
+GIF_FPS       = 10.0
+
 
 def launch_setup(context, *args, **kwargs):
 
@@ -30,6 +36,12 @@ def launch_setup(context, *args, **kwargs):
         get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py'
     )
     rsp_launch = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')
+    world_path = os.path.join(                                  # mundo con piso transparente
+        get_package_share_directory('simulador'), 'worlds', 'demo.world'
+    )
+    camera_sdf = os.path.join(
+        get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
+    )
 
     # Líder en el origen; seguidores en grilla detrás (x negativo)
     n_followers = n - 1
@@ -53,13 +65,38 @@ def launch_setup(context, *args, **kwargs):
             positions[i] = follower_positions[seg_idx]
             seg_idx += 1
 
+    # Encuadre de cámara: bounding box de las posiciones de spawn + la ruta del líder
+    wp_pairs = [(waypoints[i], waypoints[i + 1]) for i in range(0, len(waypoints), 2)]
+    all_x = [p[0] for p in positions.values()] + [p[0] for p in wp_pairs]
+    all_y = [p[1] for p in positions.values()] + [p[1] for p in wp_pairs]
+    camera_x = (max(all_x) + min(all_x)) / 2.0
+    camera_y = (max(all_y) + min(all_y)) / 2.0
+
     late_delay = 3.0 + n * 1.5 + 2.0
 
     actions = []
 
     actions.append(
-        IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(gazebo_launch),
+            launch_arguments={'world': world_path}.items()
+        )
     )
+
+    if RECORD_GIF:
+        actions.append(TimerAction(period=2.0, actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-file', camera_sdf,
+                    '-entity', 'overhead_camera',
+                    '-x', str(camera_x), '-y', str(camera_y), '-z', str(CAMERA_HEIGHT),
+                    '-P', '1.5708',
+                ],
+                output='screen'
+            )
+        ]))
 
     # Staggered: robot i spawns at t = 3 + i*1.5 s
     for i in range(n):
@@ -144,10 +181,33 @@ def launch_setup(context, *args, **kwargs):
                 'save_dir':          save_dir,
                 't_final':           t_final,
                 'n_robots_expected': n,
+                # ConsensusLeader no tiene offset de formación: todos los
+                # seguidores convergen exactamente a la posición del líder.
+                # formation_d=0.0 colapsa el offset ideal a (0,0) para todos.
+                'error_reference':   'leader_robot',
+                'formation_leader_id': leader_id,
+                'formation_d':        0.0,
             }],
             output='screen'
         )
     ]))
+
+    if RECORD_GIF:
+        actions.append(TimerAction(period=late_delay, actions=[
+            Node(
+                package='simulador',
+                executable='gif_recorder',
+                name='gif_recorder',
+                parameters=[{
+                    'save_dir':      save_dir,
+                    'gif_name':      'consenso_lider.gif',
+                    'fps':           GIF_FPS,
+                    't_final':       t_final,
+                    'auto_shutdown': True,
+                }],
+                output='screen'
+            )
+        ]))
 
     # actions.append(TimerAction(period=late_delay, actions=[
     #     Node(

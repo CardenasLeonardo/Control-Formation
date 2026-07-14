@@ -10,6 +10,7 @@ from rclpy.executors import MultiThreadedExecutor
 
 from nav_msgs.msg import Odometry
 from multi_robot_interfaces.msg import RobotState
+from std_msgs.msg import Bool
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -61,10 +62,29 @@ class StatesPlotterV2(Node):
         self.declare_parameter('t_initial',         3.0)
         self.declare_parameter('t_final',           30.0)
         self.declare_parameter('n_robots_expected', 0)
+        # Cierre anticipado por meta alcanzada (mismo mecanismo que
+        # gif_recorder): si stop_mode='goal', guarda y termina stop_delay
+        # segundos después de goal_topic, en vez de esperar a t_final. Evita
+        # que un auto_shutdown/pkill externo (p.ej. de gif_recorder) mate
+        # este nodo antes de que alcance a guardar sus figuras — t_final
+        # queda como respaldo de seguridad.
+        self.declare_parameter('stop_mode',   'time')   # 'time' | 'goal'
+        self.declare_parameter('goal_topic',  '')
+        self.declare_parameter('stop_delay',  1.0)
         self.declare_parameter('trajectory_only',   False)
-        # Trayectoria + error euclidiano respecto al offset individual dentro
-        # de la V (requiere /virtual_structure, publicado por vs_node)
+        # Trayectoria + error euclidiano respecto a un objetivo dinámico.
+        # error_vs_virtual_structure=True es atajo retrocompatible de
+        # error_reference='virtual_structure'. Valores de error_reference:
+        #   'virtual_structure' — ideal = pose de /virtual_structure + offset
+        #                          (formation_*), ej. vs_formacion*
+        #   'leader_robot'      — ideal = pose del robot formation_leader_id
+        #                          + offset (formation_*); formation_d=0
+        #                          reduce el offset a cero (consenso_lider,
+        #                          sin formación, todos convergen al líder)
+        #   'centroid'          — ideal = centroide instantáneo del grupo,
+        #                          sin offset (consenso_prom)
         self.declare_parameter('error_vs_virtual_structure', False)
+        self.declare_parameter('error_reference', '')
         # Parámetros de snapshots de formación
         self.declare_parameter('formation_snapshots',  False)
         self.declare_parameter('snap_interval_s',      15.0)
@@ -80,12 +100,18 @@ class StatesPlotterV2(Node):
         self.n_robots_expected     = int(self.get_parameter('n_robots_expected').value)
         self.trajectory_only       = bool(self.get_parameter('trajectory_only').value)
         self.error_vs_virtual_structure = bool(self.get_parameter('error_vs_virtual_structure').value)
+        self.error_reference       = str(self.get_parameter('error_reference').value)
+        if self.error_vs_virtual_structure and not self.error_reference:
+            self.error_reference = 'virtual_structure'
         self.formation_snapshots   = bool(self.get_parameter('formation_snapshots').value)
         self.snap_interval_s       = float(self.get_parameter('snap_interval_s').value)
         self.formation_leader_id   = str(self.get_parameter('formation_leader_id').value)
         self.formation_n_followers = int(self.get_parameter('formation_n_followers').value)
         self.formation_angle_v     = float(self.get_parameter('formation_angle_v').value)
         self.formation_d           = float(self.get_parameter('formation_d').value)
+        self.stop_mode             = str(self.get_parameter('stop_mode').value)
+        self.goal_topic            = str(self.get_parameter('goal_topic').value)
+        self.stop_delay            = float(self.get_parameter('stop_delay').value)
 
         os.makedirs(self.save_dir, exist_ok=True)
 
@@ -100,7 +126,7 @@ class StatesPlotterV2(Node):
 
         # Serie temporal de la estructura virtual (para el error vs offset ideal)
         self.vs_data = {'t': [], 'x': [], 'y': [], 'theta': []}
-        if self.error_vs_virtual_structure:
+        if self.error_reference == 'virtual_structure':
             self.create_subscription(RobotState, '/virtual_structure', self._vs_cb, 100)
 
         # Suscripción directa a odom de cada robot (tasa máxima de Gazebo)
@@ -120,6 +146,11 @@ class StatesPlotterV2(Node):
                 self.state_callback,
                 100
             )
+
+        # Cierre anticipado por meta alcanzada
+        self._goal_seen = False
+        if self.stop_mode == 'goal' and self.goal_topic:
+            self.create_subscription(Bool, self.goal_topic, self._goal_reached_cb, 10)
 
         # Timer solo para vigilar el tiempo — sin matplotlib
         self.timer = self.create_timer(0.5, self._check_timing)
@@ -182,6 +213,28 @@ class StatesPlotterV2(Node):
             self.vs_data['x'].append(msg.x)
             self.vs_data['y'].append(msg.y)
             self.vs_data['theta'].append(msg.theta)
+
+    # -------------------------------------------------
+
+    def _goal_reached_cb(self, msg):
+        if not msg.data:
+            return
+        with self._lock:
+            if self._goal_seen:
+                return
+            self._goal_seen = True
+        self.get_logger().info(
+            f"Meta final recibida en {self.goal_topic} — guardando figuras "
+            f"en {self.stop_delay}s (antes de que llegue t_final={self.t_final}s)"
+        )
+        threading.Timer(self.stop_delay, self._trigger_final_save).start()
+
+    def _trigger_final_save(self):
+        with self._lock:
+            if self.final_saved:
+                return
+            self.final_saved = True
+        self.save_final()
 
     # -------------------------------------------------
 
@@ -325,7 +378,7 @@ class StatesPlotterV2(Node):
 
         self._save_raw(data_snapshot)
 
-        if self.error_vs_virtual_structure:
+        if self.error_reference:
             self._save_trajectory_and_error(data_snapshot)
         elif self.trajectory_only:
             self._save_trajectory_only(data_snapshot)
@@ -380,45 +433,62 @@ class StatesPlotterV2(Node):
 
     def _save_trajectory_and_error(self, data_snapshot):
         """Dos gráficas: trayectorias (idéntica a _save_triple) y error
-        euclidiano de cada robot respecto a su offset ideal dentro de la V,
-        interpolando la pose de la estructura virtual en cada instante."""
+        euclidiano de cada robot respecto a un objetivo dinámico (ver
+        error_reference: 'virtual_structure' | 'leader_robot' | 'centroid')."""
 
-        with self._lock:
-            vs_t     = np.array(self.vs_data['t'],     dtype=float)
-            vs_x     = np.array(self.vs_data['x'],     dtype=float)
-            vs_y     = np.array(self.vs_data['y'],     dtype=float)
-            vs_theta = np.array(self.vs_data['theta'], dtype=float)
-
-        if len(vs_t) >= 2:
-            sort_vs = np.argsort(vs_t)
-            vs_t, vs_x, vs_y, vs_theta = (
-                vs_t[sort_vs], vs_x[sort_vs], vs_y[sort_vs], vs_theta[sort_vs])
-            _, uniq_vs = np.unique(vs_t, return_index=True)
-            vs_t, vs_x, vs_y, vs_theta = (
-                vs_t[uniq_vs], vs_x[uniq_vs], vs_y[uniq_vs], vs_theta[uniq_vs])
-            have_vs = True
-        else:
-            have_vs = False
-            self.get_logger().warn(
-                "error_vs_virtual_structure=True pero no se recibió /virtual_structure "
-                "— se omite la gráfica de error"
-            )
-
-        fig = Figure(figsize=(11, 5.2))
-        FigureCanvasAgg(fig)
-        axes = fig.subplots(1, 2)
-
-        for i, (robot, d) in enumerate(sorted(data_snapshot.items())):
-            c = COLORS[i % len(COLORS)]
-
+        # --- Series limpias (ordenadas, sin timestamps duplicados) por robot ---
+        clean = {}
+        for robot, d in data_snapshot.items():
             sort_idx = np.argsort(d["t"])
             x     = np.array(d["x"],     dtype=float)[sort_idx]
             y     = np.array(d["y"],     dtype=float)[sort_idx]
             t     = np.array(d["t"],     dtype=float)[sort_idx]
             theta = np.array(d["theta"], dtype=float)[sort_idx]
-
             _, uniq = np.unique(t, return_index=True)
-            x, y, t, theta = x[uniq], y[uniq], t[uniq], theta[uniq]
+            clean[robot] = (t[uniq], x[uniq], y[uniq], theta[uniq])
+
+        mode = self.error_reference
+        ref_t = ref_x = ref_y = ref_theta = None
+        have_ref = False
+
+        if mode == 'virtual_structure':
+            with self._lock:
+                vs_t     = np.array(self.vs_data['t'],     dtype=float)
+                vs_x     = np.array(self.vs_data['x'],     dtype=float)
+                vs_y     = np.array(self.vs_data['y'],     dtype=float)
+                vs_theta = np.array(self.vs_data['theta'], dtype=float)
+            if len(vs_t) >= 2:
+                s = np.argsort(vs_t)
+                vs_t, vs_x, vs_y, vs_theta = vs_t[s], vs_x[s], vs_y[s], vs_theta[s]
+                _, u = np.unique(vs_t, return_index=True)
+                ref_t, ref_x, ref_y, ref_theta = vs_t[u], vs_x[u], vs_y[u], vs_theta[u]
+                have_ref = True
+            else:
+                self.get_logger().warn(
+                    "error_reference='virtual_structure' pero no se recibió "
+                    "/virtual_structure — se omite la gráfica de error"
+                )
+
+        elif mode == 'leader_robot':
+            if self.formation_leader_id in clean:
+                ref_t, ref_x, ref_y, ref_theta = clean[self.formation_leader_id]
+                have_ref = len(ref_t) >= 2
+            if not have_ref:
+                self.get_logger().warn(
+                    f"error_reference='leader_robot' pero no hay datos de "
+                    f"{self.formation_leader_id} — se omite la gráfica de error"
+                )
+
+        elif mode == 'centroid':
+            have_ref = len(clean) >= 1
+
+        fig = Figure(figsize=(11, 5.2))
+        FigureCanvasAgg(fig)
+        axes = fig.subplots(1, 2)
+
+        for i, robot in enumerate(sorted(clean.keys())):
+            c = COLORS[i % len(COLORS)]
+            t, x, y, theta = clean[robot]
 
             axes[0].plot(x, y, color=c, label=robot, linewidth=1.8, zorder=2)
             axes[0].scatter(x[0], y[0], s=90, facecolors='white',
@@ -427,25 +497,41 @@ class StatesPlotterV2(Node):
                             s=220, zorder=5, edgecolors='black', linewidths=0.5)
             self._draw_triangles(axes[0], x, y, theta, c)
 
-            if have_vs:
-                try:
-                    follower_index = int(robot.replace('robot', ''))
-                except ValueError:
-                    follower_index = 0
+            if not have_ref:
+                continue
 
-                vs_x_i  = np.interp(t, vs_t, vs_x)
-                vs_y_i  = np.interp(t, vs_t, vs_y)
-                vs_th_i = np.interp(t, vs_t, vs_theta)
+            try:
+                follower_index = int(robot.replace('robot', ''))
+            except ValueError:
+                follower_index = 0
 
-                ox = np.empty_like(vs_th_i)
-                oy = np.empty_like(vs_th_i)
-                for j, th in enumerate(vs_th_i):
+            if mode == 'centroid':
+                # Centroide instantáneo del grupo (interpolando cada robot en
+                # los timestamps de `robot`), sin offset — todos deben
+                # converger al mismo punto.
+                cx = np.zeros_like(t)
+                cy = np.zeros_like(t)
+                for other, (ot, ox_, oy_, _) in clean.items():
+                    cx += np.interp(t, ot, ox_)
+                    cy += np.interp(t, ot, oy_)
+                cx /= len(clean)
+                cy /= len(clean)
+                error = np.hypot(x - cx, y - cy)
+            else:
+                ref_x_i  = np.interp(t, ref_t, ref_x)
+                ref_y_i  = np.interp(t, ref_t, ref_y)
+                ref_th_i = np.interp(t, ref_t, ref_theta)
+
+                ox = np.empty_like(ref_th_i)
+                oy = np.empty_like(ref_th_i)
+                for j, th in enumerate(ref_th_i):
                     ox[j], oy[j] = _compute_offset(
                         follower_index, self.n_robots_expected, th,
                         self.formation_angle_v, self.formation_d)
 
-                error = np.hypot(x - (vs_x_i + ox), y - (vs_y_i + oy))
-                axes[1].plot(t, error, color=c, label=robot, linewidth=1.8)
+                error = np.hypot(x - (ref_x_i + ox), y - (ref_y_i + oy))
+
+            axes[1].plot(t, error, color=c, label=robot, linewidth=1.8)
 
         axes[0].set_title("Robot trajectories")
         axes[0].set_xlabel("x (m)")

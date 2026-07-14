@@ -12,15 +12,21 @@ from ament_index_python.packages import get_package_share_directory
 
 
 POSES_8 = [
-    (0.0, 0.0,   math.pi / 4),       # robot0 
-    (4.0, 1.0,  -math.pi / 2),       # robot1 
-    (8.0, 0.0,  -math.pi / 4),       # robot2 
-    (1.0, 4.0,   math.pi),           # robot3 
-    (8.0, 4.0,   0.0),               # robot4 
-    (0.0, 8.0,   3*math.pi / 4),     # robot5 
-    (4.0, 9.0,   math.pi / 2),       # robot6 
-    (8.0, 8.0,  -3*math.pi / 4),     # robot7 
+    (0.0, 0.0,   math.pi / 4),       # robot0
+    (4.0, 1.0,  -math.pi / 2),       # robot1
+    (8.0, 0.0,  -math.pi / 4),       # robot2
+    (1.0, 4.0,   math.pi),           # robot3
+    (8.0, 4.0,   0.0),               # robot4
+    (0.0, 8.0,   3*math.pi / 4),     # robot5
+    (4.0, 9.0,   math.pi / 2),       # robot6
+    (8.0, 8.0,  -3*math.pi / 4),     # robot7
 ]
+
+# Grabación de GIF (cámara cenital) — se detiene sola al llegar a t_final
+# (no hay señal de "meta alcanzada" en consenso promedio, solo t_final).
+RECORD_GIF    = True
+CAMERA_HEIGHT = 9.0   # estándar del proyecto — "más cerca, robots se ven más grandes"
+GIF_FPS       = 10.0
 
 
 def launch_setup(context, *args, **kwargs):
@@ -38,13 +44,43 @@ def launch_setup(context, *args, **kwargs):
         'launch',
         'gazebo.launch.py'
     )
-    rsp_launch    = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')   # launch del robot state publisher
+    rsp_launch = os.path.join(articubot_pkg, 'launch', 'rsp.launch.py')   # launch del robot state publisher
+    world_path = os.path.join(                                            # mundo con piso transparente
+        get_package_share_directory('simulador'), 'worlds', 'demo.world'
+    )
+    camera_sdf = os.path.join(
+        get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
+    )
 
-    # Arranque de Gazebo #
+    # Encuadre de cámara: bounding box de las poses iniciales usadas
+    wp_x = [p[0] for p in poses]
+    wp_y = [p[1] for p in poses]
+    camera_x = (max(wp_x) + min(wp_x)) / 2.0
+    camera_y = (max(wp_y) + min(wp_y)) / 2.0
+
+    # Arranque de Gazebo (con piso transparente) #
     actions = []
     actions.append(
-        IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))  # lanza el simulador vacío
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(gazebo_launch),
+            launch_arguments={'world': world_path}.items()
+        )
     )
+
+    if RECORD_GIF:
+        actions.append(TimerAction(period=2.0, actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-file', camera_sdf,
+                    '-entity', 'overhead_camera',
+                    '-x', str(camera_x), '-y', str(camera_y), '-z', str(CAMERA_HEIGHT),
+                    '-P', '1.5708',
+                ],
+                output='screen'
+            )
+        ]))
 
     # Spawn escalonado: RSP → robot → nodo de control (uno por uno para no sobrecargar Gazebo) #
     for i, (x0, y0, yaw) in enumerate(poses):
@@ -56,7 +92,7 @@ def launch_setup(context, *args, **kwargs):
             PythonLaunchDescriptionSource(rsp_launch),
             launch_arguments={
                 'namespace':    ns,
-                'use_sim_time': 'true'
+                'use_sim_time': 'false'
             }.items()
         )
 
@@ -80,7 +116,6 @@ def launch_setup(context, *args, **kwargs):
             name='consenso',
             namespace=ns,
             parameters=[{
-                'use_sim_time':    True,                         # sincronizar con Gazebo
                 'consensus_type': 'prom_err',                   # tipo: consenso por promedio de errores
                 'k1':             0.8,                          # ganancia lineal
                 'k2':             1.0,                          # ganancia angular
@@ -103,8 +138,7 @@ def launch_setup(context, *args, **kwargs):
                 package='simulador',
                 executable='aire',
                 name='aire',
-                parameters=[{'neighbor_radius': R,               # publica vecindades dentro del radio R
-                             'use_sim_time': True}],             # sincronizar con Gazebo
+                parameters=[{'neighbor_radius': R}],             # publica vecindades dentro del radio R
                 output='screen'
             )
         ])
@@ -117,10 +151,13 @@ def launch_setup(context, *args, **kwargs):
                 executable='states_plotter_v2',
                 name='states_plotter_v2',
                 parameters=[{
-                    'save_dir':          save_dir, # carpeta de destino de las figuras
-                    't_final':           t_final,                 # cierra y guarda al llegar a t_final
-                    'n_robots_expected': n,                       # espera a tener datos de n robots
-                    'use_sim_time':      True,                    # sincronizar con Gazebo
+                    'save_dir':          save_dir,   # carpeta de destino de las figuras
+                    't_final':           t_final,    # cierra y guarda al llegar a t_final
+                    'n_robots_expected': n,          # espera a tener datos de n robots
+                    # Sin líder ni formación: el "ideal" de cada robot es el
+                    # centroide instantáneo del grupo, sin offset — todos
+                    # deben converger al mismo punto.
+                    'error_reference':   'centroid',
                 }],
                 output='screen'
             )
@@ -136,12 +173,28 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[{
                     'save_dir': save_dir,          # carpeta de destino
                     't_final':  t_final,                          # cierra al llegar a t_final
-                    'use_sim_time': True,                         # sincronizar con Gazebo
                 }],
                 output='screen'
             )
         ])
     )
+
+    if RECORD_GIF:
+        actions.append(TimerAction(period=late_delay, actions=[
+            Node(
+                package='simulador',
+                executable='gif_recorder',
+                name='gif_recorder',
+                parameters=[{
+                    'save_dir':      save_dir,
+                    'gif_name':      'consenso_prom.gif',
+                    'fps':           GIF_FPS,
+                    't_final':       t_final,
+                    'auto_shutdown': True,
+                }],
+                output='screen'
+            )
+        ]))
 
     return actions
 

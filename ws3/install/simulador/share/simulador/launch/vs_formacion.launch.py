@@ -198,11 +198,17 @@ def launch_setup(context, *args, **kwargs):
             name='states_plotter_v2',
             parameters=[{
                 'save_dir':                   save_dir,
-                't_final':                    T_FINAL,
+                't_final':                    T_FINAL,   # respaldo de seguridad
                 'n_robots_expected':          N_ROBOTS,
                 'error_vs_virtual_structure': True,
                 'formation_angle_v':          ANGLE_V,
                 'formation_d':                D,
+                # Guarda al completar la trayectoria (antes de que
+                # gif_recorder mate este proceso con su auto_shutdown/pkill
+                # si termina antes de T_FINAL, que es lo normal).
+                'stop_mode':    'goal',
+                'goal_topic':   '/final_goal_reached',
+                'stop_delay':   1.0,
             }],
             output='screen'
         )
