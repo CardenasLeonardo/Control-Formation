@@ -1,5 +1,10 @@
-# Terminal 1: Lanzar simulación con 3 robots
-ros2 launch simulation_pkg spawn_multi_robot.launch.py n_robots:=3
+> Instrucciones de compilación/instalación: ver el [README](../../README.md) en
+> la raíz del repo. Esto de aquí son comandos sueltos útiles para debug manual.
+
+# Terminal 1: Lanzar una simulación (paquete real: `simulador`; el archivo
+# `spawn_multi_robot.launch.py` de abajo es solo ilustrativo — usa uno real
+# de ws3/src/simulador/launch/, p. ej. demo_pva.launch.py o consenso_prom.launch.py)
+ros2 launch simulador spawn_multi_robot.launch.py n_robots:=3
 
 # Terminal teleop
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/robot0/cmd_vel
