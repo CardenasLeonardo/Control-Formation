@@ -1,9 +1,0 @@
-\begin{abstract}
-This paper presents a distributed control scheme for formation navigation of multi-agent systems composed of differential-drive mobile robots. 
-
-Unlike conventional approaches that model agents as holonomic systems, the proposed scheme explicitly preserves the non-holonomic kinematic constraints of each robot through an exponential control law. Inter-agent coordination is achieved via an error-based consensus protocol that generates reference velocities consistent with each robot's dynamics, without requiring linearization or kinematic model simplification.
-
-Inter-agent collision avoidance is incorporated through the Feasible Velocities Polygon (FVP), an anisotropic representation constructed from LiDAR sensor measurements that maps each detected neighboring agent as a linear constraint in the robot's velocity space $(v, \omega)$, in contrast to the isotropic potential fields commonly employed in the literature. 
-
-Three scenarios are validated in a simulation environment: average consensus with collision avoidance, leader-following, and V-formation maintenance. Results demonstrate the convergence of all agents toward the desired formation objectives while preserving collision-free trajectories in all three cases.
-\end{abstract}

@@ -1,7 +1,0 @@
-\section{Introducción}
-
-En un experimento de control de formación multi-robot sobre ROS~2 y Gazebo, el inicio de una simulación involucra docenas de procesos que deben arrancar en un orden específico: primero el simulador, luego las descripciones de cada robot, luego el spawn de cada modelo en el mundo, y finalmente los nodos de control. Coordinar esto manualmente es inviable.
-
-El launch file es el mecanismo de ROS~2 diseñado para resolver exactamente este problema. Es un script Python que describe declarativamente toda la configuración del sistema: qué procesos lanzar, con qué parámetros, en qué secuencia, y bajo qué condiciones. Al ejecutar ros2 launch, el sistema interpreta esa descripción y orquesta el arranque completo.
-
-Este documento explica los patrones de composición que aparecen en los launch files de este proyecto, usando consenso\_prom.launch.py como caso de estudio concreto. El objetivo es que cada línea de ese archivo tenga una justificación clara: por qué existe, qué problema resuelve, y qué pasaría si no estuviera.

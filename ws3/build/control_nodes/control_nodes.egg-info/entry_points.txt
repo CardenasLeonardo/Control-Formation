@@ -1,6 +1,0 @@
-[console_scripts]
-aire = control_nodes.aire:main
-consenso_node = control_nodes.consenso_node:main
-navigate_individual_pva = control_nodes.navigate_individual_pva:main
-navigate_waypoints_pva = control_nodes.navigate_waypoints_pva:main
-

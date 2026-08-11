@@ -1,7 +1,0 @@
-\section{Introducción}
-
-La navegación autónoma de robots móviles en entornos compartidos requiere que cada agente sea capaz de alcanzar su objetivo mientras evita colisiones con otros agentes y obstáculos estáticos. El enfoque clásico basado en campos potenciales~\cite{khatib1986realtime} presenta limitaciones prácticas como mínimos locales y oscilaciones cerca de obstáculos. Una alternativa más robusta consiste en reformular la evasión de colisiones como una restricción sobre el espacio de velocidades de control.
-
-El Polígono de Velocidades Admisibles (PVA), derivado del trabajo seminal de Ramírez-Torres~\cite{ramirez2001collision}, representa cada obstáculo detectado por el sensor LiDAR como una restricción lineal en el espacio $(v,\,\omega)$ del robot diferencial. La velocidad de control aplicada es la proyección ortogonal de la velocidad de referencia al interior del polígono factible, resuelta mediante un problema de optimización cuadrática (QP). Este enfoque es anisótropo —distingue la distancia y el ángulo de cada obstáculo— y preserva explícitamente las restricciones no holonómicas del robot.
-
-En este documento se reporta la demostración del PVA implementada en ROS~2 con simulación Gazebo. Se describe la formulación matemática, la arquitectura de software, los parámetros empleados y los resultados visuales obtenidos para 8 robots navegando de forma individual con evasión de colisiones activa.

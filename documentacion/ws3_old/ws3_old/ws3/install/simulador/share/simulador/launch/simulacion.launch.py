@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws3/build/simulador/launch/simulacion.launch.py
