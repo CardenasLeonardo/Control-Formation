@@ -17,6 +17,9 @@ setup(
         (os.path.join('share', package_name, 'launch'),
             glob('launch/*.launch.py')),
 
+        (os.path.join('share', package_name, 'launch', 'presentacion'),
+            glob('launch/presentacion/*.launch.py')),
+
         (os.path.join('share', package_name, 'models'),
             glob('models/*.sdf')),
 
@@ -38,7 +41,11 @@ setup(
             'sphere_demo        = simulador.sphere_demo:main',
             'vs_node            = simulador.vs_node:main',
             'gif_recorder       = simulador.gif_recorder:main',
+            'gif_combiner       = simulador.gif_combiner:main',
             'camera_zoom        = simulador.camera_zoom:main',
+            'spawn_cube_demo    = simulador.spawn_cube_demo:main',
+            'snapshot_camera    = simulador.snapshot_camera:main',
+            'spawn_parts_demo   = simulador.spawn_parts_demo:main',
         ],
     },
 )

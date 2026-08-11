@@ -11,6 +11,7 @@ from multi_robot_interfaces.msg import PVAConstraints
 
 from control_nodes.algorithms.control_law import NavControlador
 from control_nodes.algorithms.pva import PVA
+from control_nodes.algorithms.deadlock import Deadlock
 
 import math
 import numpy as np
@@ -33,10 +34,14 @@ class NavigateWaypoints(Node):
         self.declare_parameter('wmax',     1.0)
         self.declare_parameter('n_rays_used', 0)
         self.declare_parameter('loop',     True)
+        self.declare_parameter('d_safe',      0.85)
+        self.declare_parameter('d_influence', 3.0)
 
         vmax        = float(self.get_parameter('vmax').value)
         wmax        = float(self.get_parameter('wmax').value)
         n_rays_used = int(self.get_parameter('n_rays_used').value) or None
+        d_safe      = float(self.get_parameter('d_safe').value)
+        d_influence = float(self.get_parameter('d_influence').value)
 
         raw = list(self.get_parameter('waypoints').value)
 
@@ -60,18 +65,20 @@ class NavigateWaypoints(Node):
         self.controller = NavControlador()
 
         # --------------------------------------------------
-        # PVA con boundary following
+        # PVA — evasión instantánea, sin bordeo de obstáculos
         # --------------------------------------------------
 
         self.pva = PVA(
-            d_safe=0.85,
-            d_influence=3.0,
+            d_safe=d_safe,
+            d_influence=d_influence,
             xi=1.0,
             rp=0.25,
             v_max=vmax,
             w_max=wmax,
             n_rays_used=n_rays_used,
         )
+
+        self.deadlock = Deadlock(speed_thr=0.05, distance_tol=self.tolerance)
 
         self.vmax = vmax
         self.wmax = wmax
@@ -219,7 +226,7 @@ class NavigateWaypoints(Node):
             self.next_waypoint()
 
         # --------------------------------------------------
-        # CONTROL NOMINAL — también calcula a y alpha
+        # CONTROL NOMINAL
         # --------------------------------------------------
 
         v_goal, w_goal = self.controller.ley_control(
@@ -232,12 +239,23 @@ class NavigateWaypoints(Node):
         w_goal = max(-self.wmax, min(self.wmax, w_goal))
 
         # --------------------------------------------------
-        # PVA
+        # PVA — evasión instantánea (QP sobre las restricciones)
         # --------------------------------------------------
 
-        v_safe, w_safe, self.constraints, self.vertices, mode, search_dir = self.pva.apply(
-            v_goal, w_goal, self.ranges, a=self.controller.a
+        u_star, self.constraints, self.vertices = self.pva.apply(
+            (v_goal, w_goal), self.ranges
         )
+
+        # --------------------------------------------------
+        # DEADLOCK — detección de atasco + bordeo por tangente
+        # --------------------------------------------------
+
+        u_final, is_deadlock = self.deadlock.apply(
+            (v_goal, w_goal), u_star, self.constraints, self.vertices,
+            distance=distance_to_goal, alpha=self.controller.alpha,
+        )
+        v_safe = max(-self.vmax, min(self.vmax, float(u_final[0])))
+        w_safe = max(-self.wmax, min(self.wmax, float(u_final[1])))
 
         # --------------------------------------------------
         # PUBLICAR PVA
@@ -254,10 +272,23 @@ class NavigateWaypoints(Node):
         pva_msg.v_goal = float(v_goal)
         pva_msg.w_goal = float(w_goal)
 
-        pva_msg.v_star     = float(v_safe)
-        pva_msg.w_star     = float(w_safe)
-        pva_msg.mode       = int(mode)
-        pva_msg.search_dir = int(search_dir)
+        pva_msg.v_star = float(v_safe)
+        pva_msg.w_star = float(w_safe)
+
+        pva_msg.is_deadlock = bool(is_deadlock)
+        pva_msg.search_dir  = int(self.deadlock.selected_direction)
+
+        edge_sel   = self.deadlock.selected_vertex
+        edge_other = self.deadlock.other_vertex
+        pva_msg.has_edge = edge_sel is not None and edge_other is not None
+        if pva_msg.has_edge:
+            pva_msg.edge_v_sel   = float(edge_sel[0])
+            pva_msg.edge_w_sel   = float(edge_sel[1])
+            pva_msg.edge_v_other = float(edge_other[0])
+            pva_msg.edge_w_other = float(edge_other[1])
+
+        pva_msg.v_z          = float(self.deadlock.v_z)
+        pva_msg.v_z_previous = float(self.deadlock.v_z_previous)
 
         self.pva_pub.publish(pva_msg)
 

@@ -24,12 +24,12 @@ def launch_setup(context, *args, **kwargs):
     n             = int(LaunchConfiguration('n_robots').perform(context))
     R             = float(LaunchConfiguration('neighbor_radius').perform(context))
     leader_id     = LaunchConfiguration('leader_id').perform(context)
+    angle_v       = float(LaunchConfiguration('angle_v').perform(context))
+    d             = float(LaunchConfiguration('d').perform(context))
     waypoints_str = LaunchConfiguration('waypoints').perform(context)
     t_final       = float(LaunchConfiguration('t_final').perform(context))
     save_dir      = LaunchConfiguration('save_dir').perform(context)
     waypoints     = [float(v) for v in waypoints_str.split(',')]
-
-    sep = 2.0  # separación entre seguidores en la grilla inicial
 
     articubot_pkg = get_package_share_directory('articubot_one')
     gazebo_launch = os.path.join(
@@ -43,27 +43,29 @@ def launch_setup(context, *args, **kwargs):
         get_package_share_directory('simulador'), 'models', 'overhead_camera.sdf'
     )
 
-    # Líder en el origen; seguidores en grilla detrás (x negativo)
+    # Escenario común a todas las experimentaciones (consenso_lider,
+    # consenso_formacion, vs_formacion): líder/robot0 en el origen mirando
+    # al este (theta=0), seguidores ya en su ancla dentro de la V
+    # (angle_v, d), en vez de una grilla arbitraria — así el punto de
+    # partida es idéntico entre experimentos y las gráficas son comparables.
     n_followers = n - 1
-    cols = math.ceil(math.sqrt(n_followers)) if n_followers > 0 else 1
-    rows = math.ceil(n_followers / cols)     if n_followers > 0 else 1
+    n_left      = n_followers // 2
 
-    follower_positions = []
-    for row in range(rows):
-        for col in range(cols):
-            if len(follower_positions) >= n_followers:
-                break
-            x = -(col + 1) * sep
-            y = (row - rows // 2) * sep
-            follower_positions.append((x, y))
+    def rot(theta, vx, vy):
+        c, s = math.cos(theta), math.sin(theta)
+        return c * vx - s * vy, s * vx + c * vy
 
     leader_num = int(leader_id.replace('robot', ''))
     positions  = {leader_num: (0.0, 0.0)}
-    seg_idx    = 0
-    for i in range(n):
-        if i != leader_num:
-            positions[i] = follower_positions[seg_idx]
-            seg_idx += 1
+    idx = 1
+    for k in range(1, n_left + 1):
+        rx, ry = rot(angle_v, -k * d, 0.0)
+        positions[idx] = (round(rx, 4), round(ry, 4))
+        idx += 1
+    for k in range(1, n_followers - n_left + 1):
+        rx, ry = rot(-angle_v, -k * d, 0.0)
+        positions[idx] = (round(rx, 4), round(ry, 4))
+        idx += 1
 
     # Encuadre de cámara: bounding box de las posiciones de spawn + la ruta del líder
     wp_pairs = [(waypoints[i], waypoints[i + 1]) for i in range(0, len(waypoints), 2)]
@@ -237,8 +239,17 @@ def generate_launch_description():
         DeclareLaunchArgument('leader_id',
             default_value='robot0',
             description='Namespace del robot líder'),
+        DeclareLaunchArgument('angle_v',
+            default_value='0.7854',
+            description='Ángulo de apertura de la V (rad), default π/4 = 45°'),
+        DeclareLaunchArgument('d',
+            default_value='1.0',
+            description='Separación entre robots en el brazo de la V (m)'),
         DeclareLaunchArgument('waypoints',
-            default_value='5.0,0.0,5.0,5.0,0.0,5.0,0.0,0.0',
+            # Mismo cuadrado 5x5m que consenso_formacion.launch.py y
+            # vs_formacion.launch.py: escenario común para las cuatro
+            # experimentaciones.
+            default_value='0.0,0.0,5.0,0.0,5.0,5.0,0.0,5.0,0.0,0.0',
             description='Waypoints del líder: x0,y0,x1,y1,...'),
         DeclareLaunchArgument('t_final',
             default_value='90.0',

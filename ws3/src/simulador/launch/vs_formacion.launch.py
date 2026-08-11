@@ -20,40 +20,28 @@ N_ROBOTS = 5
 ANGLE_V  = math.pi / 4
 D        = 1.0
 
-THETA_0  = math.pi / 2.0   # heading inicial: norte
+# Escenario común a las cuatro experimentaciones (consenso_lider,
+# consenso_formacion, vs_formacion): robot0 en el origen mirando al este
+# (theta=0), formación V ya desplegada al spawn.
+THETA_0  = 0.0   # heading inicial: este
 
-# Centroide de la estructura virtual
-VS_X = 3.0
-VS_Y = 0.0
+# Robots spawnean en el origen (mismo punto de partida que los demás
+# experimentos); el centroide de la estructura virtual arranca ahí también.
+ROBOT_X = 0.0
+ROBOT_Y = 0.0
+VS_X = ROBOT_X
+VS_Y = ROBOT_Y
 
-# Robots spawnean 2.5 m detrás de la estructura virtual
-ROBOT_OFFSET = 2.5
-ROBOT_X = VS_X - math.cos(THETA_0) * ROBOT_OFFSET   # 3.0
-ROBOT_Y = VS_Y - math.sin(THETA_0) * ROBOT_OFFSET   # -2.5
-
-# waypoints[0] es la posición inicial del centroide; la curva pasa por todos ellos.
-# Ruta: cuadrado con esquinas redondeadas (Catmull-Rom suaviza cada esquina al
-# tener dos puntos cercanos alrededor de ella; los tramos entre esquinas quedan
-# prácticamente rectos). El cuadrado se arma de modo que:
-#   - el borde derecho (x = SQ_RIGHT) pasa por (VS_X, VS_Y), el inicio real
-#   - la esquina inferior derecha coincide con (ROBOT_X, ROBOT_Y), el spawn de
-#     los robots, así el GIF cierra el ciclo exactamente donde arrancaron
-SQ_RIGHT  = VS_X                 # 3.0
-SQ_BOTTOM = ROBOT_Y              # -2.5  (== esquina inferior derecha)
-SQ_LEFT   = SQ_RIGHT  - 7.0      # -4.0
-SQ_TOP    = SQ_BOTTOM + 7.0      # 4.5
-CORNER_R  = 1.3                  # radio de recorte de cada esquina
-
+# waypoints[0] es la posición inicial del centroide; la curva pasa por todos
+# ellos. Mismo cuadrado 5x5m que consenso_lider.launch.py y
+# consenso_formacion.launch.py — sin esquinas redondeadas, para que las
+# cuatro experimentaciones sean directamente comparables.
 WAYPOINTS = [
-    VS_X, VS_Y,                                    # inicio: sobre el borde derecho
-    SQ_RIGHT,            SQ_TOP - CORNER_R,         # llega a la esquina sup. derecha
-    SQ_RIGHT - CORNER_R, SQ_TOP,                    # sale de la esquina sup. derecha
-    SQ_LEFT + CORNER_R,  SQ_TOP,                    # llega a la esquina sup. izquierda
-    SQ_LEFT,             SQ_TOP - CORNER_R,         # sale de la esquina sup. izquierda
-    SQ_LEFT,             SQ_BOTTOM + CORNER_R,       # llega a la esquina inf. izquierda
-    SQ_LEFT + CORNER_R,  SQ_BOTTOM,                 # sale de la esquina inf. izquierda
-    SQ_RIGHT - CORNER_R, SQ_BOTTOM,                 # llega a la esquina inf. derecha...
-    ROBOT_X, ROBOT_Y-2,                               # ...y termina justo en ella
+    0.0, 0.0,
+    5.0, 0.0,
+    5.0, 5.0,
+    0.0, 5.0,
+    0.0, 0.0,
 ]
 
 # Timing
@@ -67,8 +55,8 @@ START_DELAY  = T_CONTROL - T_START + 2.0                 # 11.5 s
 # trayectoria de la estructura virtual, no por tiempo fijo
 RECORD_GIF    = True
 CAMERA_HEIGHT = 9.0     # antes 16.0: más cerca, robots se ven más grandes
-CAMERA_X      = (SQ_RIGHT + SQ_LEFT) / 2.0    # centro del cuadrado de la ruta
-CAMERA_Y      = (SQ_TOP + SQ_BOTTOM) / 2.0
+CAMERA_X      = 2.5     # centro del cuadrado 5x5m de la ruta
+CAMERA_Y      = 2.5
 GIF_FPS       = 10.0
 STOP_DELAY    = 2.0
 

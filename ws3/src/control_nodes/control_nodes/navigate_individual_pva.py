@@ -194,7 +194,8 @@ class NavigateIndividual(Node):
         # PVA
         # --------------------------------------------------
 
-        v_safe, w_safe, self.constraints, *_ = self.pva.apply(v_goal, w_goal, self.ranges)
+        u_star, self.constraints, *_ = self.pva.apply((v_goal, w_goal), self.ranges)
+        v_safe, w_safe = float(u_star[0]), float(u_star[1])
 
         self.v = v_safe
         self.w = w_safe

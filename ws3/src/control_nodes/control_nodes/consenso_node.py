@@ -187,7 +187,8 @@ class ConsensoNode(Node):
 
         a, alpha         = result
         v_ref, w_ref     = self.control_law.compute(a, alpha)
-        v, w, constrs, *_ = self.pva.apply(v_ref, w_ref, self.ranges)
+        u_star, constrs, _vertices = self.pva.apply((v_ref, w_ref), self.ranges)
+        v, w = float(u_star[0]), float(u_star[1])
         self._pub_pva_debug(v_ref, w_ref, v, w, constrs)
 
         twist = Twist()

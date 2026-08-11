@@ -135,12 +135,17 @@ class PVAPlotter(Node):
             "a": np.array(msg.a, dtype=float),
             "b": np.array(msg.b, dtype=float),
             "c": np.array(msg.c, dtype=float),
-            "v_goal":     float(msg.v_goal),
-            "w_goal":     float(msg.w_goal),
-            "v_star":     float(msg.v_star),
-            "w_star":     float(msg.w_star),
-            "mode":       int(msg.mode),
-            "search_dir": int(msg.search_dir),
+            "v_goal": float(msg.v_goal),
+            "w_goal": float(msg.w_goal),
+            "v_star": float(msg.v_star),
+            "w_star": float(msg.w_star),
+            "is_deadlock":  bool(msg.is_deadlock),
+            "search_dir":   int(msg.search_dir),
+            "has_edge":     bool(msg.has_edge),
+            "edge_sel":     (float(msg.edge_v_sel),   float(msg.edge_w_sel)),
+            "edge_other":   (float(msg.edge_v_other), float(msg.edge_w_other)),
+            "v_z":          float(msg.v_z),
+            "v_z_previous": float(msg.v_z_previous),
         }
 
     # --------------------------------------------------
@@ -154,7 +159,14 @@ class PVAPlotter(Node):
         cols = math.ceil(math.sqrt(n))
         rows = math.ceil(n / cols)
 
-        self.fig_main, axs = plt.subplots(rows, cols, figsize=(5*cols,4*rows))
+        # constrained_layout en vez de llamar tight_layout() en cada
+        # frame: tight_layout() recalcula el layout COMPLETO de la figura
+        # cada vez que se llama (caro), mientras que constrained_layout
+        # lo resuelve una sola vez por cambios reales de tamaño/artistas,
+        # mucho más barato en el loop de refresco.
+        self.fig_main, axs = plt.subplots(
+            rows, cols, figsize=(5*cols, 4*rows), constrained_layout=True
+        )
 
         axs = np.atleast_1d(axs).flatten()
 
@@ -169,66 +181,40 @@ class PVAPlotter(Node):
         plt.show(block=False)
 
     # --------------------------------------------------
-    # AGREGAR LÍMITES DEL ROBOT COMO RESTRICCIONES
-    # --------------------------------------------------
-
-    def add_velocity_bounds(self, A, B, C):
-
-        A_box = np.array([
-            1.0,
-           -1.0,
-            0.0,
-            0.0
-        ])
-
-        B_box = np.array([
-            0.0,
-            0.0,
-            1.0,
-           -1.0
-        ])
-
-        C_box = np.array([
-            self.vmax,
-            self.vmax,
-            self.wmax,
-            self.wmax
-        ])
-
-        A_all = np.concatenate([A, A_box])
-        B_all = np.concatenate([B, B_box])
-        C_all = np.concatenate([C, C_box])
-
-        return A_all, B_all, C_all
-
-    # --------------------------------------------------
     # CALCULAR POLÍGONO FACTIBLE
     # --------------------------------------------------
 
     def compute_polygon(self, A, B, C):
-
-        points = []
+        # Vectorizado con numpy en vez del doble loop de Python: para n
+        # restricciones son n(n-1)/2 pares de rectas — con n_rays_used
+        # alto (72+box) esto son miles de intersecciones evaluadas en
+        # Python puro cada frame, que es buena parte del costo de refresco
+        # de la gráfica. Aquí se calculan TODAS las intersecciones y la
+        # factibilidad de una sola vez con operaciones de arreglo.
         n = len(A)
+        i, j = np.triu_indices(n, k=1)
 
-        for i in range(n):
-            for j in range(i + 1, n):
-
-                det = A[i] * B[j] - A[j] * B[i]
-
-                if abs(det) < 1e-9:
-                    continue
-
-                v = (C[i] * B[j] - C[j] * B[i]) / det
-                w = (A[i] * C[j] - A[j] * C[i]) / det
-
-                if np.all(A * v + B * w <= C + 1e-7):
-                    points.append([v, w])
-
-        if len(points) == 0:
+        det = A[i] * B[j] - A[j] * B[i]
+        valid = np.abs(det) > 1e-9
+        i, j, det = i[valid], j[valid], det[valid]
+        if len(det) == 0:
             return None
 
-        points = np.array(points, dtype=float)
+        v = (C[i] * B[j] - C[j] * B[i]) / det
+        w = (A[i] * C[j] - A[j] * C[i]) / det
 
+        # A @ v + B @ w <= C + tol para TODAS las restricciones, por cada
+        # punto candidato (broadcasting: (n_constraints, n_puntos))
+        feasible = np.all(
+            A[:, None] * v[None, :] + B[:, None] * w[None, :] <= C[:, None] + 1e-7,
+            axis=0,
+        )
+        v, w = v[feasible], w[feasible]
+
+        if len(v) == 0:
+            return None
+
+        points = np.column_stack([v, w])
         points = np.unique(np.round(points, decimals=8), axis=0)
 
         if len(points) < 3:
@@ -244,25 +230,37 @@ class PVAPlotter(Node):
     # DIBUJAR UN ROBOT
     # --------------------------------------------------
 
+    _DEADLOCK_COLOR = {True: "tab:orange", False: "tab:green"}
+
     def draw_robot_pva(self, ax, robot, d):
 
         ax.cla()
+
+        is_deadlock  = d.get("is_deadlock", False)
+        border_color = self._DEADLOCK_COLOR[is_deadlock]
 
         ax.set_title(f"PVA - {robot}")
         ax.set_xlabel(r"Linear velocity $v$ (m/s)")
         ax.set_ylabel(r"Angular velocity $\omega$ (rad/s)")
         ax.grid(True)
 
+        # Contorno de los ejes: naranja si Deadlock detectó atasco,
+        # verde si el robot se mueve con normalidad.
+        for spine in ax.spines.values():
+            spine.set_edgecolor(border_color)
+            spine.set_linewidth(3.0)
+
         ax.axhline(0.0, linestyle="--", color="gray", linewidth=1.0)
         ax.axvline(0.0, linestyle="--", color="gray", linewidth=1.0)
 
+        # Los límites de velocidad ya vienen incluidos en a/b/c (ver
+        # control_nodes/algorithms/pva.py, build_constraints), no hace
+        # falta agregarlos otra vez aquí.
         A = d["a"]
         B = d["b"]
         C = d["c"]
 
-        A_all, B_all, C_all = self.add_velocity_bounds(A, B, C)
-
-        polygon = self.compute_polygon(A_all, B_all, C_all)
+        polygon = self.compute_polygon(A, B, C)
 
         if polygon is not None:
 
@@ -290,16 +288,54 @@ class PVAPlotter(Node):
                 label="Vertices"
             )
 
-            if d["mode"] == 2:
-                if d["search_dir"] == 1:
-                    sel = polygon[np.argmin(polygon[:, 1])]
-                else:
-                    sel = polygon[np.argmax(polygon[:, 1])]
-                ax.scatter(
-                    sel[0], sel[1],
-                    color="red", s=80, zorder=6,
-                    label="Search dir vertex"
-                )
+        # Arista seleccionada por Deadlock (estrategia de bordeo): solo
+        # se dibuja cuando hay atasco Y la arista quedó bien definida
+        # (dos vértices sobre la misma recta). Vértice elegido en verde
+        # claro, el otro extremo de la arista en verde fuerte, y la
+        # dirección de bordeo (sR/sL) como texto.
+        if is_deadlock and d.get("has_edge", False):
+            v_sel,   w_sel   = d["edge_sel"]
+            v_other, w_other = d["edge_other"]
+
+            ax.plot(
+                [v_sel, v_other], [w_sel, w_other],
+                color="red", linewidth=2.5, zorder=6,
+                label="Selected constraint",
+            )
+            ax.scatter(
+                [v_other], [w_other],
+                color="darkgreen", s=90, zorder=7,
+                label="Edge vertex (other)",
+            )
+            ax.scatter(
+                [v_sel], [w_sel],
+                color="lightgreen", edgecolor="darkgreen", linewidth=1.2,
+                s=90, zorder=8,
+                label="Edge vertex (selected)",
+            )
+
+            direction_label = "sR" if d.get("search_dir", 1) == 1 else "sL"
+            ax.text(
+                0.98, 0.98, f"dir = {direction_label}",
+                transform=ax.transAxes, ha="right", va="top",
+                fontsize=10, fontweight="bold", color="white",
+                bbox=dict(facecolor="red", edgecolor="none",
+                          boxstyle="round,pad=0.3", alpha=0.9),
+                zorder=10,
+            )
+
+        # V(z) actual y V(z) capturado al entrar en deadlock.
+        v_z          = d.get("v_z", 0.0)
+        v_z_previous = d.get("v_z_previous", 0.0)
+        ax.text(
+            0.02, 0.86,
+            f"$V(z)$ = {v_z:.4f}\n$V(z)_{{prev}}$ = {v_z_previous:.4f}",
+            transform=ax.transAxes, ha="left", va="top",
+            fontsize=9, color="black",
+            bbox=dict(facecolor="white", edgecolor="gray",
+                      boxstyle="round,pad=0.3", alpha=0.85),
+            zorder=10,
+        )
 
         ax.plot(
             d["v_goal"],
@@ -360,8 +396,6 @@ class PVAPlotter(Node):
             ax = self.axes[robot]
 
             self.draw_robot_pva(ax, robot, d)
-
-        self.fig_main.tight_layout()
 
         self.fig_main.canvas.draw_idle()
         self.fig_main.canvas.flush_events()
@@ -483,7 +517,12 @@ def main(args=None):
     try:
         while rclpy.ok():
             node.update_plot()
-            plt.pause(1.0 / 7.0)
+            # 1/7s era un límite artificial de refresco; con
+            # tight_layout() fuera del loop y compute_polygon vectorizado
+            # el render ya es mucho más barato — se sube el techo a ~30fps
+            # (más no ayuda: por debajo de ~33ms domina el costo real de
+            # redibujar la figura, no la espera de plt.pause).
+            plt.pause(1.0 / 30.0)
 
     except KeyboardInterrupt:
         node.get_logger().info("Guardando figuras...")

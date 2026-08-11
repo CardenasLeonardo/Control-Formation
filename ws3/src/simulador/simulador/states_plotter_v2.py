@@ -469,6 +469,11 @@ class StatesPlotterV2(Node):
                 vs_t, vs_x, vs_y, vs_theta = vs_t[s], vs_x[s], vs_y[s], vs_theta[s]
                 _, u = np.unique(vs_t, return_index=True)
                 ref_t, ref_x, ref_y, ref_theta = vs_t[u], vs_x[u], vs_y[u], vs_theta[u]
+                # Sin unwrap, np.interp abajo interpola linealmente a través
+                # del salto de +pi a -pi (o viceversa), produciendo un
+                # ángulo espurio por 1-2 muestras que dispara el offset
+                # calculado y crea un pico falso en la gráfica de error.
+                ref_theta = np.unwrap(ref_theta)
                 have_ref = True
             else:
                 self.get_logger().warn(
@@ -479,6 +484,10 @@ class StatesPlotterV2(Node):
         elif mode == 'leader_robot':
             if self.formation_leader_id in clean:
                 ref_t, ref_x, ref_y, ref_theta = clean[self.formation_leader_id]
+                # Mismo fix que en el modo virtual_structure: desenvolver
+                # antes de interpolar para evitar el pico espurio en el
+                # salto +pi/-pi del heading del líder.
+                ref_theta = np.unwrap(ref_theta)
                 have_ref = len(ref_t) >= 2
             if not have_ref:
                 self.get_logger().warn(
