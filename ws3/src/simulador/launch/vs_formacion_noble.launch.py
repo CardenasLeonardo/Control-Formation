@@ -38,13 +38,29 @@ ROBOT_X = VS_X - math.cos(THETA_0) * ROBOT_OFFSET   # 3.0
 ROBOT_Y = VS_Y - math.sin(THETA_0) * ROBOT_OFFSET   # -2.5
 
 # waypoints[0] es la posición inicial del centroide; la curva pasa por todos
-# ellos. Trayectoria original de la experimentación previa (la misma que en
-# Control-Formation-87bcac3/ws3/src/simulador/launch/vs_formacion.launch.py),
-# con el mismo cierre de loop que vs_formacion.launch.py: el último punto es
-# (ROBOT_X, ROBOT_Y) —el spawn físico de los robots—, no (VS_X, VS_Y), para
-# que el GIF cierre el ciclo exactamente donde arrancaron.
-WAYPOINTS = [3.0, 0.0,   3.0, 4.0,   0.0, 7.0,  -4.0, 5.0,
-             -4.0, 0.0,  -1.0, -3.0,  ROBOT_X, ROBOT_Y-2]
+# ellos. Ruta de ESTRÉS (deliberadamente exigente, a diferencia de la
+# trayectoria "noble" original de la experimentación previa): muchos
+# waypoints, giros cerrados entre segmentos consecutivos (71°-152°,
+# incluido un giro casi en U) y tramos de longitud muy dispar (2.5m a
+# 9m), para ver hasta dónde aguanta la formación sin inducir el efecto
+# látigo del cuadrado de vs_formacion.launch.py. El último punto sigue
+# siendo (ROBOT_X, ROBOT_Y) —el spawn físico de los robots—, no
+# (VS_X, VS_Y), para que el GIF cierre el ciclo exactamente donde
+# arrancaron.
+WAYPOINTS = [
+    3.0, 0.0,      # inicio (VS_X, VS_Y)
+    3.0, 4.0,      # tramo largo al norte
+    0.5, 4.3,      # giro cerrado (~83°)
+    0.2, 1.0,      # vuelta abrupta hacia el sur (~92°)
+    3.5, 1.3,      # zigzag: gira al este (~100°)
+    3.8, -2.0,     # otra vuelta cerrada hacia el sur (~90°)
+    0.0, -2.3,     # gira hacia el oeste (~91°)
+    -3.5, 6.0,     # tramo largo diagonal (9m)
+    -4.0, 0.0,     # giro muy cerrado, casi en U (~152°)
+    -1.0, -0.3,    # zigzag corto tras el tramo largo (~89°)
+    -1.0, -3.0,    # baja (~84°)
+    ROBOT_X, ROBOT_Y - 2,  # cierre del loop
+]
 
 # Timing
 T_START      = 3.0
@@ -60,8 +76,11 @@ GIF_FPS       = 10.0
 STOP_DELAY    = 2.0
 
 # Cierre de las gráficas (states_plotter_v2): margen generoso sobre el tiempo
-# estimado para recorrer toda la trayectoria a v_max=0.25 m/s.
-T_FINAL = 150.0
+# estimado para recorrer toda la trayectoria a v_max=0.25 m/s. Ruta de
+# estrés: ~45m de distancia poligonal entre waypoints, pero la curva
+# Catmull-Rom real es más larga en los giros cerrados (puede formar
+# bucles locales) — se sube el margen respecto a la ruta original.
+T_FINAL = 260.0
 
 # Encuadre de cámara: misma condición de toma que vs_formacion.launch.py
 # (CAMERA_HEIGHT=9.0 fijo, "más cerca, robots se ven más grandes"). El centro

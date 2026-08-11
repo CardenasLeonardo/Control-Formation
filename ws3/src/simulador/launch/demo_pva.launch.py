@@ -42,6 +42,7 @@ def launch_setup(context, *args, **kwargs):
     simulador_pkg = get_package_share_directory('simulador')
     obstacle_sdf  = os.path.join(simulador_pkg, 'models', 'obstacle_cylinder.sdf')
     camera_sdf    = os.path.join(simulador_pkg, 'models', 'overhead_camera.sdf')
+    world_path    = os.path.join(simulador_pkg, 'worlds', 'demo.world')  # piso transparente
 
     articubot_pkg = get_package_share_directory('articubot_one')
     gazebo_launch = os.path.join(
@@ -52,7 +53,10 @@ def launch_setup(context, *args, **kwargs):
     actions = []
 
     actions.append(
-        IncludeLaunchDescription(PythonLaunchDescriptionSource(gazebo_launch))
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(gazebo_launch),
+            launch_arguments={'world': world_path}.items()
+        )
     )
 
     # RSP
@@ -77,7 +81,8 @@ def launch_setup(context, *args, **kwargs):
         )
     ]))
 
-    # Cámara cenital sobre el centro del circuito (2.0, 2.0)
+    # Cámara cenital sobre el centro del circuito (2.0, 2.0), altura estándar
+    # del proyecto (9.0 m) para la vista amplia.
     actions.append(TimerAction(period=3.5, actions=[
         Node(
             package='gazebo_ros',
@@ -85,9 +90,30 @@ def launch_setup(context, *args, **kwargs):
             arguments=[
                 '-file', camera_sdf,
                 '-entity', 'overhead_camera',
-                '-x', '2.0', '-y', '2.0', '-z', '7.0',
+                '-x', '2.0', '-y', '2.0', '-z', '9.0',
                 '-P', '1.5708',
             ],
+            output='screen'
+        )
+    ]))
+
+    # Gráfica de posición (trayectoria del robot, un solo panel — sin error de
+    # formación porque aquí no hay líder ni consenso). Guarda al completar la
+    # vuelta, antes de que gif_recorder mate el proceso con su auto_shutdown.
+    actions.append(TimerAction(period=5.5, actions=[
+        Node(
+            package='simulador',
+            executable='states_plotter_v2',
+            name='states_plotter_v2',
+            parameters=[{
+                'save_dir':          save_dir,
+                't_final':           180.0,
+                'n_robots_expected': 1,
+                'trajectory_only':   True,
+                'stop_mode':         'goal',
+                'goal_topic':        '/robot0/final_goal_reached',
+                'stop_delay':        1.0,
+            }],
             output='screen'
         )
     ]))
@@ -112,8 +138,8 @@ def launch_setup(context, *args, **kwargs):
         )
     ]))
 
-    # Cámara dinámica: se acerca al robot cuando entra al radio de un
-    # obstáculo, vuelve a la vista amplia al alejarse.
+    # Cámara dinámica: se acerca al robot solo en el PRIMER acercamiento a un
+    # obstáculo (zoom_once=True); de ahí en adelante se queda en vista amplia.
     obstacles_flat = [v for _, ox, oy in OBSTACLES for v in (ox, oy)]
     actions.append(TimerAction(period=5.5, actions=[
         Node(
@@ -126,9 +152,10 @@ def launch_setup(context, *args, **kwargs):
                 'obstacles':   obstacles_flat,
                 'wide_x':      2.0,
                 'wide_y':      2.0,
-                'wide_z':      7.0,
+                'wide_z':      9.0,
                 'zoom_z':      2.5,
                 'zoom_radius': 1.8,
+                'zoom_once':   True,
             }],
             output='screen'
         )

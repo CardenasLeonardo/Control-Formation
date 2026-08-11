@@ -37,9 +37,14 @@ class CameraZoom(Node):
         raw = list(self.get_parameter('obstacles').value)
         self.obstacles = [(raw[i], raw[i + 1]) for i in range(0, len(raw) - 1, 2)]
 
+        self.declare_parameter('zoom_once', True)
+        self.zoom_once = bool(self.get_parameter('zoom_once').value)
+
         self.x = None
         self.y = None
         self._last_state = None
+        self._zoom_used     = False  # ya se gastó el único zoom permitido
+        self._in_zoom_episode = False  # sigue dentro del acercamiento actual
 
         self.cli = self.create_client(SetEntityState, '/gazebo/set_entity_state')
 
@@ -67,8 +72,23 @@ class CameraZoom(Node):
             return
 
         d_min = min(math.hypot(self.x - ox, self.y - oy) for ox, oy in self.obstacles)
+        near_obstacle = d_min < self.zoom_radius
 
-        if d_min < self.zoom_radius:
+        # zoom_once=True: se permite un solo ciclo de zoom-in/zoom-out (el
+        # primer acercamiento). Una vez que ese ciclo termina (el robot se
+        # aleja de nuevo), los acercamientos posteriores a cualquier
+        # obstáculo ya no disparan zoom — la cámara se queda en vista amplia.
+        if self.zoom_once:
+            if near_obstacle:
+                if self._zoom_used and not self._in_zoom_episode:
+                    near_obstacle = False
+                else:
+                    self._zoom_used = True
+                    self._in_zoom_episode = True
+            else:
+                self._in_zoom_episode = False
+
+        if near_obstacle:
             cx, cy, cz = self.x, self.y, self.zoom_z
         else:
             cx, cy, cz = self.wide_x, self.wide_y, self.wide_z

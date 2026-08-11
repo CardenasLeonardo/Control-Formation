@@ -1,0 +1,10 @@
+# Documentación (no se versiona en este repo)
+documentacion/
+
+# Artefactos de build de ROS2/colcon
+ws3/build/
+ws3/install/
+ws3/log/
+
+# Configuración local de Claude Code
+.claude/

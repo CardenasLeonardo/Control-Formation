@@ -14,6 +14,7 @@ from simulador.vs_trayectoria import TrayectoriaVS
 
 BLUE  = '0.0 0.4 1.0 1.0'
 GREEN = '0.0 0.85 0.2 1.0'
+GOLD  = '1.0 0.65 0.0 1.0'
 
 
 def _make_sdf(name, color, radius=0.18, transparency=0.65):
@@ -29,6 +30,28 @@ def _make_sdf(name, color, radius=0.18, transparency=0.65):
       <visual name="visual">
         <transparency>{transparency}</transparency>
         <geometry><sphere><radius>{radius}</radius></sphere></geometry>
+        <material>
+          <ambient>{color}</ambient>
+          <diffuse>{color}</diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>"""
+
+
+def _make_sdf_diamond(name, color, size=0.35, transparency=0.65):
+    # Rombo: cubo rotado 45° sobre Z, aplanado en Z para que se lea como
+    # marcador en el piso visto desde la cámara cenital.
+    return f"""<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="{name}">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <pose>0 0 0 0 0 0.7854</pose>
+        <transparency>{transparency}</transparency>
+        <geometry><box><size>{size} {size} 0.02</size></box></geometry>
         <material>
           <ambient>{color}</ambient>
           <diffuse>{color}</diffuse>
@@ -66,6 +89,9 @@ class VirtualStructureNode(Node):
     RADIUS = 0.18
     Z      = RADIUS + 0.02
 
+    WP_SIZE = 0.35   # rombo de los waypoints reales (puntos de control)
+    WP_Z    = 0.03
+
     def __init__(self):
         super().__init__('vs_node')
 
@@ -88,25 +114,29 @@ class VirtualStructureNode(Node):
         self.d_form      = self.get_parameter('d').value
         self.start_delay = self.get_parameter('start_delay').value
 
-        wp_flat   = list(self.get_parameter('waypoints').value)
-        waypoints = [(wp_flat[i], wp_flat[i+1]) for i in range(0, len(wp_flat), 2)]
+        wp_flat        = list(self.get_parameter('waypoints').value)
+        self.waypoints = [(wp_flat[i], wp_flat[i+1]) for i in range(0, len(wp_flat), 2)]
 
         self.tray = TrayectoriaVS(
-            waypoints = waypoints,
+            waypoints = self.waypoints,
             v_max     = self.get_parameter('v_max').value,
         )
 
-        self._spawned        = False
-        self._ticks_waited   = 0
-        self._done_published = False
+        self._spawn_queue      = self._build_spawn_queue()
+        self._spawns_pending   = len(self._spawn_queue)
+        self._spawn_inflight   = False   # hay una llamada call_async esperando respuesta
+        self._spawned          = False   # TODAS las entidades ya confirmadas por Gazebo
+        self._ticks_waited     = 0
+        self._done_published   = False
 
         # --- Clientes Gazebo ---
         self.spawn_cli = self.create_client(SpawnEntity,    '/spawn_entity')
         self.move_cli  = self.create_client(SetEntityState, '/gazebo/set_entity_state')
 
         # --- Publicador de la estructura virtual ---
-        self.vs_pub   = self.create_publisher(RobotState, '/virtual_structure', 10)
-        self.done_pub = self.create_publisher(Bool, 'final_goal_reached', 10)
+        self.vs_pub    = self.create_publisher(RobotState, '/virtual_structure', 10)
+        self.ready_pub = self.create_publisher(Bool, '/virtual_structure_ready', 10)
+        self.done_pub  = self.create_publisher(Bool, 'final_goal_reached', 10)
 
         self.create_timer(self.DT, self.tick)
         self.get_logger().info(
@@ -114,23 +144,58 @@ class VirtualStructureNode(Node):
             f'start_delay={self.start_delay}s  wps={self.tray.n_waypoints}'
         )
 
-    # --- Spawn de esferas en posiciones iniciales de la V ---
-    def _spawn_all(self):
+    # --- Construye la cola de entidades a spawnear (sin disparar nada) ---
+    def _build_spawn_queue(self):
+        queue = []
+
         offs = _compute_offsets(self.n, self.tray.theta, self.av, self.d_form)
         for i in range(self.n):
             name   = f'vs_{i}'
             color  = BLUE if i == 0 else GREEN
             ox, oy = offs.get(i, (0.0, 0.0))
-            req = SpawnEntity.Request()
-            req.name                       = name
-            req.xml                        = _make_sdf(name, color, self.RADIUS)
-            req.initial_pose.position.x    = self.tray.x + ox
-            req.initial_pose.position.y    = self.tray.y + oy
-            req.initial_pose.position.z    = self.Z
-            req.initial_pose.orientation.w = 1.0
-            req.reference_frame            = 'world'
-            self.spawn_cli.call_async(req)
-        self.get_logger().info(f'Esferas spawneadas. Esperando {self.start_delay}s...')
+            queue.append((
+                name, _make_sdf(name, color, self.RADIUS),
+                self.tray.x + ox, self.tray.y + oy, self.Z,
+            ))
+
+        for i, (wx, wy) in enumerate(self.waypoints):
+            name = f'waypoint_{i}'
+            queue.append((
+                name, _make_sdf_diamond(name, GOLD, self.WP_SIZE),
+                wx, wy, self.WP_Z,
+            ))
+
+        return queue
+
+    # --- Dispara UNA entidad de la cola por tick, para no saturar
+    # /spawn_entity con decenas de llamadas call_async simultáneas
+    # (el servicio pierde respuestas bajo esa carga). No se marca
+    # self._spawned = True al DISPARAR la última — se espera la
+    # respuesta real de Gazebo (_on_spawn_response) para cada una,
+    # así la formación nunca empieza a avanzar con un spawn a medias. ---
+    def _spawn_next(self):
+        name, xml, x, y, z = self._spawn_queue.pop(0)
+        req = SpawnEntity.Request()
+        req.name                       = name
+        req.xml                        = xml
+        req.initial_pose.position.x    = x
+        req.initial_pose.position.y    = y
+        req.initial_pose.position.z    = z
+        req.initial_pose.orientation.w = 1.0
+        req.reference_frame            = 'world'
+        self._spawn_inflight = True
+        future = self.spawn_cli.call_async(req)
+        future.add_done_callback(self._on_spawn_response)
+
+    def _on_spawn_response(self, future):
+        self._spawn_inflight  = False
+        self._spawns_pending -= 1
+        if self._spawns_pending <= 0:
+            self._spawned = True
+            self.get_logger().info(
+                f'Esferas y {len(self.waypoints)} waypoints spawneados y '
+                f'CONFIRMADOS por Gazebo. Esperando {self.start_delay}s...'
+            )
 
     # --- Mover esferas a posiciones actuales ---
     def _move_spheres(self):
@@ -156,12 +221,21 @@ class VirtualStructureNode(Node):
 
     # --- Loop principal ---
     def tick(self):
-        # 1. Spawn en cuanto /spawn_entity esté disponible
+        # 1. Spawn en cuanto /spawn_entity esté disponible. No avanza a la
+        # formación hasta que TODAS las entidades fueron confirmadas por
+        # Gazebo (self._spawned, fijado en _on_spawn_response) — nunca con
+        # spawns solo "disparados" (call_async no espera respuesta).
         if not self._spawned:
-            if self.spawn_cli.service_is_ready():
-                self._spawn_all()
-                self._spawned = True
+            if (not self._spawn_inflight and self._spawn_queue
+                    and self.spawn_cli.service_is_ready()):
+                self._spawn_next()
             return
+
+        # Se republica en cada tick (no solo una vez) porque los tópicos
+        # ROS2 no son "latched" por defecto: consenso_node de cada robot
+        # puede arrancar en cualquier momento y necesita recibir esta señal
+        # sin importar cuándo se suscribió respecto al spawn de la VS.
+        self.ready_pub.publish(Bool(data=True))
 
         # 2. Publicar posición inicial mientras se espera start_delay
         if self._ticks_waited * self.DT < self.start_delay:

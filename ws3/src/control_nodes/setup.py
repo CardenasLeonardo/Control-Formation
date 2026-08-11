@@ -28,6 +28,10 @@ setup(
             'aire = control_nodes.aire:main',
             'navigate_waypoints_pva = control_nodes.navigate_waypoints_pva:main',
             'consenso_node = control_nodes.consenso_node:main',
+            'trayectoria_vs_node = control_nodes.trayectoria_vs_node:main',
+            'pivot_giro_node = control_nodes.pivot_giro_node:main',
+            'pivot_giro_waypoints_node = control_nodes.pivot_giro_waypoints_node:main',
+            'pivot_giro_waypoints_v2_node = control_nodes.pivot_giro_waypoints_v2_node:main',
         ],
     },
 )

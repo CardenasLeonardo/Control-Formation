@@ -6,6 +6,7 @@ import math
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Bool
 from multi_robot_interfaces.msg import RobotState, PVAConstraints
 
 from control_nodes.algorithms.consensus_prom_err  import ConsensusPromErr
@@ -68,7 +69,8 @@ class ConsensoNode(Node):
                 self.follower_index = int(self.robot_id.replace('robot', ''))
             except ValueError:
                 self.follower_index = 0
-            self.virtual_state = None  # (x_v, y_v, theta_v) — llega de /virtual_structure
+            self.virtual_state  = None   # (x_v, y_v, theta_v) — llega de /virtual_structure
+            self.virtual_ready  = False  # confirmado por vs_node vía /virtual_structure_ready
             self.consensus = ConsensusFormation()
 
         else:
@@ -96,6 +98,8 @@ class ConsensoNode(Node):
         if self.consensus_type == 'formacion':
             self.create_subscription(RobotState, '/virtual_structure',
                                      self.virtual_callback, 10)
+            self.create_subscription(Bool, '/virtual_structure_ready',
+                                     self.virtual_ready_callback, 10)
 
         # --- Publicadores ---
         self.state_pub = self.create_publisher(RobotState,     '/robot_states_tx',   10)
@@ -136,6 +140,11 @@ class ConsensoNode(Node):
         self.virtual_state = (msg.x, msg.y, msg.theta)
         self.get_logger().info(f"VS recibida: x={msg.x:.2f} y={msg.y:.2f} th={msg.theta:.2f}")
 
+    def virtual_ready_callback(self, msg):
+        if msg.data and not self.virtual_ready:
+            self.virtual_ready = True
+            self.get_logger().info("VS confirmada lista (spawn completo) — habilitando movimiento")
+
     # ------------------------------------------------------------------
     # Pipeline: consenso → ley de control → PVA → cmd_vel
     # ------------------------------------------------------------------
@@ -160,17 +169,16 @@ class ConsensoNode(Node):
             result = self.consensus.step(s, neighbors,
                                          self.robot_id, self.leader_id, self.k_leader)
         elif self.consensus_type == 'formacion':
-            virtual = self.virtual_state
-            if virtual is None:
-                self.get_logger().warn(f"VS no recibida — usando líder {self.leader_id} como fallback")
-                if self.leader_id in neighbors:
-                    virtual   = neighbors[self.leader_id]
-                    neighbors = {r: p for r, p in neighbors.items()
-                                 if r != self.leader_id}
-            else:
-                self.get_logger().info(f"Usando VS: ({virtual[0]:.2f}, {virtual[1]:.2f}, {virtual[2]:.2f})")
+            if not self.virtual_ready or self.virtual_state is None:
+                # vs_node todavía no confirmó spawn completo (todas las
+                # esferas + waypoints creados en Gazebo) o aún no llegó su
+                # primer estado. No hay fallback: moverse antes de esa
+                # confirmación es exactamente el bug que se busca evitar
+                # (robots arrancando con datos a medias).
+                self.cmd_pub.publish(Twist())
+                return
             result = self.consensus.step(s, neighbors,
-                                         virtual, self.follower_index,
+                                         self.virtual_state, self.follower_index,
                                          self.n_robots, self.angle_v, self.d, self.beta)
 
         if result is None:

@@ -391,6 +391,12 @@ class StatesPlotterV2(Node):
         for robot, d in data_snapshot.items():
             for k in ('t', 'x', 'y', 'theta'):
                 arrays[f'{robot}_{k}'] = np.array(d[k], dtype=float)
+        # Serie de la estructura virtual también, para poder regenerar
+        # posiciones_finales.pdf (modo 'virtual_structure') sin Gazebo.
+        if self.error_reference == 'virtual_structure':
+            with self._lock:
+                for k in ('t', 'x', 'y', 'theta'):
+                    arrays[f'vs_{k}'] = np.array(self.vs_data[k], dtype=float)
         path = os.path.join(self.save_dir, 'datos.npz')
         np.savez(path, **arrays)
         self.get_logger().info(f"Datos crudos guardados: {path}")
@@ -420,9 +426,10 @@ class StatesPlotterV2(Node):
                        s=260, zorder=5, edgecolors='black', linewidths=0.5)
             self._draw_triangles(ax, x, y, theta, c)
 
-        ax.set_title("Robot trajectory")
-        ax.set_xlabel("x (m)")
-        ax.set_ylabel("y (m)")
+        ax.set_title("Trayectoria del robot", fontsize=24)
+        ax.set_xlabel("x (m)", fontsize=22)
+        ax.set_ylabel("y (m)", fontsize=22)
+        ax.tick_params(axis='both', labelsize=17)
         ax.grid(True)
         ax.set_aspect('equal')
         fig.tight_layout()
@@ -533,18 +540,18 @@ class StatesPlotterV2(Node):
 
             axes[1].plot(t, error, color=c, label=robot, linewidth=1.8)
 
-        axes[0].set_title("Robot trajectories")
-        axes[0].set_xlabel("x (m)")
-        axes[0].set_ylabel("y (m)")
+        axes[0].set_title("Trayectorias de los robots", fontsize=24)
+        axes[0].set_xlabel("x (m)", fontsize=22)
+        axes[0].set_ylabel("y (m)", fontsize=22)
+        axes[0].tick_params(axis='both', labelsize=17)
         axes[0].grid(True)
         axes[0].set_aspect('equal')
-        axes[0].legend(fontsize=13)
 
-        axes[1].set_title("Formation error evolution")
-        axes[1].set_xlabel("Time (s)")
-        axes[1].set_ylabel("Error (m)")
+        axes[1].set_title("Evolución del error de formación", fontsize=24)
+        axes[1].set_xlabel("Tiempo (s)", fontsize=22)
+        axes[1].set_ylabel("Error (m)", fontsize=22)
+        axes[1].tick_params(axis='both', labelsize=17)
         axes[1].grid(True)
-        axes[1].legend(fontsize=13)
 
         # Snapshots de formación sobre el panel de trayectorias — idéntico a _save_triple
         if self.formation_snapshots and self.snapshots:

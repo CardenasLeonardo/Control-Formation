@@ -1,1 +1,0 @@
-/home/calafaker/Control-Formation/ws/src/articubot_one/launch/multi_robot.launch.py
